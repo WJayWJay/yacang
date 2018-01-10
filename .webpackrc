@@ -1,4 +1,7 @@
 {
+  "theme": {
+    "theme": "./theme-config.js"
+  },
   "extraBabelPlugins": [
     ["import", { "libraryName": "antd-mobile", "libraryDirectory": "lib", "style": "css" }]
   ]
