@@ -22,8 +22,11 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
     "husky": "^0.12.0",
+    "postcss-pxtorem": "^4.0.1",
     "redbox-react": "^1.4.3",
     "roadhog": "^2.0.0"
   },
-  "antd-mobile": { "upgrade-tip": false }
+  "antd-mobile": {
+    "upgrade-tip": false
+  }
 }
