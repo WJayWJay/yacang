@@ -1,0 +1,48 @@
+{
+  "short_name": "雅藏",
+  "name": "雅藏网移动版",
+  "description": "添加到主屏幕快速访问雅藏网",
+  "version": "0.1",
+  "icons": [
+    {
+      "src": "//mat1.gtimg.com/www/mobi/2017/image/logo/v0/36.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    },
+    {
+      "src": "//mat1.gtimg.com/www/mobi/2017/image/logo/v0/48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "//mat1.gtimg.com/www/mobi/2017/image/logo/v0/72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "//mat1.gtimg.com/www/mobi/2017/image/logo/v0/96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "//mat1.gtimg.com/www/mobi/2017/image/logo/v0/144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "//mat1.gtimg.com/www/mobi/2017/image/logo/v0/192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "//mat1.gtimg.com/www/mobi/2017/image/logo/v0/512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/?ADTAG=homescreen&pgv_ref=homescreen"
+}
