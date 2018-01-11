@@ -6,6 +6,6 @@
     ["import", { "libraryName": "antd-mobile", "libraryDirectory": "lib", "style": "css" }]
   ],
   "manifest": {
-    fileName: 'my-manifest.json',
+    "fileName": "my-manifest.json"
   }
 }

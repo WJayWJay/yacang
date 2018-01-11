@@ -26,6 +26,7 @@ function RouterConfig({ history, app }) {
     <Router history={history}>
       <Switch>
         {/* <Redirect from="/" to="/home" /> */}
+        <Route path="/" exact component={IndexPage} />
         <Route path="/home" exact component={IndexPage} />
         <Route path="/product" exact component={ProductPage} />
         <Route path="/checkcode" exact component={CheckCode} />
