@@ -1,5 +1,5 @@
 import dva from 'dva';
-import './index.css';
+import './index.less';
 import createLoading from 'dva-loading';
 
 // 1. Initialize

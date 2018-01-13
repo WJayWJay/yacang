@@ -11,8 +11,7 @@ const Layout = (props) => {
         onLeftClick={() => props.back? props.back(): window.history.back()}
         icon={<Icon type="left" />}
         rightContent={[
-          <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
-          <Icon key="1" type="ellipsis" />,
+          <Icon key="0" type="ellipsis" />
         ]}
       >{props.title|| ''}</NavBar> : null}
         <div className={styles.view}>

@@ -29,7 +29,7 @@ class CardCenter extends React.Component {
                   <WhiteSpace style={{height: '32px', width: '100%'}} />
                   <Flex className={[styles.flex]}>
                     <Item flex={1}>
-                      <img style={{width: '45px', height: '48px', borderRadius: '23px'}} src={ccbLogo} />
+                      <img style={{width: '45px', height: '48px', borderRadius: '23px'}} alt="" src={ccbLogo} />
                     </Item>
                     <Item className={styles.titleInfo} flex={4}>
                       <Flex align={'start'} direction={'column'}>

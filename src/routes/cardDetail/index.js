@@ -24,7 +24,7 @@ class CardDetail extends React.Component {
           <div className={styles.header}>
             <Flex direction={'column'} >
               <Flex.Item>
-                <img style={{width: 90, height: 90}} src={ccbLogo} />
+                <img style={{width: 90, height: 90}} alt="" src={ccbLogo} />
               </Flex.Item>
               <WhiteSpace style={{marginTop: '24px'}} />
               <Flex.Item >

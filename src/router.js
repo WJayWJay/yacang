@@ -12,7 +12,7 @@ function RouterConfig({ history, app }) {
     // models: () => [
     //   import('./models/users'),
     // ],
-    component: () => import('./routes/home/IndexPage')
+    component: () => import('./routes/home/index')
   })
   const ProductPage = dynamic({
     app,
@@ -50,6 +50,24 @@ function RouterConfig({ history, app }) {
         })} />
         <Route path="/cardCenter" exact component={dynamic({ app,
           component: () => import('./routes/cardCenter/index')
+        })} />
+        <Route path="/userInfo" exact component={dynamic({ app,
+          component: () => import('./routes/userInfo/index')
+        })} />
+        <Route path="/register" exact component={dynamic({ app,
+          component: () => import('./routes/register/index')
+        })} />
+        <Route path="/forget" exact component={dynamic({ app,
+          component: () => import('./routes/forget/index')
+        })} />
+        <Route path="/forget2" exact component={dynamic({ app,
+          component: () => import('./routes/forget2/index')
+        })} />
+        <Route path="/revisePass" exact component={dynamic({ app,
+          component: () => import('./routes/revisePass/index')
+        })} />
+        <Route path="/login" exact component={dynamic({ app,
+          component: () => import('./routes/login/index')
         })} />
         {/* <Route path="/show">
           <IndexRoute component={ListPage} />

@@ -1,0 +1,64 @@
+html, body, :global(#root) {
+  background-color: #FFFFFF !important;
+}
+.normal {
+  /* margin-top: 31px; */
+  width: 100%;
+}
+
+.content {
+  margin-top: 114px;
+  font-size: 16px;
+}
+
+.myList {
+  margin-bottom: 10px; 
+  width: 80%;
+  &:last-child {
+    :global(.am-list-body) {
+      &::before {
+        height: 0 !important;
+      }
+      &::after {
+        height: 0 !important;
+      }
+    }
+  }
+  :global(.am-list-body) {
+    &::before {
+      height: 0 !important;
+    }
+  }
+}
+
+.getCheckCode {
+  background: #57493F;
+  // border: 1px solid #4E0303;
+  border-radius: 10px;
+  height: 20px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 20px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.deleteButton {
+  margin-top: 90px;
+  font-size: 18px;
+  color: #FFFFFF;
+  background: #57493F;
+  width: 100%;
+  height: 45px;
+  border-radius: 22.5px;
+  &:before {
+    border: none !important;
+  }
+}
+
+.agree {
+  margin-left: 6px;
+}
+.agreeUserProto {
+  color: #7da0fe;
+}
