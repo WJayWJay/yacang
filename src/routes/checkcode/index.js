@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
 // import { Link } from 'dva/router';
-import { Flex, InputItem, Button } from 'antd-mobile';
+import { Flex, InputItem, Button,List } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 
-import styles from './index.css';
+import styles from './index.less';
 
 class CheckCode extends React.Component {
   state = {
@@ -47,14 +47,17 @@ class CheckCode extends React.Component {
             <Flex.Item className={[styles.item, styles.itemAddtion]}>
               <Flex>
                 <Flex.Item className={styles.itemLeft}>
-                  <InputItem
-                    type="phone"
-                    placeholder="请填写验证码"
-                    error={this.state.hasError}
-                    onErrorClick={this.onErrorClick}
-                    onChange={this.onChange}
-                    value={this.state.value}
-                  ></InputItem>
+                  <List>
+                    <InputItem
+                      type="number"
+                      maxLength={6}
+                      placeholder="请填写验证码"
+                      error={this.state.hasError}
+                      onErrorClick={this.onErrorClick}
+                      onChange={this.onChange}
+                      value={this.state.value}
+                    ></InputItem>
+                  </List>
                 </Flex.Item>
                 <Flex.Item className={styles.itemRight}>
                   <Button inline className={styles.getCheckButton} type="primary">获取验证码</Button>
