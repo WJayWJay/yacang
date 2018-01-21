@@ -7,5 +7,12 @@
   ],
   "manifest": {
     "fileName": "my-manifest.json"
+  },
+  "proxy": {
+      "/huicang": {
+          "target": "http://121.8.160.34:8899/",
+          "changeOrigin": true,
+          "pathRewrite": { "^/huicang" : "/huicang" }
+      }
   }
 }

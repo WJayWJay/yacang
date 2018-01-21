@@ -95,4 +95,13 @@ class GoodsDetail extends React.Component {
 GoodsDetail.propTypes = {
 };
 
-export default connect()(GoodsDetail);
+function mapStateToProps(state) {
+  const { detail, id } = state.goodsDetail;
+
+  return {
+    detail,
+    id
+  }
+}
+
+export default connect( mapStateToProps )(GoodsDetail);

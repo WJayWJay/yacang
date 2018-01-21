@@ -15,7 +15,22 @@ class Index extends React.Component {
     value: '',
     fullScreen: true
   }
+
+  componentDidMount() {
+    console.log(this.props)
+    console.log('this')
+    let page = 1;
+    this.props.dispatch({
+      type: 'product/fetch',
+      payload: {page}
+    });
+  }
+
   renderHome() {
+    console.log(this.props)
+    const first = ['国内藏馆1', '臻至美玉', '名家书画', '臻至美玉', '名家书画'];
+    const second = ['国内藏馆2', '臻至美玉', '名家书画', '臻至美玉', '名家书画'];
+    const third = ['国内藏馆3', '臻至美玉', '名家书画', '臻至美玉', '名家书画'];
     return (
       <div style={{ height: '100%', textAlign: 'center' }}>
         <Layout title={'汇藏'}>
@@ -29,70 +44,72 @@ class Index extends React.Component {
             <div className={styles.content}> 
               <Flex className={styles.flexContainer} direction="column">
                 <Flex className={styles.flex} direction="row">
-                  <Flex className={styles.flex} direction="row">
-                    国内藏馆
+                  <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneFirst, styles.firstRowOneSpecial1]} direction="row">
+                    { first[0] }
                   </Flex>
                   <Flex className={styles.flex} direction="column">
-                    <Flex className={styles.flex} direction="column">
-                    臻至美玉
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneSecond1]} direction="column">
+                    { first[1] }
                     </Flex>
-                    <Flex className={styles.flex} direction="column">
-                    名家书画
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneSecond2]} direction="column">
+                    { first[2] }
                     </Flex>
                   </Flex>
                   <Flex className={styles.flex} direction="column">
-                    <Flex className={styles.flex} direction="column">
-                    臻至美玉
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneThird, styles.rightTopRadius]} direction="column">
+                    { first[3] }
                     </Flex>
-                    <Flex className={styles.flex} direction="column">
-                    名家书画
+                    <Flex className={[styles.flex, styles.firstRowOne]} direction="column">
+                    { first[4] }
+                    </Flex>
+                  </Flex>
+                </Flex>
+                {/* 2 */}
+                <Flex className={[styles.flex, styles.column]} direction="row">
+                  <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneFirst, styles.secondRowOneSpecial1]} direction="row">
+                  { second[0] }
+                  </Flex>
+                  <Flex className={styles.flex} direction="column">
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneSecond1]} direction="column">
+                    { second[1] }
+                    </Flex>
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneSecond2]} direction="column">
+                    { second[2] }
+                    </Flex>
+                  </Flex>
+                  <Flex className={styles.flex} direction="column">
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneThird]} direction="column">
+                    { second[3] }
+                    </Flex>
+                    <Flex className={[styles.flex, styles.firstRowOne]} direction="column">
+                    { second[4] }
+                    </Flex>
+                  </Flex>
+                </Flex>
+                {/* 3 */}
+                <Flex className={[styles.flex, styles.column]} direction="row">
+                  <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneFirst, styles.thirdRowOneSpecial1]} direction="row">
+                  { third[0] }
+                  </Flex>
+                  <Flex className={styles.flex} direction="column">
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneSecond1]} direction="column">
+                    { third[1] }
+                    </Flex>
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneSecond2]} direction="column">
+                    { third[2] }
+                    </Flex>
+                  </Flex>
+                  <Flex className={styles.flex} direction="column">
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneThird]} direction="column">
+                    { third[3] }
+                    </Flex>
+                    <Flex className={[styles.flex, styles.firstRowOne, styles.bottomTopRadius]} direction="column">
+                    { third[4] }
                     </Flex>
                   </Flex>
                 </Flex>
                 
-                <Flex className={styles.flex} direction="row">
-                  <Flex className={styles.flex} direction="row">
-                    海外藏馆
-                  </Flex>
-                  <Flex className={styles.flex} direction="column">
-                    <Flex className={styles.flex} direction="column">
-                    1
-                    </Flex>
-                    <Flex className={styles.flex} direction="column">
-                    2
-                    </Flex>
-                  </Flex>
-                  <Flex className={styles.flex} direction="column">
-                    <Flex className={styles.flex} direction="column">
-                    1
-                    </Flex>
-                    <Flex className={styles.flex} direction="column">
-                    2
-                    </Flex>
-                  </Flex>
-                </Flex>
                 
-                <Flex className={styles.flex} direction="row">
-                  <Flex className={styles.flex} direction="row">
-                    私人藏馆
-                  </Flex>
-                  <Flex className={styles.flex} direction="column">
-                    <Flex className={styles.flex} direction="column">
-                    1
-                    </Flex>
-                    <Flex className={styles.flex} direction="column">
-                    2
-                    </Flex>
-                  </Flex>
-                  <Flex className={styles.flex} direction="column">
-                    <Flex className={styles.flex} direction="column">
-                    1
-                    </Flex>
-                    <Flex className={styles.flex} direction="column">
-                    2
-                    </Flex>
-                  </Flex>
-                </Flex>
                 
               </Flex>
             </div>
@@ -105,7 +122,7 @@ class Index extends React.Component {
     );
   }
   renderContent(pageText) {
-    if(pageText == 'home') {
+    if(pageText === 'home') {
       return this.renderHome();
     }
     return (
@@ -117,6 +134,7 @@ class Index extends React.Component {
   
   render() {
     
+    const iconSize = '26px';
     return (
       <div style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
         <TabBar
@@ -129,15 +147,16 @@ class Index extends React.Component {
             title="雅藏"
             key="雅藏"
             icon={<div style={{
-              width: '22px',
-              height: '22px',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/sifuoDUQdAFKAVcFGROC.svg) center center /  21px 21px no-repeat' }}
+              width: iconSize,
+              height: iconSize,
+              background: 'url(' + require('../../assets/tabbar/tab-sy-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' 
+            }}
             />
             }
             selectedIcon={<div style={{
-              width: '22px',
-              height: '22px',
-              background: 'url(https://zos.alipayobjects.com/rmsportal/iSrlOTqrKddqbOmlvUfq.svg) center center /  21px 21px no-repeat' }}
+              width: iconSize,
+              height: iconSize,
+              background: 'url(' + require('../../assets/tabbar/tab-sy-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
             />
             }
             selected={this.state.selectedTab === 'blueTab'}
@@ -154,16 +173,16 @@ class Index extends React.Component {
           <TabBar.Item
             icon={
               <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://gw.alipayobjects.com/zos/rmsportal/BTSsmHkPsQSPTktcXyTV.svg) center center /  21px 21px no-repeat' }}
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-tx-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
               />
             }
             selectedIcon={
               <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://gw.alipayobjects.com/zos/rmsportal/ekLecvKBnRazVLXbWOnE.svg) center center /  21px 21px no-repeat' }}
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-tx-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
               />
             }
             title="提现"
@@ -182,21 +201,21 @@ class Index extends React.Component {
           <TabBar.Item
             icon={
               <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg) center center /  21px 21px no-repeat' }}
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-wd-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
               />
             }
             selectedIcon={
               <div style={{
-                width: '22px',
-                height: '22px',
-                background: 'url(https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg) center center /  21px 21px no-repeat' }}
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-wd-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
               />
             }
             title="我的"
             key="我的"
-            dot
+            // dot
             selected={this.state.selectedTab === 'greenTab'}
             onPress={() => {
               this.setState({
@@ -215,4 +234,12 @@ class Index extends React.Component {
 Index.propTypes = {
 };
 
-export default connect()(Index);
+function mapStateToProps(state) {
+  const { list, total } = state.product;
+  return {
+    list,
+    total
+  };
+}
+
+export default connect(mapStateToProps)(Index);

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // import { Router, Route, Switch, Redirect, IndexRoute } from 'dva/router';
-import { Router, Route, Switch } from 'dva/router';
+import { Router, Route, Switch, Redirect } from 'dva/router';
 import dynamic from 'dva/dynamic';
 // import App from './app';
 
@@ -9,9 +9,9 @@ import dynamic from 'dva/dynamic';
 function RouterConfig({ history, app }) {
   const IndexPage = dynamic({
     app,
-    // models: () => [
-    //   import('./models/users'),
-    // ],
+    models: () => [
+      import('./models/product'),
+    ],
     component: () => import('./routes/home/index')
   })
   const ProductPage = dynamic({
@@ -42,7 +42,10 @@ function RouterConfig({ history, app }) {
         <Route path="/checkcode" exact component={CheckCode} />
         <Route path="/addBankCard" exact component={AddBankCard} />
         <Route path="/about" exact component={About} />
-        <Route path="/goodsDetail" exact component={dynamic({ app,
+        <Route path="/goodsDetail/:id" exact component={dynamic({ app,
+          models: () => [
+            import('./models/goodsDetail'),
+          ],
           component: () => import('./routes/goodsDetail/index')
         })} />
         <Route path="/cardDetail" exact component={dynamic({ app,
@@ -55,6 +58,9 @@ function RouterConfig({ history, app }) {
           component: () => import('./routes/userInfo/index')
         })} />
         <Route path="/register" exact component={dynamic({ app,
+          models: () => [
+            import('./models/register'),
+          ],
           component: () => import('./routes/register/index')
         })} />
         <Route path="/forget" exact component={dynamic({ app,
@@ -69,10 +75,14 @@ function RouterConfig({ history, app }) {
         <Route path="/login" exact component={dynamic({ app,
           component: () => import('./routes/login/index')
         })} />
+        <Route path="/myself" exact component={dynamic({ app,
+          component: () => import('./routes/myself/index')
+        })} />
         {/* <Route path="/show">
           <IndexRoute component={ListPage} />
           <Route path=":page" component={ListPage} />
         </Route> */}
+        
       </Switch>
     </Router>
   );

@@ -1,6 +1,15 @@
 html, body, :global(#root) {
   background-color: #FFFFFF !important;
 }
+:global(.am-list-body) {
+  :global(.am-list-item) {
+    padding-left: 0 !important;
+    :global(.am-list-line) {
+      padding-left: 0; 
+    }
+  }
+}
+
 .normal {
   /* margin-top: 31px; */
   width: 100%;
@@ -33,6 +42,7 @@ html, body, :global(#root) {
 
 .getCheckCode {
   background: #57493F;
+  color: #FFFFFF;
   // border: 1px solid #4E0303;
   border-radius: 10px;
   height: 20px;

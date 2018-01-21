@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-// import { Link } from 'dva/router';
-import { Flex, List, InputItem, Icon, WhiteSpace } from 'antd-mobile';
+import { Link } from 'dva/router';
+import { Flex, List, InputItem, WhiteSpace, Toast } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
@@ -11,13 +11,146 @@ import styles from './index.less';
 import logo from '../../assets/login-logo.png';
 
 class Index extends React.Component {
+
+  intervId = 0;
+
   state = {
     hasError: false,
-    value: '',
+    phone: '',
+    code: '',
+    timeout: 0,
+    timeoutInfo: '获取验证码',
+    isSend: 0
+  }
+  
+  componentDidMount() {
+    try {
+      let phone = localStorage.getItem('key@phone');
+      phone && phone.length > 9 && this.setState({phone: phone});
+    } catch(e) {}
+  }
+  componentWillUnmount() {
+    if(this.intervId) {
+      clearInterval(this.intervId);
+    }
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { isSend } = this.state;
+    if(isSend !== newProps.isSend) {
+      if(newProps.isSend === 1) {
+        this.setState({
+          isSend: newProps.isSend,
+          timeout: 60
+        }, () => {
+          this.intervId = setInterval(() => {
+            let t = this.state.timeout;
+            if(isNaN(parseInt(t, 10))) {
+              t = 60;
+            }
+            console.log(t,'current t');
+            if(t <1) {
+              this.setState({
+                timeout: 60,
+                timeoutInfo: '获取验证码'
+              });
+              if(this.intervId) {
+                clearInterval(this.intervId);
+              }
+              this.props.dispatch({
+                type: 'user/changeCodeSend',
+                payload: {codeSend: 0}
+              })
+              return;
+            }
+            t = t-1;
+            this.setState({
+              timeout: t,
+              timeoutInfo: '获取验证码 ('+ t +')'
+            });
+          }, 1000)
+        });
+      } else {
+        this.setState({
+          isSend: newProps.isSend
+        });
+      }
+    }
+  }
+
+  getCheckCode=() => {
+    const { phone , hasError, isSend} = this.state;
+    if(isSend === 1) return;
+    if(hasError) {
+      this.alertErrorInfo();
+      return;
+    }
+    this.props.dispatch({
+      type: 'user/fetchCode',
+      payload: {phone: phone}
+    })
+  }
+
+  alertErrorInfo = () => {
+    Toast.info('请输入11位手机号');
+  }
+
+  onErrorClick = () => {
+    if (this.state.hasError) {
+      Toast.info('请输入11位手机号');
+    }
+  }
+
+  onCodeChange = (value) => {
+    this.setState({
+      code: value,
+    });
+  }
+
+  onChange = (value) => {
+    console.log(value)
+    if (value.replace(/\s/g, '').length < 11 || !value.startsWith('1')) {
+      this.setState({
+        hasError: true,
+      });
+    } else {
+      this.setState({
+        hasError: false,
+      });
+      try {
+        localStorage.setItem('key@phone', value);
+      } catch(e) {}
+    }
+    this.setState({
+      phone: value,
+    });
+  }
+
+  submit = () => {
+    const { code, phone } = this.state;
+    if(!code) {
+      this.codeInput && this.codeInput.focus();
+      Toast.fail('验证码不能为空');
+      return;
+    }
+    if(!phone) {
+      this.phoneInput && this.phoneInput.focus();
+      Toast.fail('手机号不能为空');
+      return;
+    }
+    this.props.dispatch({
+      type: 'user/loginPost',
+      payload: {code, phone}
+    })
   }
   
   render() {
-    
+    if(this.props.isLogin) {
+      this.props.history.push('/home')
+      return <div />
+    }
+    const {isSend, timeoutInfo} = this.state;
+    const iconSize = '24px';
     return (
       <Layout title={'登录'}>
         <div className={styles.normal}>   
@@ -31,28 +164,49 @@ class Index extends React.Component {
                   clear
                   style={{fontSize: '16px',opacity: 0.4}}  
                   labelNumber={2}
+                  maxLength={12}
                   placeholder="请输入手机号"
-                  ref={el => this.autoFocusInst = el}
-                ><Icon type='check-circle-o' /></InputItem>
+                  onChange={this.onChange}
+                  ref={el => this.phoneInput = el}
+                  value={this.state.phone}
+                  onErrorClick={this.onErrorClick}
+                ><div style={{
+                  width: iconSize,
+                  height: iconSize,
+                  background: 'url(' + require('../../assets/login/login-phone.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}  
+                /></InputItem>
               </List>
               <WhiteSpace />
               <List className={styles.myList}>
                 <InputItem
                   clear
                   style={{fontSize: '16px',opacity: 0.4}}  
-                  extra={<div className={styles.getCheckCode}>获取验证码</div>}
+                  extra={<div 
+                      onClick={() => this.getCheckCode()} 
+                      style={{backgroundColor: isSend===1? '#CECECE':'#57493F'}} 
+                      className={styles.getCheckCode}
+                  >{timeoutInfo}</div>}
                   labelNumber={2}
+                  ref={el => this.codeInput = el}
                   placeholder="请输入验证码"
-                ><Icon type='check-circle-o' /></InputItem>
+                  maxLength={6}
+                  onChange={this.onCodeChange}
+                >
+                  <div style={{
+                    width: iconSize,
+                    height: iconSize,
+                    background: 'url(' + require('../../assets/login/login-key.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}  
+                  />
+                </InputItem>
               </List>
               <List className={styles.myList}>
-                <Button className={styles.deleteButton}>登录</Button>
+                <Button onClick={this.submit} className={styles.deleteButton}>登录</Button>
               </List>
             </Flex>
             
             <Flex className={styles.register} align="center" justify="center">
               <Flex.Item>
-                新用户注册
+                <Link to="/register"> 新用户注册 </Link>
               </Flex.Item>
             </Flex>
             
@@ -73,5 +227,11 @@ class Index extends React.Component {
 
 Index.propTypes = {
 };
-
-export default connect()(Index);
+function mapStateToProps( state ) {
+  // console.log(state)
+  const { isLogin, codeSend: isSend } = state.user
+  return {
+    isLogin, isSend
+  }
+}
+export default connect( mapStateToProps )(Index);
