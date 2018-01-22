@@ -9,9 +9,6 @@ import dynamic from 'dva/dynamic';
 function RouterConfig({ history, app }) {
   const IndexPage = dynamic({
     app,
-    models: () => [
-      import('./models/product'),
-    ],
     component: () => import('./routes/home/index')
   })
   const ProductPage = dynamic({
@@ -77,6 +74,12 @@ function RouterConfig({ history, app }) {
         })} />
         <Route path="/myself" exact component={dynamic({ app,
           component: () => import('./routes/myself/index')
+        })} />
+        <Route path="/productList" exact component={dynamic({ app,
+          models: () => [
+            import('./models/product'),
+          ],
+          component: () => import('./routes/listProduct/index')
         })} />
         {/* <Route path="/show">
           <IndexRoute component={ListPage} />

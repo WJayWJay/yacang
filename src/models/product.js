@@ -1,4 +1,6 @@
-import { productList } from '../services/product'
+import { productList } from '../services/product';
+import pathToRegexp from 'path-to-regexp';
+
 
 export default {
 
@@ -11,6 +13,18 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
+      return history.listen(({ pathname, query }) => {
+        console.log(pathname, query)
+        if(pathname === '/productList') {
+          dispatch({ type: 'fetch', payload: {page: 1} });
+        }
+        // const re = pathToRegexp('/productList');
+        // const match = re.exec(pathname);
+        // if ( Array.isArray(match) ) {
+        //   let productNo = match[1]; 
+        //   dispatch({ type: 'fetch', payload: {productNo} });
+        // }
+      });
     },
   },
 
