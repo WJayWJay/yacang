@@ -41,7 +41,7 @@ class Index extends React.Component {
             }>
               雅藏app全新上线，满满诚意，致收藏家们
             </NoticeBar>
-            <div className={styles.content}> 
+            <div className={styles.content}>
               <Flex className={styles.flexContainer} direction="column">
                 <Flex className={styles.flex} direction="row">
                   <Flex className={[styles.flex, styles.firstRowOne, styles.firstRowOneFirst, styles.firstRowOneSpecial1]} direction="row">
@@ -108,9 +108,9 @@ class Index extends React.Component {
                     </Flex>
                   </Flex>
                 </Flex>
-                
-                
-                
+
+
+
               </Flex>
             </div>
             <Flex className={styles.bottom} align="center" justify="center">
@@ -131,9 +131,9 @@ class Index extends React.Component {
       </div>
     )
   }
-  
+
   render() {
-    
+
     const iconSize = '26px';
     return (
       <div style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
@@ -149,7 +149,7 @@ class Index extends React.Component {
             icon={<div style={{
               width: iconSize,
               height: iconSize,
-              background: 'url(' + require('../../assets/tabbar/tab-sy-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' 
+              background: 'url(' + require('../../assets/tabbar/tab-sy-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat'
             }}
             />
             }
@@ -235,10 +235,10 @@ Index.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { list, total } = state.product;
+  // const { list, total } = state.product;
   return {
-    list,
-    total
+    // list,
+    // total
   };
 }
 
