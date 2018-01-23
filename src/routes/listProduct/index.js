@@ -87,6 +87,8 @@ const data = [
   },
 ];
 
+const testImg = 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png';
+
 class ListProduct extends React.Component {
 
 
@@ -100,61 +102,79 @@ class ListProduct extends React.Component {
       dataSource,
       showed: false,
       data: [],
-      listHeight: '500px'
+      listHeight: '500px',
+      hasMore: true
     }
   }
 
   componentDidMount() {
-
-    this.rData = genData(data);
+    this.rData = [];
+    // this.rData = genData(data);
     // console.log(this.rData, 'rData')
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows( this.rData )
-    });
+    // this.setState({
+    //   dataSource: this.state.dataSource.cloneWithRows( this.rData )
+    // });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps !== this.props) {
+      console.log(nextProps, 'jjjjjj')
+      if(nextProps.list) {
+        this.rData = this.rData.concat(genData(nextProps.list));
+        
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(this.rData),
+          isLoading: false,
+          hasMore: !!nextProps.hasMore
+        });
+      }
+    }
+  }
+
+  toDetail = (obj) => {
+    this.props.history.push(`/goodsDetail/${obj.productNo}`);
   }
 
   row = (rowData, sectionID, rowID) => {
     // console.log( '****' ,rowData, '****')
-    console.log(sectionID, rowID, 'tttttttt');
+    // console.log(sectionID, rowID, 'tttttttt');
 
-    // let index = data.length - 1;
-    // if (index < 0) {
-    //   index = data.length - 1;
-    // }
-    // const obj = data[index--];
     const obj = rowData;
     return (
-      <div key={rowID} style={{ padding: '0 15px' }}>
-        <div
+      <div onClick={() => this.toDetail(obj)} key={rowID} style={{ padding: '0 15px' }}>
+        {/* <div
           style={{
             lineHeight: '50px',
             color: '#888',
             fontSize: 18,
             borderBottom: '1px solid #F6F6F6',
           }}
-        >{obj.title}</div>
+        >{obj.title}</div> */}
+        
         <div style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}>
-          <img style={{ height: '64px', marginRight: '15px' }} src={obj.img} alt="" />
-          <div style={{ lineHeight: 1 }}>
-            <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.des}</div>
-            <div><span style={{ fontSize: '30px', color: '#FF6E27' }}>{rowID}</span>¥</div>
-          </div>
+          <img style={{ height: '108px', marginRight: '15px' }} src={/*obj.imageUrl*/ testImg} alt={obj.productName} />
+          <Flex direction="column" style={{ lineHeight: 1, width: '100%' }}>
+            {/* <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.des}</div>
+            <div><span style={{ fontSize: '30px', color: '#FF6E27' }}>{rowID}</span>¥</div> */}
+            <Flex style={{ flex: 1 }}>
+              {obj.productName}
+            </Flex>
+            <Flex style={{ flex: 1, width: '100%' }}>
+            <img style={{ height: '22px', width: '22px', marginRight: '4px' }} src={obj.img || testImg} alt="" /> {'大大的大'}
+            </Flex>
+            <Flex justify='end' style={{ flex: 1, width: '100%' }}>
+              <Flex justify='start' style={{flex: 1}}>¥{obj.salePrice}</Flex>
+              <Flex justify='end' style={{flex: 1}}>厦门</Flex>
+            </Flex>
+          </Flex>
         </div>
+        
       </div>
     );
   };
 
-  renderContent1 = tab => {
-    return (
-      <div className={styles.tab}>
-          jjj
-      </div>
-    )
-  }
-
-
   renderContent = tab => {
-
+    const { hasMore } = this.state;
     const row = (rowData, sectionID, rowID) => {
       return this.row(rowData, sectionID, rowID);
     }
@@ -175,9 +195,9 @@ class ListProduct extends React.Component {
         <ListView
           ref={el => this.lv = el}
           dataSource={this.state.dataSource}
-          renderHeader={() => <span>header</span>}
+          renderHeader={() => <span></span>}
           renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-            {this.state.isLoading ? 'Loading...' : 'Loaded'}
+            {hasMore ? this.state.isLoading ? '加载中...' : '加载完成' : '没有更多了...'}
           </div>)}
           renderBodyComponent={() => <MyBody />}
           renderRow={row}
@@ -201,19 +221,19 @@ class ListProduct extends React.Component {
   onEndReached = (event) => {
     // load new data
     // hasMore: from backend data, indicates whether it is the last page, here is false
-    // if (this.state.isLoading && !this.state.hasMore) {
-    //   return;
-    // }
+    if (!this.state.hasMore) {
+      return;
+    }
     console.log('reach end', event);
 
-    this.setState({ isLoading: true });
-    this.rData = this.rData.concat(genData(data));
-    setTimeout(() => {
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.rData),
-        isLoading: false,
-      });
-    }, 1000);
+    // this.setState({ isLoading: true });
+    // this.rData = this.rData.concat(genData(data));
+    // setTimeout(() => {
+    //   this.setState({
+    //     dataSource: this.state.dataSource.cloneWithRows(this.rData),
+    //     isLoading: false,
+    //   });
+    // }, 1000);
   }
 
   onSelectClick = (item) => {
@@ -296,9 +316,10 @@ ListProduct.propTypes = {
 
 function mapStateToProps(state) {
   // console.log(state)
-  const { list } = state.product;
+  const { list,hasMore } = state.product;
+  console.log(list)
   return {
-    list
+    list,hasMore
   }
 }
 

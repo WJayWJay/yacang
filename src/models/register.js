@@ -6,7 +6,7 @@ export default {
   state: {
     info: {},
     registerStatus: -1,
-    codeSend: 0
+    codeSend: 0,
   },
 
   subscriptions: {

@@ -97,7 +97,7 @@ GoodsDetail.propTypes = {
 
 function mapStateToProps(state) {
   const { detail, id } = state.goodsDetail;
-
+  console.log(detail)
   return {
     detail,
     id

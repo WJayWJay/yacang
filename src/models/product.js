@@ -1,5 +1,5 @@
 import { productList } from '../services/product';
-import pathToRegexp from 'path-to-regexp';
+// import pathToRegexp from 'path-to-regexp';
 
 
 export default {
@@ -8,7 +8,9 @@ export default {
 
   state: {
     list: [],
-    total: null
+    total: 0,
+    page: 1,
+    hasMore: true
   },
 
   subscriptions: {
@@ -33,16 +35,26 @@ export default {
       // yield put({ type: 'save' });
       console.log(page)
       const { data } = yield call(productList, {pageNo: page});
+      let hasMore = true;
       console.log('fetch', data)
       if( data && data['success'] && data['result'] ) {
-        yield put({type: 'save', payload: { data: data.result.results, total: data.result.totalSize}})
+        if(!Array.isArray(data.result.results)) {
+          hasMore = false;
+        }
+        if(Array.isArray(data.result.results) && data.result.results.length) {
+          page = +1;
+          if(data.result.results.length < 10) {
+            hasMore = false;
+          }
+        }
+        yield put({type: 'save', payload: { data: data.result.results, total: data.result.totalSize, page, hasMore}})
       }
     },
   },
 
   reducers: {
-    save(state, { payload: {data: list, total} }) {
-      return { ...state, list, total };
+    save(state, { payload: {data: list, total, page, hasMore} }) {
+      return { ...state, list, total, page, hasMore };
     },
   },
 

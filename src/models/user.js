@@ -1,17 +1,36 @@
 import { login, register, code } from '../services/user';
 import { Toast } from 'antd-mobile';
+import Cache from '../utils/cache';
+
+const userKey = 'user@info';
+const loginKey = 'isLogin';
+const tokenKey = 'user@tokeyId';
 
 export default {
   namespace: 'user',
   state: {
     info: {},
-    isLogin: false,
+    isLogin: 0,
     codeSend: 0
   },
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
       // dispatch({ type: 'fetch', payload: {productNo} });
+      let isLogin = Cache.get(loginKey);
+      let info = Cache.get(userKey);
+      console.log(info, isLogin, 'iiiiiiiii')
+      if(isLogin) {
+        dispatch({
+          type: 'update'
+        })
+      }
+      if(info) {
+        dispatch({
+          type: 'updateInfo',
+          payload: {info}
+        })
+      }
     },
   },
 
@@ -23,6 +42,7 @@ export default {
       console.log('fetch', data)
       if( data && data['success'] && data['result'] ) {
         yield put({type: 'save', payload: { data: data.result.results, total: data.result.totalSize}})
+        
       }
     },
     *loginPost({ payload: { code, phone } }, { call, put, select}) {  // eslint-disable-line
@@ -31,7 +51,10 @@ export default {
       console.log('login', data)
       if( data && data['success'] && data['result'] ) {
         Toast.success('登录成功!');
-        yield put({type: 'save', payload: { data: data.result}})
+        yield put({type: 'save', payload: { data: data.result}});
+        Cache.set(userKey, data.result, true);
+        Cache.set(tokenKey, data.result.tokenId);
+        Cache.set('loginKey', 1);
       } else {
         Toast.fail(data && data.errorMsg || '登录失败');
       }
@@ -58,7 +81,13 @@ export default {
 
   reducers: {
     save(state, { payload: {data: info} }) {
-      return { ...state, info, isLogin: true };
+      return { ...state, info, isLogin: 1 };
+    },
+    updateLogin(state, { payload: {isLogin} }) {
+      return { ...state, isLogin: 1 };
+    },
+    updateInfo(state, { payload: {info} }) {
+      return { ...state, info };
     },
     changeCodeSend(state, {payload: {codeSend}}) {
       console.log(codeSend, 'change')

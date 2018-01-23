@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 // import { Link } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import { Flex, List, InputItem, Icon, WhiteSpace, Toast } from 'antd-mobile';
 
 import Layout from '../../components/layout';
@@ -34,9 +35,9 @@ class Index extends React.Component {
 
   componentWillReceiveProps(newProps) {
     const { isSend } = this.state;
+    console.log(newProps)
     if(newProps.registerStatus === 0) {
-      this.props.history.push('/login');
-      return ;
+      this.props.dispatch(routerRedux.push('/login'));
     }
     if(isSend !== newProps.isSend) {
       if(newProps.isSend === 1) {
@@ -232,9 +233,10 @@ Index.propTypes = {
 
 function mapStateToProps( state ) {
   console.log(state)
-  const { codeSend: isSend } = state.register
+  const { codeSend: isSend, registerStatus } = state.register
   return {
     isSend,
+    registerStatus,
     loading: state.loading.models.register,
   }
 }

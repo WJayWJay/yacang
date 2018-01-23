@@ -6,6 +6,8 @@ import { Flex, NoticeBar, TabBar } from 'antd-mobile';
 import Layout from '../../components/layout';
 import Swiper from '../../components/swiper';
 
+import Myself from '../myself'
+
 import styles from './index.less';
 
 
@@ -17,13 +19,11 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
-    console.log('this')
     let page = 1;
-    this.props.dispatch({
-      type: 'product/fetch',
-      payload: {page}
-    });
+    // this.props.dispatch({
+    //   type: 'product/fetch',
+    //   payload: {page}
+    // });
   }
 
   renderHome() {
@@ -121,9 +121,17 @@ class Index extends React.Component {
       </div>
     );
   }
+
+  renderMy = () => {
+    return <Myself {...this.props} />
+  }
+
   renderContent(pageText) {
     if(pageText === 'home') {
       return this.renderHome();
+    }
+    if(pageText === 'myself') {
+      return this.renderMy();
     }
     return (
       <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
@@ -223,7 +231,7 @@ class Index extends React.Component {
               });
             }}
           >
-            {this.renderContent('Friend')}
+            {this.renderContent('myself')}
           </TabBar.Item>
         </TabBar>
       </div>
@@ -235,11 +243,11 @@ Index.propTypes = {
 };
 
 function mapStateToProps(state) {
-  // const { list, total } = state.product;
+  // const { list, total } = state.user;
+  const { isLogin, codeSend: isSend } = state.user
   return {
-    // list,
-    // total
-  };
+    isLogin, isSend
+  }
 }
 
 export default connect(mapStateToProps)(Index);

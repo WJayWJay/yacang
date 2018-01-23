@@ -127,10 +127,10 @@ class Index extends React.Component {
 Index.propTypes = {
 };
 function mapStateToProps( state ) {
-  // console.log(state)
+  console.log(state,'myself')
   const { isLogin, codeSend: isSend } = state.user
   return {
     isLogin, isSend
   }
 }
-export default connect( mapStateToProps )(Index);
+export default connect( )(Index);
