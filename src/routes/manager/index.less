@@ -1,0 +1,74 @@
+html, body, :global(#root) {
+  background-color: #f9f9f9 !important;
+}
+
+:global(.am-list-body) {
+  :global(.am-list-item) {
+    padding-left: 20px !important;
+    &::after {
+      content: '';
+      position: absolute;
+      background-color: #ddd;
+      display: block;
+      z-index: 1;
+      top: auto;
+      right: auto;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1PX;
+      transform-origin: 50% 100%;
+      transform: scaleY(0.5);
+    }
+    :global(.am-list-line) {
+      padding-left: 0;
+      :global(.am-list-extra) {
+        flex-basis: 50%;
+      } 
+    }
+  }
+}
+:global(.my-list) {
+  background: #f9f9f9;
+}
+
+.normal {
+  /* margin-top: 31px; */
+  width: 100%;
+}
+
+.content {
+  font-size: 16px;
+  width: 100%;
+  .availableMoney {
+    height: 159px;
+    background: #57493F;
+    color: #FFFFFF;
+    .money {
+      font-size: 36px;
+    }
+    .moneyDesc {
+      font-size: 14px;
+    }
+  }
+  .inviteContainer {
+    position: fixed;
+    bottom: 60px;
+    width: 100%;
+    .invite {
+      flex: 1;
+      margin: 21px;
+      background: #57493F;
+      border-radius: 4px;
+      font-size: 18px;
+      color: #FFFFFF;
+    }
+  }
+}
+
+
+.listItem {
+  font-size: 16px;
+  padding-left: 20px !important;
+  height: 64px;
+}

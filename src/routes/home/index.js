@@ -15,7 +15,8 @@ class Index extends React.Component {
   state = {
     hasError: false,
     value: '',
-    fullScreen: true
+    fullScreen: true,
+    selectedTab: 'blueTab',
   }
 
   componentDidMount() {
@@ -123,7 +124,7 @@ class Index extends React.Component {
   }
 
   renderMy = () => {
-    return <Myself {...this.props} />
+    
   }
 
   renderContent(pageText) {
@@ -131,13 +132,17 @@ class Index extends React.Component {
       return this.renderHome();
     }
     if(pageText === 'myself') {
-      return this.renderMy();
+      
     }
     return (
       <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
         {pageText}
       </div>
     )
+  }
+
+  toLink = (link) => {
+    this.props.history.push(link);
   }
 
   render() {
@@ -170,9 +175,7 @@ class Index extends React.Component {
             selected={this.state.selectedTab === 'blueTab'}
             // badge={1}
             onPress={() => {
-              this.setState({
-                selectedTab: 'blueTab',
-              });
+              // this.toLink('/')
             }}
             data-seed="logId"
           >
@@ -198,9 +201,7 @@ class Index extends React.Component {
             // badge={'new'}
             selected={this.state.selectedTab === 'redTab'}
             onPress={() => {
-              this.setState({
-                selectedTab: 'redTab',
-              });
+              this.toLink('/myself')
             }}
             data-seed="logId1"
           >
@@ -226,9 +227,7 @@ class Index extends React.Component {
             // dot
             selected={this.state.selectedTab === 'greenTab'}
             onPress={() => {
-              this.setState({
-                selectedTab: 'greenTab',
-              });
+              this.toLink('/myself')
             }}
           >
             {this.renderContent('myself')}

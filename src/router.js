@@ -81,6 +81,15 @@ function RouterConfig({ history, app }) {
           ],
           component: () => import('./routes/listProduct/index')
         })} />
+        <Route path="/share" exact component={dynamic({ app,
+          component: () => import('./routes/share/index')
+        })} />
+        <Route path="/manager" exact component={dynamic({ app,
+          component: () => import('./routes/manager/index')
+        })} />
+        <Route path="/reposit" exact component={dynamic({ app,
+          component: () => import('./routes/reposit/index')
+        })} />
         {/* <Route path="/show">
           <IndexRoute component={ListPage} />
           <Route path=":page" component={ListPage} />

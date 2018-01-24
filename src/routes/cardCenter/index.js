@@ -53,7 +53,7 @@ class CardCenter extends React.Component {
                       设置还款提醒
                     </Item>
                     <Item flex={1} style={{'textAlign': 'right'}}>
-                      <span className={styles.nowBack}>添加新卡</span>
+                      <span className={styles.nowBack}>立即还款</span>
                     </Item>
                   </Flex>
                 </Flex>

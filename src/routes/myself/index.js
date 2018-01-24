@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
-import { Flex, List, WhiteSpace, Toast, NoticeBar, Icon } from 'antd-mobile';
+import { Flex, List, WhiteSpace, Toast, NoticeBar, Icon, TabBar } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 
@@ -34,6 +34,8 @@ class Index extends React.Component {
   state = {
     hasError: false,
     phone: '',
+    fullScreen: true,
+    selectedTab: 'greenTab'
   }
 
   componentDidMount() {
@@ -58,8 +60,8 @@ class Index extends React.Component {
   toLink = (item) => {
     const map = {
       'about': '/about',
-      'share': '/about',
-      'manager': '/about',
+      'share': '/share',
+      'manager': '/manager',
       'feedback': '/about',
       'notice': '/about',
     }
@@ -68,15 +70,29 @@ class Index extends React.Component {
     }
   }
 
+  renderContent(pageText) {
+    if(pageText === 'home') {
+      // return this.props.history.push('/home');
+    }
+    if(pageText === 'myself') {
+      return this.renderSelf();
+    }
+    return (
+      <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
+        {pageText}
+      </div>
+    )
+  }
 
-  render() {
+  renderSelf() {
     const { isLogin, info } = this.props;
-
+    console.log(isLogin, info, 'mysel')
+    const username = info ? info.customerName||info.companyPhone : ''; 
     const iconSize = '16px';
     return (
       <Layout title={'我的'}>
         <div className={styles.normal}>
-          <NoticeBar mode="closable" icon={
+          {isLogin? <NoticeBar mode="closable" icon={
             <div style={{
               width: iconSize,
               height: iconSize,
@@ -84,14 +100,14 @@ class Index extends React.Component {
             />
           }>
             为了您的账户安全，请先完善个人资料！
-          </NoticeBar>
+          </NoticeBar>: null}
           <div className={styles.content}>
             <Flex onClick={this.toLogin} className={styles.head} direction="column">
               <Flex>
                 <img src={headImageIcon} style={{width: '64px', height: '64px'}} alt="头像" />
               </Flex>
               <Flex className={styles.loginInfo}>
-              {isLogin ? info.customerName :'未登录，请先登录'}
+              {isLogin ? username:'未登录，请先登录'}
               </Flex>
             </Flex>
             <Flex className={styles.headAddition}>
@@ -103,7 +119,7 @@ class Index extends React.Component {
                   <Flex className={styles.tabsFlexFont} align='start'>{tabsInfo[0].title}</Flex>
                 </Flex>
                 <div className={styles.whiteLine}></div>
-                <Flex direction='column' className={styles.tabsFlex}>
+                <Flex onClick={()=> this.props.history.push('/cardCenter')} direction='column' className={styles.tabsFlex}>
                   <Flex className={styles.tabsFlexImg} align='end'>
                     <img style={{ width: '35px', height: '27px'}} src={tabsInfo[1].icon} alt={tabsInfo[1].title} />
                   </Flex>
@@ -143,16 +159,112 @@ class Index extends React.Component {
       </Layout>
     );
   }
+
+  toTabLink = (link) => {
+    this.props.history.push(link);
+  }
+
+  render() {
+    const iconSize = '26px';
+    return (
+      <div style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
+        <TabBar
+          unselectedTintColor="#949494"
+          tintColor="#33A3F4"
+          barTintColor="white"
+          hidden={this.state.hidden}
+        >
+          <TabBar.Item
+            title="雅藏"
+            key="雅藏"
+            icon={<div style={{
+              width: iconSize,
+              height: iconSize,
+              background: 'url(' + require('../../assets/tabbar/tab-sy-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat'
+            }}
+            />
+            }
+            selectedIcon={<div style={{
+              width: iconSize,
+              height: iconSize,
+              background: 'url(' + require('../../assets/tabbar/tab-sy-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+            />
+            }
+            selected={this.state.selectedTab === 'blueTab'}
+            // badge={1}
+            onPress={() => {
+              this.toTabLink('/home')
+            }}
+            data-seed="logId"
+          >
+            {this.renderContent('home')}
+          </TabBar.Item>
+          <TabBar.Item
+            icon={
+              <div style={{
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-tx-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              />
+            }
+            selectedIcon={
+              <div style={{
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-tx-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              />
+            }
+            title="提现"
+            key="提现"
+            // badge={'new'}
+            selected={this.state.selectedTab === 'redTab'}
+            onPress={() => {
+              // this.toLink('/reposit')
+              this.toTabLink('/home')
+            }}
+            data-seed="logId1"
+          >
+            {this.renderContent('Koubei')}
+          </TabBar.Item>
+          <TabBar.Item
+            icon={
+              <div style={{
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-wd-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              />
+            }
+            selectedIcon={
+              <div style={{
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-wd-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              />
+            }
+            title="我的"
+            key="我的"
+            // dot
+            selected={this.state.selectedTab === 'greenTab'}
+            onPress={() => {
+              // this.toTabLink('/myself')
+            }}
+          >
+            {this.renderContent('myself')}
+          </TabBar.Item>
+        </TabBar>
+      </div>
+    );
+  }
 }
 
 Index.propTypes = {
 };
 function mapStateToProps( state ) {
   console.log(state,'myself')
-  const { isLogin, codeSend: isSend } = state.user
+  const { isLogin, info, codeSend: isSend } = state.user
   return {
-    isLogin, isSend
+    isLogin, isSend, info
   }
 }
-// export default connect( )(Index);
-export default Index;
+export default connect( mapStateToProps )(Index);
+

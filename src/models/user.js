@@ -19,10 +19,11 @@ export default {
       // dispatch({ type: 'fetch', payload: {productNo} });
       let isLogin = Cache.get(loginKey);
       let info = Cache.get(userKey);
-      console.log(info, isLogin, 'iiiiiiiii')
+      console.log(info, isLogin, 'user model')
       if(isLogin) {
         dispatch({
-          type: 'update'
+          type: 'updateLogin',
+          payload: {isLogin}
         })
       }
       if(info) {
@@ -54,7 +55,7 @@ export default {
         yield put({type: 'save', payload: { data: data.result}});
         Cache.set(userKey, data.result, true);
         Cache.set(tokenKey, data.result.tokenId);
-        Cache.set('loginKey', 1);
+        Cache.set(loginKey, 1);
       } else {
         Toast.fail(data && data.errorMsg || '登录失败');
       }
