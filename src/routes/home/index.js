@@ -244,9 +244,9 @@ Index.propTypes = {
 
 function mapStateToProps(state) {
   // const { list, total } = state.user;
-  const { isLogin, codeSend: isSend } = state.user
+  const { isLogin, codeSend: isSend, info } = state.user
   return {
-    isLogin, isSend
+    isLogin, isSend, info
   }
 }
 

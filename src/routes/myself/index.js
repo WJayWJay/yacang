@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
 import { Flex, List, WhiteSpace, Toast, NoticeBar, Icon } from 'antd-mobile';
 
 import Layout from '../../components/layout';
@@ -20,11 +20,11 @@ const tabsInfo= [
   {title: '成交记录', icon: tradeRecordIcon},
 ];
 const listInfo= [
-  {title: '成员管理', icon: require('../../assets/myself/wd-cy.png') },
-  {title: '推荐给好友', icon: require('../../assets/myself/wd-tj.png') },
-  {title: '关于雅藏', icon: require('../../assets/myself/wd-gy.png') },
-  {title: '帮助反馈', icon: require('../../assets/myself/wd-bz.png') },
-  {title: '关注公众号', icon: require('../../assets/myself/wd-gz.png') },
+  {id: 'manager', title: '成员管理', icon: require('../../assets/myself/wd-cy.png') },
+  {id: 'share', title: '推荐给好友', icon: require('../../assets/myself/wd-tj.png') },
+  {id: 'about', title: '关于雅藏', icon: require('../../assets/myself/wd-gy.png') },
+  {id: 'feedback', title: '帮助反馈', icon: require('../../assets/myself/wd-bz.png') },
+  {id: 'notice', title: '关注公众号', icon: require('../../assets/myself/wd-gz.png') },
 ]
 
 class Index extends React.Component {
@@ -35,9 +35,9 @@ class Index extends React.Component {
     hasError: false,
     phone: '',
   }
-  
+
   componentDidMount() {
-    
+
   }
   componentWillUnmount() {
     if(this.intervId) {
@@ -45,12 +45,33 @@ class Index extends React.Component {
     }
   }
 
-  
-  render() {
-    if(this.props.isLogin) {
-      this.props.history.push('/home')
-      return <div />
+  componentWillReceiveProps(nextProps) {
+    if(nextProps !== this.props) {
+
     }
+  }
+
+  toLogin = () => {
+    this.props.history.push('/login');
+  }
+
+  toLink = (item) => {
+    const map = {
+      'about': '/about',
+      'share': '/about',
+      'manager': '/about',
+      'feedback': '/about',
+      'notice': '/about',
+    }
+    if(item && item.id && map[item.id]) {
+      this.props.history.push(map[item.id]);
+    }
+  }
+
+
+  render() {
+    const { isLogin, info } = this.props;
+
     const iconSize = '16px';
     return (
       <Layout title={'我的'}>
@@ -59,18 +80,18 @@ class Index extends React.Component {
             <div style={{
               width: iconSize,
               height: iconSize,
-              background: 'url(' + require('../../assets/icon/wd-tip.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}  
+              background: 'url(' + require('../../assets/icon/wd-tip.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
             />
           }>
             为了您的账户安全，请先完善个人资料！
-          </NoticeBar>  
-          <div className={styles.content}> 
-            <Flex className={styles.head} direction="column">
+          </NoticeBar>
+          <div className={styles.content}>
+            <Flex onClick={this.toLogin} className={styles.head} direction="column">
               <Flex>
                 <img src={headImageIcon} style={{width: '64px', height: '64px'}} alt="头像" />
               </Flex>
               <Flex className={styles.loginInfo}>
-              未登录，请先登录
+              {isLogin ? info.customerName :'未登录，请先登录'}
               </Flex>
             </Flex>
             <Flex className={styles.headAddition}>
@@ -108,14 +129,14 @@ class Index extends React.Component {
                     arrow="horizontal"
                     thumb={item.icon}
                     multipleLine
-                    onClick={() => {}}
+                    onClick={() => { this.toLink(item) }}
                   >
-                    {item.title} 
+                    {item.title}
                   </Item>
                 )
               })
             }
-              
+
             </List>
           </div>
         </div>
@@ -133,4 +154,5 @@ function mapStateToProps( state ) {
     isLogin, isSend
   }
 }
-export default connect( )(Index);
+// export default connect( )(Index);
+export default Index;
