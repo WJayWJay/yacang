@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Flex, List, InputItem, WhiteSpace, Toast } from 'antd-mobile';
+import { Flex, List, WhiteSpace, Toast, Radio, TabBar } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
 
 import styles from './index.less';
 
-import logo from '../../assets/login-logo.png';
+import zhaoshangIcon from '../../assets/card/card-zhaoshang.png';
+import jianhangIcon from '../../assets/card/card-jianhang.png';
 
 const Item = List.Item;
+const Brief = Item.Brief;
 
 class Index extends React.Component {
 
@@ -18,7 +20,9 @@ class Index extends React.Component {
 
   state = {
     hasError: false,
-    phone: ''
+    phone: '',
+    selectedTab: 'redTab',
+    fullScreen: true
   }
   
   componentDidMount() {
@@ -27,63 +31,180 @@ class Index extends React.Component {
   componentWillUnmount() {
     
   }
+  
+  
+  renderSelf() {
 
-  
-  
-  
-  render() {
-
-    const iconSize = '24px';
     return (
-      <Layout title={'成员管理'}>
+      <Layout title={'提现'}>
         <div className={styles.normal}>   
           <div className={styles.content}> 
-            <Flex justify="center" className={styles.availableMoney}>
-              <Flex direction='column'>
-                <Flex className={styles.money}>
-                  34560.00
-                </Flex>
-                <Flex className={styles.moneyDesc}>
-                  可分利润额（元）
-                </Flex>
-              </Flex>
-            </Flex>
-
-            <List renderHeader={() => '我的好友（4人）'} className="my-list">
+            
+            <List renderHeader={() => '提现信用卡'} className="my-list">
               <Item 
               className={styles.listItem}
-              thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
-              extra='2017年12月25日'
+              thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
+              extra=''
+              arrow='horizontal'
               multipleLine onClick={() => {}}>
-                杨望洋 
+                招商银行 <Brief>尾号2528 信用卡</Brief> 
+              </Item>
+            </List>
+            <WhiteSpace />
+            <List renderHeader={() => '到账银行'} className="my-list">
+              <Item 
+              className={styles.listItem}
+              thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
+              extra=''
+              arrow='horizontal'
+              multipleLine onClick={() => {}}>
+                招商银行 <Brief>尾号2528 信用卡</Brief> 
+              </Item>
+            </List>
+
+            <WhiteSpace />
+            <List renderHeader={() => '选择支付方式'} className="my-list">
+              <Item 
+              className={styles.listItem}
+              extra={<Radio checked={true} className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
+              multipleLine onClick={() => {}}>
+                极速到账 <Brief>提现手续费  0.01%</Brief> 
               </Item>
 
-              <Item
+              <Item 
               className={styles.listItem}
-              thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
-              extra='2017年12月25日'
+              extra={<Radio className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
               multipleLine onClick={() => {}}>
-                杨望洋 
+                极速到账 + 额外获得积分 <Brief>提现手续费  0.015%</Brief> 
               </Item>
 
-              <Item
+              <Item 
               className={styles.listItem}
-              thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
-              extra='2017年12月25日'
+              extra={<Radio className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
               multipleLine onClick={() => {}}>
-                杨望洋 
+                普通到账 + 额外获得积分 <Brief>提现手续费  0.015%</Brief> 
               </Item>
             </List>
             
             <Flex className={styles.inviteContainer}>
               <Button className={styles.invite}>
-              立即邀请
+              立即提现
               </Button>
             </Flex>
             
           </div>
         </div>
       </Layout>
+    );
+  }
+
+  toTabLink = (link) => {
+    this.props.history.push(link);
+  }
+
+  renderContent(pageText) {
+    if(pageText === 'home') {
+      // return this.props.history.push('/home');
+    }
+    if(pageText === 'reposit') {
+      return this.renderSelf();
+    }
+    return (
+      <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
+        {pageText}
+      </div>
+    )
+  }
+
+  render() {
+    const iconSize = '26px';
+    return (
+      <div style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
+        <TabBar
+          unselectedTintColor="#949494"
+          tintColor="#33A3F4"
+          barTintColor="white"
+          hidden={this.state.hidden}
+        >
+          <TabBar.Item
+            title="雅藏"
+            key="雅藏"
+            icon={<div style={{
+              width: iconSize,
+              height: iconSize,
+              background: 'url(' + require('../../assets/tabbar/tab-sy-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat'
+            }}
+            />
+            }
+            selectedIcon={<div style={{
+              width: iconSize,
+              height: iconSize,
+              background: 'url(' + require('../../assets/tabbar/tab-sy-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+            />
+            }
+            selected={this.state.selectedTab === 'blueTab'}
+            // badge={1}
+            onPress={() => {
+              this.toTabLink('/home')
+            }}
+            data-seed="logId"
+          >
+            {this.renderContent('home')}
+          </TabBar.Item>
+          <TabBar.Item
+            icon={
+              <div style={{
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-tx-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              />
+            }
+            selectedIcon={
+              <div style={{
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-tx-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              />
+            }
+            title="提现"
+            key="提现"
+            // badge={'new'}
+            selected={this.state.selectedTab === 'redTab'}
+            onPress={() => {
+              // this.toLink('/reposit')
+              // this.toTabLink('/reposit')
+            }}
+            data-seed="logId1"
+          >
+            {this.renderContent('reposit')}
+          </TabBar.Item>
+          <TabBar.Item
+            icon={
+              <div style={{
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-wd-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              />
+            }
+            selectedIcon={
+              <div style={{
+                width: iconSize,
+                height: iconSize,
+                background: 'url(' + require('../../assets/tabbar/tab-wd-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              />
+            }
+            title="我的"
+            key="我的"
+            // dot
+            selected={this.state.selectedTab === 'greenTab'}
+            onPress={() => {
+              this.toTabLink('/myself')
+            }}
+          >
+            {this.renderContent('myself')}
+          </TabBar.Item>
+        </TabBar>
+      </div>
     );
   }
 }

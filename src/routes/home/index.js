@@ -201,7 +201,7 @@ class Index extends React.Component {
             // badge={'new'}
             selected={this.state.selectedTab === 'redTab'}
             onPress={() => {
-              this.toLink('/myself')
+              this.toLink('/reposit')
             }}
             data-seed="logId1"
           >

@@ -220,7 +220,7 @@ class Index extends React.Component {
             selected={this.state.selectedTab === 'redTab'}
             onPress={() => {
               // this.toLink('/reposit')
-              this.toTabLink('/home')
+              this.toTabLink('/reposit')
             }}
             data-seed="logId1"
           >

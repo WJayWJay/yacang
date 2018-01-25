@@ -3,8 +3,15 @@ html, body, :global(#root) {
 }
 
 :global(.am-list-body) {
-  :global(.am-list-item) {
+  .listItem {
     padding-left: 20px !important;
+    font-size: 16px;
+    padding-left: 20px !important;
+    height: 70px;
+    .listItemIcon {
+      width: 48px;
+      height: 48px;
+    }
     &::after {
       content: '';
       position: absolute;
@@ -22,9 +29,6 @@ html, body, :global(#root) {
     }
     :global(.am-list-line) {
       padding-left: 0;
-      :global(.am-list-extra) {
-        flex-basis: 50%;
-      } 
     }
   }
 }
@@ -40,35 +44,37 @@ html, body, :global(#root) {
 .content {
   font-size: 16px;
   width: 100%;
-  .availableMoney {
-    height: 159px;
-    background: #57493F;
-    color: #FFFFFF;
-    .money {
-      font-size: 36px;
-    }
-    .moneyDesc {
-      font-size: 14px;
-    }
-  }
+  padding-bottom: 10px;
+  
   .inviteContainer {
-    position: fixed;
-    bottom: 60px;
+    // position: fixed;
+    // bottom: 0;
     width: 100%;
+    margin-top: 48px;
     .invite {
       flex: 1;
-      margin: 21px;
+      height: 54px;
       background: #57493F;
       border-radius: 4px;
       font-size: 18px;
       color: #FFFFFF;
     }
   }
+  .myRadio {
+     :global(.am-radio) {
+      padding: 2.5px;
+      border: 1px solid #ccc;
+      border-radius: 50%;
+      margin-right: 5px;
+      width: 20px;
+      height: 20px;
+      // background-color: #1ACA5A;
+      // border: 1px solid #13B14C;
+      :global(.am-radio-inner:after) {
+        // border-color: #FFFFFF;
+      }
+    }
+  }
 }
 
 
-.listItem {
-  font-size: 16px;
-  padding-left: 20px !important;
-  height: 64px;
-}
