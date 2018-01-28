@@ -139,6 +139,7 @@ class ListProduct extends React.Component {
     // console.log( '****' ,rowData, '****')
     // console.log(sectionID, rowID, 'tttttttt');
 
+    console.log(rowData)
     const obj = rowData;
     return (
       <div onClick={() => this.toDetail(obj)} key={rowID} style={{ padding: '0 15px' }}>
@@ -152,15 +153,16 @@ class ListProduct extends React.Component {
         >{obj.title}</div> */}
         
         <div style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}>
-          <img style={{ height: '108px', marginRight: '15px' }} src={/*obj.imageUrl*/ testImg} alt={obj.productName} />
-          <Flex direction="column" style={{ lineHeight: 1, width: '100%' }}>
+          <img className={styles.productImg} style={{ height: '108px',width: '108px', marginRight: '15px' }} src={obj.imageUrl || testImg} alt={obj.productName} />
+          {/* <div className={styles.productImg}></div> */}
+          <Flex direction="column" style={{flex:1, lineHeight: 1, width: '100%' }}>
             {/* <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.des}</div>
             <div><span style={{ fontSize: '30px', color: '#FF6E27' }}>{rowID}</span>¥</div> */}
             <Flex style={{ flex: 1 }}>
               {obj.productName}
             </Flex>
             <Flex style={{ flex: 1, width: '100%' }}>
-            <img style={{ height: '22px', width: '22px', marginRight: '4px' }} src={obj.img || testImg} alt="" /> {'大大的大'}
+            <img style={{ height: '22px', width: '22px', marginRight: '4px' }} src={obj.imageUrl || testImg} alt="" /> {'大大的大'}
             </Flex>
             <Flex justify='end' style={{ flex: 1, width: '100%' }}>
               <Flex justify='start' style={{flex: 1}}>¥{obj.salePrice}</Flex>

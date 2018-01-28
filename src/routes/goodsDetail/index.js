@@ -22,11 +22,15 @@ class GoodsDetail extends React.Component {
   }
   
   render() {
-    
+    const { detail } = this.props;
+    if(!detail.productNo) {
+      return <h2></h2>;
+    }
+    const imgUrls = detail.images && detail.images.map(item => ({url: item.imageUrl}));
     return (
       <Layout title={'商品详情'}>
         <div className={styles.normal}>
-          <Swiper />
+          <Swiper items={imgUrls} />
           <div className={styles.content}>
             <Flex direction="column"> 
               <Flex className={styles.maxWidth}>
@@ -34,20 +38,20 @@ class GoodsDetail extends React.Component {
               </Flex> 
               <Flex className={[styles.maxWidth, styles.price]}> 
                 <Flex.Item justify={'start'}> 
-                  <Flex.Item className={styles.currentPrice}> ¥ 19000.00 </Flex.Item>
+                  <Flex.Item className={styles.currentPrice}> ¥ {detail.marketPrice} </Flex.Item>
                 </Flex.Item>
                 <Flex.Item justify={'end'}>
                   <Flex justify={'end'} style={{'textAlign': 'right'}}>
-                    <Flex.Item className={styles.originalPrice}><s> 原价：¥ 24000.00 </s></Flex.Item>
+                    <Flex.Item className={styles.originalPrice}><s> 原价：¥ {detail.referencePrice} </s></Flex.Item>
                   </Flex>
                 </Flex.Item>
               </Flex>
               <Flex justify={'center'} className={[styles.maxWidth, styles.additional]}> 
-                <div className={styles.flexItem}> 快递：20:00 </div>
-                <div className={styles.flexItem}> 库存：12 </div>
+                <div className={styles.flexItem}> 快递：{detail.expressPrice} </div>
+                <div className={styles.flexItem}> 库存：{detail.storeCount} </div>
                 <div className={styles.flexItem}>
                   <Flex justify={'end'} style={{'textAlign': 'right'}}>
-                    <Flex.Item className={styles.originalPrice}> 附件泉州 </Flex.Item>
+                    <Flex.Item className={styles.originalPrice}> {detail.address} </Flex.Item>
                   </Flex>
                 </div>
               </Flex>

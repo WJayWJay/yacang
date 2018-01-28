@@ -44,7 +44,6 @@ class Index extends React.Component {
               <Item 
               className={styles.listItem}
               thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
-              extra=''
               arrow='horizontal'
               multipleLine onClick={() => {}}>
                 招商银行 <Brief>尾号2528 信用卡</Brief> 
@@ -55,7 +54,6 @@ class Index extends React.Component {
               <Item 
               className={styles.listItem}
               thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
-              extra=''
               arrow='horizontal'
               multipleLine onClick={() => {}}>
                 招商银行 <Brief>尾号2528 信用卡</Brief> 

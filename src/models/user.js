@@ -8,22 +8,24 @@ const tokenKey = 'user@tokeyId';
 
 export default {
   namespace: 'user',
+  history: null,
   state: {
     info: {},
     isLogin: 0,
-    codeSend: 0
+    codeSend: 0,
+    tokenId: ''
   },
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
-      // dispatch({ type: 'fetch', payload: {productNo} });
       let isLogin = Cache.get(loginKey);
       let info = Cache.get(userKey);
+      let tokenId = Cache.get(tokenKey);
       console.log(info, isLogin, 'user model')
       if(isLogin) {
         dispatch({
           type: 'updateLogin',
-          payload: {isLogin}
+          payload: {isLogin, tokenId}
         })
       }
       if(info) {
@@ -38,12 +40,10 @@ export default {
   effects: {
     *fetch({ payload: { page } }, { call, put, select}) {  // eslint-disable-line
       // yield put({ type: 'save' });
-      console.log(page)
       const { data } = yield call(register, {pageNo: page});
       console.log('fetch', data)
       if( data && data['success'] && data['result'] ) {
         yield put({type: 'save', payload: { data: data.result.results, total: data.result.totalSize}})
-        
       }
     },
     *loginPost({ payload: { code, phone } }, { call, put, select}) {  // eslint-disable-line
@@ -51,13 +51,14 @@ export default {
       const { data } = yield call(login, {messages: code, phoneNumber: phone});
       console.log('login', data)
       if( data && data['success'] && data['result'] ) {
-        Toast.success('登录成功!');
+        Toast.success('登录成功!', 1.5);
         yield put({type: 'save', payload: { data: data.result}});
+        yield put({type: 'updateLogin', payload: {isLogin: 1, tokenId: data.result.tokenId }});
         Cache.set(userKey, data.result, true);
         Cache.set(tokenKey, data.result.tokenId);
         Cache.set(loginKey, 1);
       } else {
-        Toast.fail(data && data.errorMsg || '登录失败');
+        Toast.fail(data && data.errorMsg || '登录失败', 2);
       }
     },
     *fetchCode({ payload: { phone } }, { call, put, select}) {  // eslint-disable-line
@@ -84,8 +85,8 @@ export default {
     save(state, { payload: {data: info} }) {
       return { ...state, info, isLogin: 1 };
     },
-    updateLogin(state, { payload: {isLogin} }) {
-      return { ...state, isLogin: 1 };
+    updateLogin(state, { payload: {isLogin, tokenId} }) {
+      return { ...state, isLogin: 1, tokenId };
     },
     updateInfo(state, { payload: {info} }) {
       return { ...state, info };
@@ -93,6 +94,10 @@ export default {
     changeCodeSend(state, {payload: {codeSend}}) {
       console.log(codeSend, 'change')
       return { ...state, codeSend };
+    },
+    logout(state, {payload: {}}) {
+      Cache.remove([loginKey, userKey, tokenKey]);
+      return { ...state, info:{}, isLogin: 0, tokenId: '' };
     }
   },
 

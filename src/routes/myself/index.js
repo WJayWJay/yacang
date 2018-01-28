@@ -54,7 +54,17 @@ class Index extends React.Component {
   }
 
   toLogin = () => {
-    this.props.history.push('/login');
+    const { isLogin, dispatch } = this.props;
+    if(isLogin) {
+      this.props.history.push('/userinfo');
+    } else {
+      console.log(encodeURIComponent(window.location.href))
+      dispatch(routerRedux.push({
+        pathname: '/login',
+        // query: {uri: encodeURIComponent(window.location.href)}
+        search: '?uri='+encodeURIComponent(window.location.href)
+      }));
+    }
   }
 
   toLink = (item) => {

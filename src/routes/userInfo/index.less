@@ -1,16 +1,28 @@
 
+
+
 .normal {
   /* margin-top: 31px; */
   width: 100%;
+  .myList {
+    :global(.am-list-body) {
+      :global(.am-list-item) {
+        font-size: 16px;
+        color: #16153A;
+        :global(.am-list-line) {
+          padding-left: 20px !important;
+          :global(.am-list-extra) {
+            flex-basis: 50% ;
+          }
+        }
+      }
+    }
+  }
 }
+
 
 .content {
   
-}
-
-.myList {
-  font-size: 16px;
-  color: #16153A;
 }
 
 .deleteButton {

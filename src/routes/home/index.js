@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 // import { Link } from 'dva/router';
 import { Flex, NoticeBar, TabBar } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 import Swiper from '../../components/swiper';
 
-import Myself from '../myself'
 
 import styles from './index.less';
 
@@ -115,7 +115,7 @@ class Index extends React.Component {
               </Flex>
             </div>
             <Flex className={styles.bottom} align="center" justify="center">
-              <span>咦，滑到底了，点击查看更多商品</span>
+              <span><Link to='/productList'>咦，滑到底了，点击查看更多商品</Link></span>
             </Flex>
           </div>
         </Layout>

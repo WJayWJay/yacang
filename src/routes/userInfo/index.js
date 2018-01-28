@@ -15,17 +15,34 @@ class CardCenter extends React.Component {
     hasError: false,
     value: '',
   }
+
+  logout = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/logout',
+      payload: {}
+    });
+    this.props.history.push('/home');
+  }
   
   render() {
-    
+    const { isLogin, info } = this.props;
+    let userInfo = Object.assign({}, info);
+    if(!isLogin) {
+      this.props.history.push({
+        pathname: '/login',
+        query: {uri: encodeURI(window.location.href)}
+      });
+      return;
+    }
     return (
       <Layout title={'个人信息'}>
         <div className={styles.normal}>   
           <div className={styles.content}> 
             <List className={styles.myList}>
-              <Item extra={'谭雅藏'}>姓名</Item>
+              <Item extra={ userInfo.customerName || userInfo.companyPhone || ''}>姓名</Item>
               <Item extra={'3****************4'}>身份证</Item>
-              <Item extra={'186*****4525'}>手机号码</Item>
+              <Item extra={ userInfo.companyPhone || ''}>手机号码</Item>
             </List>
             <List renderHeader={() => '账户状态'} className={styles.myList}>
               <Item extra="已实名" arrow="horizontal" onClick={() => {}}>账户状态</Item>
@@ -34,7 +51,7 @@ class CardCenter extends React.Component {
             </List>
           </div>
           
-          <Button className={styles.deleteButton}>注销账户</Button>
+          <Button onClick={this.logout} className={styles.deleteButton}>注销账户</Button>
         </div>
       </Layout>
     );
@@ -44,4 +61,13 @@ class CardCenter extends React.Component {
 CardCenter.propTypes = {
 };
 
-export default connect()(CardCenter);
+function mapStateToProps( state ) {
+  console.log(state,'myself')
+  const { isLogin, info } = state.user
+  return {
+    isLogin, info
+  }
+}
+
+
+export default connect(mapStateToProps)(CardCenter);

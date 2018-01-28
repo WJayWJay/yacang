@@ -61,6 +61,24 @@ const Cache = (function(){
     }
     return value;
   }
+  c.prototype.delete = function(key) {
+    try {
+      this.cache[key] = null;
+      setCookie(key, '');
+      sessionStorage.removeItem(key);
+      localStorage.removeItem(key);
+    } catch(e) {
+      console.log(e, 'error when remove cache');
+    }
+  }
+  c.prototype.remove = function(keys) {
+    if( Array.isArray(keys) ) {
+      keys.forEach((key) => {key && this.delete(key)});
+    } else if(typeof keys === 'string') {
+      this.delete(keys);
+    }
+  }
+
 
   return new c();
 })();

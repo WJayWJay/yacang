@@ -24,8 +24,9 @@ class Index extends React.Component {
   
   
   render() {
-    
-    const iconSize = '24px';
+    const { info } = this.props;
+    const userInfo = Object.assign({}, info);
+
     return (
       <Layout title={'立即邀请'}>
       <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0,background: '#57493F', marginTop:'45px' }} >
@@ -37,10 +38,10 @@ class Index extends React.Component {
               </Flex>
               <Flex direction='column'>
                 <Flex style={{flex: 1, width: '100%'}}>
-                姓名：大秦溜溜
+                姓名：{ userInfo.customerName || userInfo.companyPhone || '' }
                 </Flex>
                 <Flex style={{flex: 1, width: '100%'}}>
-                I   D：84
+                I   D：{ userInfo.customerNo || '' }
                 </Flex>
               </Flex>
             </Flex>
@@ -48,7 +49,7 @@ class Index extends React.Component {
               <img src={ewmIcon} alt="logo" style={{width: '289px', height: '289px'}} />
             </Flex>
             <Flex justify="center" className={styles.last}>
-              我的邀请码：RQEJK3456
+              我的邀请码：{ userInfo.invitationCode || '' }
             </Flex>
           </div>
         </div>
@@ -62,9 +63,9 @@ Index.propTypes = {
 };
 function mapStateToProps( state ) {
   // console.log(state)
-  const { isLogin, codeSend: isSend } = state.user
+  const { isLogin, info } = state.user
   return {
-    isLogin, isSend
+    isLogin, info
   }
 }
 export default connect( mapStateToProps )(Index);

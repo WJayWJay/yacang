@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
 import { Flex, List, InputItem, WhiteSpace, Toast } from 'antd-mobile';
 
 import Layout from '../../components/layout';
@@ -145,10 +145,13 @@ class Index extends React.Component {
   }
   
   render() {
+    const { dispatch } = this.props;
     if(this.props.isLogin) {
-      this.props.history.push('/home')
+      dispatch(routerRedux.push('/home'))
       return <div />
     }
+    console.log(this.props.location)
+    console.log(this.props.history)
     const {isSend, timeoutInfo} = this.state;
     const iconSize = '24px';
     return (
