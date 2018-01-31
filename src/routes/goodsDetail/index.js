@@ -34,7 +34,7 @@ class GoodsDetail extends React.Component {
           <div className={styles.content}>
             <Flex direction="column"> 
               <Flex className={styles.maxWidth}>
-                <div className={styles.title}>国家一级美术师 常炳华 粉彩生肖杯 极品精致 纯手绘手工胎</div>
+                <div className={styles.title}>{ detail.productName || ''}</div>
               </Flex> 
               <Flex className={[styles.maxWidth, styles.price]}> 
                 <Flex.Item justify={'start'}> 
@@ -67,19 +67,15 @@ class GoodsDetail extends React.Component {
               onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
             >
               <div className={styles.tabs}>
-                油彩陶瓷艺术馆旨在传承景德镇陶瓷传统文化，弘扬创新艺术理念，打造东西文化相结合的平台，团结一切艺术家，为景德镇千年瓷都
-                的更加辉煌贡献力量。
-
-                  独创的颜色釉油彩瓷画既有国画的深远意境，又有油画的质感，立体感，苍劲古朴，气韵生动，大气磅礴，获得了一次烧制成功的重大
-                突破，添补了景德镇瓷绘画艺术的一项空白，成为景德镇陶瓷艺术的一大亮点。
+                {detail.descriptions}
               </div>
               <div className={styles.tabs}>
-                Content of second tab
+                { detail.productSize }
               </div>
             </Tabs>
           </div>
 
-          <WhiteSpace style={{height: '100px'}} />
+          <WhiteSpace style={{height: '50px'}} />
           <div className={styles.bottom} >
             <Flex>
               <Item style={{flex: 1}} >
@@ -101,7 +97,6 @@ GoodsDetail.propTypes = {
 
 function mapStateToProps(state) {
   const { detail, id } = state.goodsDetail;
-  console.log(detail)
   return {
     detail,
     id

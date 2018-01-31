@@ -1,7 +1,7 @@
 import React from 'react';
 
 // import { Router, Route, Switch, Redirect, IndexRoute } from 'dva/router';
-import { Router, Route, Switch, Redirect } from 'dva/router';
+import { Router, Route, Switch, Redirect, withRouter } from 'dva/router';
 import dynamic from 'dva/dynamic';
 // import App from './app';
 
@@ -9,6 +9,9 @@ import dynamic from 'dva/dynamic';
 function RouterConfig({ history, app }) {
   const IndexPage = dynamic({
     app,
+    models: () => [
+      import('./models/home'),
+    ],
     component: () => import('./routes/home/index')
   })
   const ProductPage = dynamic({
@@ -22,6 +25,9 @@ function RouterConfig({ history, app }) {
 
   const AddBankCard = dynamic({
     app,
+    models: () => [
+      import('./models/card')
+    ],
     component: () => import('./routes/addBankCard/index')
   });
   const About = dynamic({
@@ -69,9 +75,9 @@ function RouterConfig({ history, app }) {
         <Route path="/revisePass" exact component={dynamic({ app,
           component: () => import('./routes/revisePass/index')
         })} />
-        <Route path="/login" exact component={dynamic({ app,
+        <Route path="/login" exact component={withRouter( dynamic({ app,
           component: () => import('./routes/login/index')
-        })} />
+        }))} />
         <Route path="/myself" exact component={dynamic({ app,
           component: () => import('./routes/myself/index')
         })} />

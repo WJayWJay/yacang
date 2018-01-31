@@ -1,5 +1,7 @@
 import { login, register, code } from '../services/user';
 import { Toast } from 'antd-mobile';
+import { routerRedux } from 'dva/router';
+import queryString from 'query-string';
 import Cache from '../utils/cache';
 
 const userKey = 'user@info';
@@ -34,6 +36,7 @@ export default {
           payload: {info}
         })
       }
+
     },
   },
 
@@ -48,15 +51,24 @@ export default {
     },
     *loginPost({ payload: { code, phone } }, { call, put, select}) {  // eslint-disable-line
       // yield put({ type: 'save' });
+      let locationQuery = yield select(state => state.app.locationQuery);
+      
       const { data } = yield call(login, {messages: code, phoneNumber: phone});
       console.log('login', data)
       if( data && data['success'] && data['result'] ) {
         Toast.success('登录成功!', 1.5);
         yield put({type: 'save', payload: { data: data.result}});
         yield put({type: 'updateLogin', payload: {isLogin: 1, tokenId: data.result.tokenId }});
+        
+
+        let url = locationQuery && locationQuery.uri || '';
+        
         Cache.set(userKey, data.result, true);
         Cache.set(tokenKey, data.result.tokenId);
         Cache.set(loginKey, 1);
+        if(locationQuery && locationQuery.uri) {
+          window.location.href = locationQuery.uri;
+        }
       } else {
         Toast.fail(data && data.errorMsg || '登录失败', 2);
       }

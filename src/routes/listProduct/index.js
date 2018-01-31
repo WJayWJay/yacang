@@ -97,12 +97,14 @@ class ListProduct extends React.Component {
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-
+    const winHeight = window.innerHeight;
+    let tabHeight = winHeight - 45 -43.5 -10;
     this.state = {
       dataSource,
       showed: false,
       data: [],
-      listHeight: '500px',
+      listHeight: tabHeight - 38 + 24 + 'px',
+      tabHeigh: tabHeight,
       hasMore: true
     }
   }
@@ -114,6 +116,10 @@ class ListProduct extends React.Component {
     // this.setState({
     //   dataSource: this.state.dataSource.cloneWithRows( this.rData )
     // });
+    this.props.dispatch({
+      type: 'product/fetchCategory',
+      payload: {}
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -139,7 +145,7 @@ class ListProduct extends React.Component {
     // console.log( '****' ,rowData, '****')
     // console.log(sectionID, rowID, 'tttttttt');
 
-    console.log(rowData)
+    // console.log(rowData)
     const obj = rowData;
     return (
       <div onClick={() => this.toDetail(obj)} key={rowID} style={{ padding: '0 15px' }}>
@@ -176,7 +182,7 @@ class ListProduct extends React.Component {
   };
 
   renderContent = tab => {
-    const { hasMore } = this.state;
+    const { hasMore, tabHeigh } = this.state;
     const row = (rowData, sectionID, rowID) => {
       return this.row(rowData, sectionID, rowID);
     }
@@ -193,7 +199,7 @@ class ListProduct extends React.Component {
     );
 
     return (
-      <div className={styles.tab}>
+      <div className={styles.tab} style={{ height: tabHeigh + 'px' }}>
         <ListView
           ref={el => this.lv = el}
           dataSource={this.state.dataSource}
@@ -268,14 +274,24 @@ class ListProduct extends React.Component {
 
   render() {
     const { showed } = this.state;
+    const { category } = this.props;
 
-    const tabs = [
-      { title: '金永恒' },
-      { title: '明秦' },
-      { title: '邮币卡' },
-      { title: '珍龙御石' },
-      { title: '纪念币' },
+    let tabs = [
+      // { title: '金永恒' },
+      // { title: '明秦' },
+      // { title: '邮币卡' },
+      // { title: '珍龙御石' },
+      // { title: '纪念币' },
     ];
+    if(category.length > 0) {
+      category.forEach(item => {
+        tabs.push({
+          id: item.categoryNo,
+          title: item.categoryName
+        })
+      })
+    }
+    
 
     const selectLists = [
       {title: '排序', id: 'sort'},
@@ -318,10 +334,10 @@ ListProduct.propTypes = {
 
 function mapStateToProps(state) {
   // console.log(state)
-  const { list,hasMore } = state.product;
-  console.log(list)
+  const { list,hasMore,category } = state.product;
+  console.log(category)
   return {
-    list,hasMore
+    list,hasMore,category
   }
 }
 

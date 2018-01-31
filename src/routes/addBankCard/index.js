@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 // import { Link } from 'dva/router';
 import { Flex, InputItem, List , WhiteSpace, Icon} from 'antd-mobile';
+import { createForm, createFormField } from 'rc-form';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
@@ -32,18 +33,27 @@ class AddBankCard extends React.Component {
       value,
     });
   }
+
+  submit = () => {
+    console.log(this.props.form)
+  }
   
   render() {
-    
+    const { getFieldProps } = this.props.form;
+
+    console.log(this.props)
+
     return (
       <Layout title={'添加银行卡'}>
         <div className={styles.normal}>
           <List renderHeader={() => '请绑定持卡人本人的银行卡'}>
             <InputItem
+              {...getFieldProps('realName')}
               extra="?"
               placeholder="请输入名字"
             >持卡人</InputItem>
             <InputItem
+            {...getFieldProps('bankCard')}
             // {...getFieldProps('bankCard', {
             //   initialValue: '8888 8888 8888 8888',
             // })}
@@ -56,6 +66,7 @@ class AddBankCard extends React.Component {
 
           <List renderHeader={() => '银行卡类型'}>
             <InputItem
+              {...getFieldProps('bankType')}
               placeholder="建设银行   储蓄卡"
               ref={el => this.autoFocusInst = el}
             >卡类型</InputItem>
@@ -73,7 +84,7 @@ class AddBankCard extends React.Component {
 
           <Flex style={{marginTop: '51px'}}>
             <Flex.Item>
-              <Button className={styles.nextStep}>下一步</Button>
+              <Button onClick={this.submit} className={styles.nextStep}>下一步</Button>
             </Flex.Item>
           </Flex>
         </div>
@@ -85,4 +96,32 @@ class AddBankCard extends React.Component {
 AddBankCard.propTypes = {
 };
 
-export default connect()(AddBankCard);
+function mapStateToProps(state) {
+  const { info } = state.user;
+  return {
+    info,
+    creditInfo: state.card.creditInfo
+  }
+}
+
+const AddBankCardForm = createForm({
+  mapPropsToFields(props) {
+    console.log('mapPropsToFields', props);
+    return {
+      bankCard: createFormField(props.creditInfo.bankCard),
+      phoneNumber: createFormField(props.creditInfo.phoneNumber),
+      cvv2: createFormField(props.creditInfo.cvv2),
+      validDate: createFormField(props.creditInfo.validDate),
+      smsCode: createFormField(props.creditInfo.smsCode)
+    };
+  },
+  onFieldsChange(props, fields) {
+    console.log('onFieldsChange...', fields);
+    props.dispatch({
+      type: 'card/saveFields',
+      payload: fields,
+    });
+  },
+})(AddBankCard);
+
+export default connect(mapStateToProps)(AddBankCardForm);

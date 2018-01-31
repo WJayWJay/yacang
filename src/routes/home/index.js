@@ -20,23 +20,31 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    let page = 1;
-    // this.props.dispatch({
-    //   type: 'product/fetch',
-    //   payload: {page}
-    // });
+    this.props.dispatch({
+      type: 'home/fetch',
+      payload: {type:'msg'}
+    });
+    this.props.dispatch({
+      type: 'home/fetch',
+      payload: {type:'img'}
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
   }
 
   renderHome() {
-    console.log(this.props)
+    const { swiperList, tagList } = this.props;
     const first = ['国内藏馆1', '臻至美玉', '名家书画', '臻至美玉', '名家书画'];
     const second = ['国内藏馆2', '臻至美玉', '名家书画', '臻至美玉', '名家书画'];
     const third = ['国内藏馆3', '臻至美玉', '名家书画', '臻至美玉', '名家书画'];
+    let list = swiperList;
+
     return (
       <div style={{ height: '100%', textAlign: 'center' }}>
         <Layout title={'汇藏'}>
           <div className={styles.normal}>
-            <Swiper />
+            <Swiper items={list} />
             <NoticeBar style={{fontSize: '14px'}} mode="link" action={
               <div className={styles.notify} >去看看</div>
             }>
@@ -243,9 +251,10 @@ Index.propTypes = {
 
 function mapStateToProps(state) {
   // const { list, total } = state.user;
-  const { isLogin, codeSend: isSend, info } = state.user
+  const { isLogin } = state.user
+  const { swiperList, tagList  } = state.home
   return {
-    isLogin, isSend, info
+    isLogin, swiperList, tagList
   }
 }
 
