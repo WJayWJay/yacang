@@ -2,7 +2,6 @@
 import queryString from 'query-string';
 
 import request from './request';
-import { productList } from '../services/product';
 import Cache from './cache';
 
 
@@ -23,7 +22,7 @@ const post = function post(url, data = {}, header = {}) {
     "Content-Type": "application/x-www-form-urlencoded",
   };
   if(tokenId) {
-    headers.tokenId = tokenId;
+    headers['X-Token'] = tokenId;
   }
   let body = {};
   headers = Object.assign({}, headers, header);

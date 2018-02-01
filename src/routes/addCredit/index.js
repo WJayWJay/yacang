@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Flex, InputItem, List , WhiteSpace, Icon} from 'antd-mobile';
-import { createForm, createFormField } from 'rc-form';
+import { createForm } from 'rc-form';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
@@ -43,10 +43,9 @@ class AddBankCard extends React.Component {
     //   type: 'card/bindDebit',
     //   payload: {info: 'submit'}
     // });
-
     dispatch(routerRedux.push({
       pathname: '/checkcode',
-      search: 'type=debit'
+      search: 'type=credit'
     }))
   }
   
@@ -125,7 +124,7 @@ function mapStateToProps(state) {
   const { info } = state.user;
   return {
     info,
-    creditInfo: state.card.creditInfo
+    debitInfo: state.card.debitInfo
   }
 }
 
@@ -133,7 +132,7 @@ const AddBankCardForm = createForm({
   onValuesChange(props, value) {
     console.log('onvalueChange...', value);
     props.dispatch({
-      type: 'card/saveFields',
+      type: 'card/savedDebitFields',
       payload: value,
     });
   },

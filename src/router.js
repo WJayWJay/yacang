@@ -30,6 +30,13 @@ function RouterConfig({ history, app }) {
     ],
     component: () => import('./routes/addBankCard/index')
   });
+  const addCredit = dynamic({
+    app,
+    models: () => [
+      import('./models/card')
+    ],
+    component: () => import('./routes/addCredit/index')
+  });
   const About = dynamic({
     app,
     component: () => import('./routes/about/index')
@@ -44,6 +51,7 @@ function RouterConfig({ history, app }) {
         <Route path="/product" exact component={ProductPage} />
         <Route path="/checkcode" exact component={CheckCode} />
         <Route path="/addBankCard" exact component={AddBankCard} />
+        <Route path="/addCredit" exact component={addCredit} />
         <Route path="/about" exact component={About} />
         <Route path="/goodsDetail/:id" exact component={dynamic({ app,
           models: () => [

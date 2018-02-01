@@ -16,6 +16,7 @@ export default {
         // if (pathname === '/users') {
         //   dispatch({ type: 'fetch', payload: query });
         // }
+        
         if(location) {
           dispatch({
             type: 'updateState',
