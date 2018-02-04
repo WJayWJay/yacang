@@ -6,6 +6,9 @@ const API = process.env.NODE_ENV === 'development'? '/huicang' : '/huicang';
 export function loginApi() {
   return API + '/login/main';
 }
+export function getUserInfoApi() {
+  return API + '/login/presentCustomerQuery';
+}
 export function registerApi() {
   return API + '/msg/register';
 }
@@ -26,11 +29,15 @@ export function homeDetail() {
   return API + '/msg/getCarouselMessage';
 }
 
+
 export function cardList() {
   return API + '/bankCard/getBankCardList';
 }
 export function cardCreditBind() {
   return API + '/bankCard/bindCreditCard';
+}
+export function sendCreditSms() {
+  return API + '/bankCard/applyOpenSms';
 }
 export function bindDebitCard() {
   return API + '/bankCard/bindDebitCard';

@@ -1,9 +1,9 @@
 
-// const API = process.env.NODE_ENV === 'development'? 'http://121.8.160.34:8899/huicang' : '';
-const API = process.env.NODE_ENV === 'development'? '/huicang' : '';
 
 const Constant = {
-  
+  company: '广州汇藏文化传播有限公司',
+  copyright: 'Copyright@2015～'+ new Date().getFullYear(),
 }
 
+export default Constant;
 

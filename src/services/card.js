@@ -1,6 +1,7 @@
 import post from '../utils/post';
+import postData from '../utils/postData';
 
-import { cardList, cardCreditBind, bindDebitCard } from '../apis'
+import { cardList, cardCreditBind, bindDebitCard, sendCreditSms, imgUpload } from '../apis'
 
 
 export function listCard(obj) {
@@ -26,4 +27,20 @@ export function bindCardDebit(obj) {
   data = Object.assign({}, data, obj || {});
   
   return post(bindDebitCard(), data);
+}
+
+export function sendCreditSmsCode(obj) {
+  let data ={
+    initiationID: Date.now().toString(16)
+  };
+  data = Object.assign({}, data, obj || {});
+  
+  return post(sendCreditSms(), data);
+}
+export function imageUpload(formData) {
+  if(!formData) {
+    return;
+  }
+  formData.append('initiationID', Date.now().toString(16));
+  return postData(imgUpload(), formData);
 }

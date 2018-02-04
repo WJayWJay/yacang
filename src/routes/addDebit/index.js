@@ -10,7 +10,7 @@ import Button from '../../components/button';
 
 import styles from './index.less';
 
-class AddBankCard extends React.Component {
+class AddDebitCard extends React.Component {
   state = {
     hasError: false,
     smsInfo: '获取验证码',
@@ -20,9 +20,12 @@ class AddBankCard extends React.Component {
   };
   intervId = 0;
 
+  componentWillUnmount() {
+    this.intervId && clearInterval(this.intervId);
+  }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.creditSmsSend, 'jjjjj')
-    if(nextProps.creditSmsSend === 0) {
+    console.log(nextProps.debitSmsSend, 'jjjjj')
+    if(nextProps.debitSmsSend === 0) {
       this.startInterv();
     } else {
       this.intervId && clearInterval(this.intervId);
@@ -43,7 +46,7 @@ class AddBankCard extends React.Component {
         });
         this.props.dispatch({
           type: 'card/updateState',
-          payload: {creditSmsSend: -1}
+          payload: {debitSmsSend: -1}
         });
         return;
       }
@@ -69,7 +72,7 @@ class AddBankCard extends React.Component {
     });
     this.props.dispatch({
       type: 'card/sendSmsCode',
-      payload: {type: 'credit'}
+      payload: {type: 'debit'}
     });
   }
 
@@ -95,11 +98,11 @@ class AddBankCard extends React.Component {
     }
 
     dispatch({
-      type: 'card/cacheCreditInfo',
+      type: 'card/cacheDebitInfo',
       payload: {}
     });
     dispatch({
-      type: 'card/bindCredit',
+      type: 'card/bindDebit',
       payload: {}
     });
   }
@@ -118,11 +121,12 @@ class AddBankCard extends React.Component {
   
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-    const creditInfo = this.props.creditInfo || {};
+    const creditInfo = this.props.debitInfo || {};
     return (
       <Layout title={'添加银行卡'}>
         <div className={styles.normal}>
-          <List renderHeader={() => '请绑定持卡人本人的银行卡'}>
+          <WhiteSpace />
+          <List renderHeader={() => '为保证您的账户安全，请完成验证'}>
             <InputItem
               {...getFieldProps('realName', {
                 initialValue: creditInfo.realName,
@@ -132,8 +136,19 @@ class AddBankCard extends React.Component {
               })}
               error={!!getFieldError('realName')}
               type="text"
-              placeholder="请输入名字"
-            >持卡人</InputItem>
+              placeholder="请输入真实姓名"
+            >姓名</InputItem>
+            <InputItem
+              {...getFieldProps('idCardNo', {
+                initialValue: creditInfo.realName,
+                rules: [{
+                  required: true,
+                }],
+              })}
+              error={!!getFieldError('idCardNo')}
+              type="text"
+              placeholder="请输入身份证号"
+            >身份证</InputItem>
             <InputItem
             {...getFieldProps('bankCard',{
               initialValue: creditInfo.bankCard,
@@ -150,10 +165,12 @@ class AddBankCard extends React.Component {
             })}
             error={!!getFieldError('bankCard')}
             maxLength={26}
-            placeholder={'8888 8888 8888 8888'}
+            placeholder={'请输入借记卡卡号'}
             type="bankCard"
-          >银行卡号</InputItem>
-
+          >银行卡</InputItem>
+        </List>
+        <WhiteSpace />
+        <List>
           <InputItem
             {...getFieldProps('phoneNumber', {
               initialValue: creditInfo.phoneNumber,
@@ -170,88 +187,56 @@ class AddBankCard extends React.Component {
             })}
             error={!!getFieldError('phoneNumber')}
             type="phone"
-            placeholder="请输入手机号码"
-          >手机号码</InputItem>
-          </List>
+            placeholder="请输入银行卡预留手机号"
+          >预留手机号</InputItem>
+          <InputItem
+            type="number"
+            {...getFieldProps('smsCode', {
+              initialValue: creditInfo.smsCode,
+              rules: [{
+                required: true,
+                validator: (rule, value, cb) => {
+                  value && value.length >3 && value.length <7 ? cb():cb(new Error('验证码格式错误'))
+                }
+              }],
+            })}
+            maxLength={6}
+            placeholder="请输入验证码"
+            error={!!getFieldError('smsCode')}
+            extra={<Button 
+                    disabled={this.state.sendDisabled} 
+                    onClick={this.getCode} 
+                    inline 
+                    className={styles.getSmsCode} 
+                    type="primary">{this.state.smsInfo || ''}</Button>}
+          >验证码</InputItem>
+        </List>
+        <WhiteSpace />
+        <List renderHeader={() => '请设置支付密码'}>
+          <InputItem
+            {...getFieldProps('password', {
+              initialValue: creditInfo.bankType,
+              rules: [{
+                required: true,
+              }],
+            })}
+            error={!!getFieldError('password')}
+            placeholder="请设置支付密码"
+            type="password"
+          >支付密码</InputItem>
 
-          <WhiteSpace />
-
-          <List renderHeader={() => '银行卡类型'}>
-            <InputItem
-              {...getFieldProps('bankType', {
-                initialValue: creditInfo.bankType,
-                rules: [{
-                  required: true,
-                }],
-              })}
-              error={!!getFieldError('bankType')}
-              placeholder="信用卡"
-              type="text"
-            >卡类型</InputItem>
-
-            <InputItem
-              {...getFieldProps('cvv2', {
-                initialValue: creditInfo.cvv2,
-                rules: [{
-                  required: true,
-                }],
-              })}
-              error={!!getFieldError('cvv2')}
-              placeholder="校验码"
-              type="text"
-            >校验码</InputItem>
-          
-            <InputItem
-              {...getFieldProps('validDate', {
-                initialValue: creditInfo.validDate,
-                rules: [{
-                  required: true,
-                }],
-              })}
-              error={!!getFieldError('validDate')}
-              placeholder="有效期"
-              type="text"
-            >有效期</InputItem>
-
-            {/* <DatePicker
-              mode="date"
-              title="请选择有效期"
-              {...getFieldProps('validDate', {
-                initialValue: this.state.dpValue,
-                rules: [
-                  { required: true, message: 'Must select a date' },
-                  { validator: this.validateDatePicker },
-                ],
-              })}
-              onChange={date => console.log(date)}
-            >
-              <List.Item arrow="horizontal">有效期</List.Item>
-            </DatePicker> */}
-
-            
-
-            <InputItem
-              type="number"
-              {...getFieldProps('smsCode', {
-                initialValue: creditInfo.smsCode,
-                rules: [{
-                  required: true,
-                  validator: (rule, value, cb) => {
-                    value && value.length >3 && value.length <7 ? cb():cb(new Error('验证码格式错误'))
-                  }
-                }],
-              })}
-              maxLength={6}
-              placeholder="请输入验证码"
-              error={!!getFieldError('smsCode')}
-              extra={<Button 
-                      disabled={this.state.sendDisabled} 
-                      onClick={this.getCode} 
-                      inline 
-                      className={styles.getSmsCode} 
-                      type="primary">{this.state.smsInfo || ''}</Button>}
-            >验证码</InputItem>
-          </List>
+          <InputItem
+            {...getFieldProps('confirmPassword', {
+              initialValue: creditInfo.cvv2,
+              rules: [{
+                required: true,
+              }],
+            })}
+            error={!!getFieldError('confirmPassword')}
+            placeholder="请确认支付密码"
+            type="password"
+          >确认密码</InputItem>
+        </List>
           
 
           <Flex className={styles.userProto}>
@@ -269,23 +254,22 @@ class AddBankCard extends React.Component {
   }
 }
 
-AddBankCard.propTypes = {
+AddDebitCard.propTypes = {
   form: PropTypes.object
 };
 
 function mapStateToProps(state) {
   const { info } = state.user;
-  console.log(state.card.creditSmsSend)
 
   return {
     info,
-    creditSmsSend: state.card.creditSmsSend,
-    creditInfo: state.card.creditInfo
+    debitSmsSend: state.card.debitSmsSend,
+    debitInfo: state.card.debitInfo
   }
 }
 
 
-const AddBankCardForm = createForm({
+const AddDebitCardForm = createForm({
   onValuesChange(props, value) {
     console.log('onvalueChange...', value);
     if(value && (value.bankCard || value.phoneNumber)) {
@@ -293,18 +277,17 @@ const AddBankCardForm = createForm({
       val = val.replace(/\s/g, '');
 
       let obj = value.bankCard? {bankCard: val} : {phoneNumber: val};
-      console.log(obj)
       props.dispatch({
-        type: 'card/savedCreditFields',
+        type: 'card/savedDebitFields',
         payload: obj
       });
       return;
     }
     props.dispatch({
-      type: 'card/savedCreditFields',
+      type: 'card/savedDebitFields',
       payload: value,
     });
   },
-})(AddBankCard);
+})(AddDebitCard);
 
-export default connect(mapStateToProps)(AddBankCardForm);
+export default connect(mapStateToProps)(AddDebitCardForm);

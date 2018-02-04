@@ -15,8 +15,7 @@ export function productCategory(obj) {
   let data ={
     initiationID: Date.now().toString(16)
   };
-  data = Object.assign({}, data, {});
-  
+  data = Object.assign({}, data, obj);
   return post(getProductCategory(), data);
 }
 export function detail(obj) {

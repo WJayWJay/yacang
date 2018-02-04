@@ -1,6 +1,6 @@
 import post from '../utils/post';
 
-import { registerApi, loginApi, logoutApi, codeApi } from '../apis'
+import { registerApi, loginApi, logoutApi, codeApi, getUserInfoApi } from '../apis'
 
 export function login(obj) {
   let data ={
@@ -26,7 +26,7 @@ export function logout(obj) {
   };
   data = Object.assign({}, data, obj || {});
   
-  return post(logoutApi(), data);
+  // return post(logoutApi(), data);
 }
 
 export function register(obj) {
@@ -35,5 +35,12 @@ export function register(obj) {
   };
   data = Object.assign({}, data, obj || {});
   return post(registerApi(), data);
+}
+export function userinfo(obj) {
+  let data ={
+    initiationID: Date.now().toString(16)
+  };
+  data = Object.assign({}, data, obj || {});
+  return post(getUserInfoApi(), data);
 }
 

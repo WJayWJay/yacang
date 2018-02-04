@@ -1,4 +1,4 @@
-import { login, register, code } from '../services/user';
+import { login, register, code, userinfo } from '../services/user';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
@@ -24,11 +24,16 @@ export default {
       let info = Cache.get(userKey);
       let tokenId = Cache.get(tokenKey);
       console.log(info, isLogin, 'user model')
-      if(isLogin) {
+      if(isLogin && tokenId) {
         dispatch({
           type: 'updateLogin',
           payload: {isLogin, tokenId}
+        });
+        dispatch({
+          type: 'getUserInfo',
+          payload: {}
         })
+
       }
       if(info) {
         dispatch({
@@ -41,6 +46,24 @@ export default {
   },
 
   effects: {
+    *getUserInfo({ payload: { } }, { call, put, select}) {  // eslint-disable-line
+      const { data } = yield call(userinfo, {});
+      console.log(data, 'userinfo...')
+      if(data && data['success']) {
+        Cache.set(userKey, data.result, true);
+        Cache.set(tokenKey, data.result.tokenId);
+        Cache.set(loginKey, 1);
+      } else {
+        yield put({
+          type: 'logout',
+          payload: {}
+        })
+        yield put( routerRedux.push({
+          pathname: '/login',
+          search: '?uri='+ window.location.href
+        }) )
+      }
+    },
     *fetch({ payload: { page } }, { call, put, select}) {  // eslint-disable-line
       // yield put({ type: 'save' });
       const { data } = yield call(register, {pageNo: page});
@@ -60,8 +83,6 @@ export default {
         yield put({type: 'save', payload: { data: data.result}});
         yield put({type: 'updateLogin', payload: {isLogin: 1, tokenId: data.result.tokenId }});
         
-
-        let url = locationQuery && locationQuery.uri || '';
         
         Cache.set(userKey, data.result, true);
         Cache.set(tokenKey, data.result.tokenId);

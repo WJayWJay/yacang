@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import { Flex, List, InputItem, WhiteSpace, Toast } from 'antd-mobile';
 
+import Constant from '../../constant';
 import Layout from '../../components/layout';
 import Button from '../../components/button';
 
@@ -216,10 +217,10 @@ class Index extends React.Component {
             
             <Flex className={styles.copyright} direction="column">
               <Flex.Item>
-                广州雅藏文化传播有限公司 
+              {Constant.company}
               </Flex.Item>
               <Flex.Item>
-                Copyright@2015～2035
+              {Constant.copyright}
               </Flex.Item>
             </Flex>
           </div>

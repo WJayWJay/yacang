@@ -21,7 +21,7 @@ export default {
       return history.listen(({ pathname, query }) => {
         console.log(pathname, query)
         if(pathname === '/productList') {
-          dispatch({ type: 'fetch', payload: {page: 1} });
+          
         }
         // const re = pathToRegexp('/productList');
         // const match = re.exec(pathname);
@@ -34,10 +34,10 @@ export default {
   },
 
   effects: {
-    *fetch({ payload: { page } }, { call, put, select}) {  // eslint-disable-line
+    *fetch({ payload: payload }, { call, put, select}) {  // eslint-disable-line
       // yield put({ type: 'save' });
-      console.log(page)
-      const { data } = yield call(productList, {pageNo: page});
+      console.log(payload)
+      const { data } = yield call(productList, payload);
       let hasMore = true;
       console.log('fetch', data)
       if( data && data['success'] && data['result'] ) {
@@ -45,12 +45,11 @@ export default {
           hasMore = false;
         }
         if(Array.isArray(data.result.results) && data.result.results.length) {
-          page = +1;
           if(data.result.results.length < 10) {
             hasMore = false;
           }
         }
-        yield put({type: 'save', payload: { data: data.result.results, total: data.result.totalSize, page, hasMore}})
+        yield put({type: 'save', payload: { data: data.result.results||[], total: data.result.totalSize, hasMore}})
       }
     },
     *fetchCategory({ payload: {}}, { call, put, select}) {

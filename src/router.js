@@ -20,6 +20,9 @@ function RouterConfig({ history, app }) {
   })
   const CheckCode = dynamic({
     app,
+    models: () => [
+      import('./models/card')
+    ],
     component: () => import('./routes/checkcode/index')
   })
 
@@ -30,12 +33,19 @@ function RouterConfig({ history, app }) {
     ],
     component: () => import('./routes/addBankCard/index')
   });
-  const addCredit = dynamic({
+  const AddDebit = dynamic({
     app,
     models: () => [
       import('./models/card')
     ],
-    component: () => import('./routes/addCredit/index')
+    component: () => import('./routes/addDebit/index')
+  });
+  const UploadId = dynamic({
+    app,
+    models: () => [
+      import('./models/card')
+    ],
+    component: () => import('./routes/uploadId/index')
   });
   const About = dynamic({
     app,
@@ -51,7 +61,8 @@ function RouterConfig({ history, app }) {
         <Route path="/product" exact component={ProductPage} />
         <Route path="/checkcode" exact component={CheckCode} />
         <Route path="/addBankCard" exact component={AddBankCard} />
-        <Route path="/addCredit" exact component={addCredit} />
+        <Route path="/addDebit" exact component={AddDebit} />
+        <Route path="/uploadId" exact component={UploadId} />
         <Route path="/about" exact component={About} />
         <Route path="/goodsDetail/:id" exact component={dynamic({ app,
           models: () => [
@@ -63,6 +74,9 @@ function RouterConfig({ history, app }) {
           component: () => import('./routes/cardDetail/index')
         })} />
         <Route path="/cardCenter" exact component={dynamic({ app,
+          models: () => [
+            import('./models/card'),
+          ],
           component: () => import('./routes/cardCenter/index')
         })} />
         <Route path="/userInfo" exact component={dynamic({ app,
@@ -104,10 +118,9 @@ function RouterConfig({ history, app }) {
         <Route path="/reposit" exact component={dynamic({ app,
           component: () => import('./routes/reposit/index')
         })} />
-        {/* <Route path="/show">
-          <IndexRoute component={ListPage} />
-          <Route path=":page" component={ListPage} />
-        </Route> */}
+        <Route path="/result" exact component={dynamic({ app,
+          component: () => import('./routes/result/index')
+        })} />
         
       </Switch>
     </Router>

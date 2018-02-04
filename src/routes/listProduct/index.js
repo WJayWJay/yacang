@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { WhiteSpace, WingBlank, Tabs, Flex, Menu, Icon, ListView } from 'antd-mobile';
@@ -105,34 +106,38 @@ class ListProduct extends React.Component {
       data: [],
       listHeight: tabHeight - 38 + 24 + 'px',
       tabHeigh: tabHeight,
-      hasMore: true
+      hasMore: true,
+      page: 1
     }
   }
 
   componentDidMount() {
+    const { dispatch } = this.props;
+    const { page } = this.state;
     this.rData = [];
-    // this.rData = genData(data);
-    // console.log(this.rData, 'rData')
-    // this.setState({
-    //   dataSource: this.state.dataSource.cloneWithRows( this.rData )
-    // });
-    this.props.dispatch({
+    
+    dispatch({
       type: 'product/fetchCategory',
       payload: {}
     });
+    dispatch({ type: 'product/fetch', payload: {page: page} });
   }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps !== this.props) {
-      console.log(nextProps, 'jjjjjj')
       if(nextProps.list) {
-        this.rData = this.rData.concat(genData(nextProps.list));
+        // this.rData = this.rData.concat(genData(nextProps.list));
+        this.rData = genData(nextProps.list);
         
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(this.rData),
           isLoading: false,
           hasMore: !!nextProps.hasMore
         });
+      }
+
+      if(nextProps.category && Array.isArray(nextProps.category)) {
+        
       }
     }
   }
@@ -226,6 +231,14 @@ class ListProduct extends React.Component {
     );
   }
 
+  tabChange = (tab, index) => {
+    const { dispatch } = this.props;
+    const { page } = this.state;
+    console.log(tab, index)
+
+    dispatch({ type: 'product/fetch', payload: {page: page, categoryNo: tab.id } });
+  }
+
   onEndReached = (event) => {
     // load new data
     // hasMore: from backend data, indicates whether it is the last page, here is false
@@ -277,11 +290,6 @@ class ListProduct extends React.Component {
     const { category } = this.props;
 
     let tabs = [
-      // { title: '金永恒' },
-      // { title: '明秦' },
-      // { title: '邮币卡' },
-      // { title: '珍龙御石' },
-      // { title: '纪念币' },
     ];
     if(category.length > 0) {
       category.forEach(item => {
@@ -291,7 +299,6 @@ class ListProduct extends React.Component {
         })
       })
     }
-    
 
     const selectLists = [
       {title: '排序', id: 'sort'},
@@ -314,7 +321,9 @@ class ListProduct extends React.Component {
               </Flex>
               { showed ? this.renderSelect(showed): null}
             </div>
-            <Tabs tabs={tabs}>
+            <Tabs 
+              onChange={this.tabChange}
+              tabs={tabs}>
               {this.renderContent}
             </Tabs>
 
@@ -330,6 +339,7 @@ class ListProduct extends React.Component {
 }
 
 ListProduct.propTypes = {
+  category: PropTypes.array
 };
 
 function mapStateToProps(state) {
