@@ -95,6 +95,7 @@ class Index extends React.Component {
   }
 
   toFinishInfo = () => {
+    console.log('jjjj')
     let pathname = '/login';
     if(this.props.isLogin) {
       pathname = '/addDebit';

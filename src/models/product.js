@@ -13,7 +13,8 @@ export default {
     total: 0,
     page: 1,
     category: [],
-    hasMore: true
+    hasMore: true,
+    currentCat: '',
   },
 
   subscriptions: {
@@ -40,6 +41,9 @@ export default {
       const { data } = yield call(productList, payload);
       let hasMore = true;
       console.log('fetch', data)
+      if(payload && payload.categoryNo) {
+        yield put({type: 'updateState', currentCat: payload.categoryNo});
+      }
       if( data && data['success'] && data['result'] ) {
         if(!Array.isArray(data.result.results)) {
           hasMore = false;

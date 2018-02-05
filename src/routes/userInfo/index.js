@@ -42,7 +42,7 @@ class CardCenter extends React.Component {
   }
 
   render() {
-    const { isLogin, info } = this.props;
+    const { isLogin, info, cardList } = this.props;
     let userInfo = Object.assign({}, info);
     if(!isLogin) {
       this.props.history.push({
@@ -67,7 +67,7 @@ class CardCenter extends React.Component {
             </List>
             <List renderHeader={() => '账户状态'} className={styles.myList}>
               <Item extra={!userInfo.stat ? '未实名': stats[userInfo.stat]} arrow="horizontal" onClick={() => {}}>账户状态</Item>
-              <Item extra={"3张"} arrow="horizontal" onClick={() => {}}>我的银行卡</Item>
+              <Item extra={cardList.length + "张"} arrow="horizontal" onClick={() => {}}>我的银行卡</Item>
               <Item extra="" arrow="horizontal" onClick={this.revisePwd}>修改支付密码</Item>
             </List>
           </div>
@@ -86,7 +86,7 @@ CardCenter.propTypes = {
 function mapStateToProps( state ) {
   const { isLogin, info } = state.user
   return {
-    isLogin, info
+    isLogin, info, cardList: state.card.cardList
   }
 }
 

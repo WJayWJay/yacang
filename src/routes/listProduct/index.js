@@ -120,7 +120,7 @@ class ListProduct extends React.Component {
       type: 'product/fetchCategory',
       payload: {}
     });
-    dispatch({ type: 'product/fetch', payload: {page: page} });
+    // dispatch({ type: 'product/fetch', payload: {page: page} });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -135,9 +135,9 @@ class ListProduct extends React.Component {
           hasMore: !!nextProps.hasMore
         });
       }
-
-      if(nextProps.category && Array.isArray(nextProps.category)) {
-        
+      if(nextProps.category && Array.isArray(nextProps.category) && nextProps.category> 0 && !nextProps.currentCat) {
+        let tab = nextProps.category[0];
+        this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: tab.id } });
       }
     }
   }
@@ -236,7 +236,11 @@ class ListProduct extends React.Component {
     const { page } = this.state;
     console.log(tab, index)
 
-    dispatch({ type: 'product/fetch', payload: {page: page, categoryNo: tab.id } });
+    let currentPage = 1;
+    dispatch({ type: 'product/fetch', payload: {page: currentPage, categoryNo: tab.id } });
+    this.setState({
+      page: 1,
+    })
   }
 
   onEndReached = (event) => {
@@ -344,10 +348,10 @@ ListProduct.propTypes = {
 
 function mapStateToProps(state) {
   // console.log(state)
-  const { list,hasMore,category } = state.product;
+  const { list,hasMore,category,currentCat } = state.product;
   console.log(category)
   return {
-    list,hasMore,category
+    list,hasMore,category, currentCat
   }
 }
 

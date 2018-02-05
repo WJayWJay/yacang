@@ -60,8 +60,8 @@ class AddBankCard extends React.Component {
   getCode = (e) => {
     e.preventDefault();
     const { getFieldError } = this.props.form;
-    if(!!getFieldError('smsCode')) {
-      Toast.show('验证码格式错误！');
+    if(!!getFieldError('phoneNumber')) {
+      Toast.show('手机号格式错误！');
       return;
     }
     this.setState({

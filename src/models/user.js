@@ -17,7 +17,7 @@ export default {
     codeSend: 0,
     tokenId: '',
     members: [],
-    resetPasswords: {},
+    resetPasswords: {'msgType': '003'},
     resetSmsSend: -1,
   },
 
@@ -142,18 +142,20 @@ export default {
       let locationQuery = yield select(state => state.app.locationQuery);
 
       const { data } = yield call(login, {messages: code, phoneNumber: phone});
-      console.log('login', data)
       if( data && data['success'] && data['result'] ) {
         Toast.success('登录成功!', 1.5);
         yield put({type: 'save', payload: { data: data.result}});
         yield put({type: 'updateLogin', payload: {isLogin: 1, tokenId: data.result.tokenId }});
-
-
         Cache.set(userKey, data.result, true);
         Cache.set(tokenKey, data.result.tokenId);
         Cache.set(loginKey, 1);
+        
         if(locationQuery && locationQuery.uri) {
           window.location.href = locationQuery.uri;
+        } else {
+          yield put(routerRedux.push({
+            pathname: '/myself'
+          }));
         }
       } else {
         Toast.fail(data && data.errorMsg || '登录失败', 2);
@@ -165,7 +167,7 @@ export default {
       if(isSend === 1) {
         return ;
       }
-      const { data } = yield call(code, {companyPhone: phone});
+      const { data } = yield call(code, {companyPhone: phone, 'msgType': '001'});
       console.log('fetchCode', data)
       if( data && data['success'] ) {
         Toast.success('验证码已发送, 请注意查收!');

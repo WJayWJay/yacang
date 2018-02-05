@@ -58,7 +58,7 @@ class Index extends React.Component {
 
             <List renderHeader={() => '我的好友（'+ members.length +'人）'} className="my-list">
               {
-                members.length === 0 ? (<Item>暂无好友信息!</Item>): members.map(item => this.renderMembers(item))
+                members.length === 0 ? (<div style={{'textAlign': 'center', 'padding': '10px'}}>暂无好友信息!</div>): members.map(item => this.renderMembers(item))
               }
               {/* <Item
               className={styles.listItem}

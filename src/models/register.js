@@ -7,6 +7,12 @@ export default {
     info: {},
     registerStatus: -1,
     codeSend: 0,
+    registerInfo: {
+      phoneNumber: '',
+      invitationCode: '',
+      messages: '',
+      cumSource: '2'
+    }
   },
 
   subscriptions: {
@@ -31,7 +37,7 @@ export default {
       if(isSend === 1) {
         return ;
       }
-      const { data } = yield call(code, {companyPhone: phone});
+      const { data } = yield call(code, {companyPhone: phone, 'msgType': '000'});
       if( data && data['success'] ) {
         Toast.success('验证码已发送, 请注意查收!');
         yield put({type: 'changeCodeSend', payload: { codeSend: 1}});
