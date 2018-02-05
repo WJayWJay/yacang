@@ -3,7 +3,11 @@ import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
 import { Flex, List, InputItem, WhiteSpace, Toast } from 'antd-mobile';
 
+import queryString from 'query-string';
+
 import Constant from '../../constant';
+import { isWeixin } from '../../functions';
+import { wxUserApi, weixinLogin } from '../../apis';
 import Layout from '../../components/layout';
 import Button from '../../components/button';
 
@@ -23,12 +27,31 @@ class Index extends React.Component {
     timeoutInfo: '获取验证码',
     isSend: 0
   }
-  
+
   componentDidMount() {
+    const { dispatch } = this.props;
     try {
       let phone = localStorage.getItem('key@phone');
       phone && phone.length > 9 && this.setState({phone: phone});
     } catch(e) {}
+    let curLocation = this.props.history.location;
+    console.log(curLocation)
+    if(isWeixin()) {
+      let search = window.location.search;
+      search = queryString.parse(search);
+      let code = search.code;
+      if(code && code.length > 3) {
+        dispatch({
+          type: 'user/getUserInfoByWx',
+          payload: {code: code}
+        })
+      } else {
+        // let myUri = '/#/login?index=123';
+        let redirectUri = wxUserApi();
+        window.location.href = redirectUri;
+      }
+    }
+
   }
   componentWillUnmount() {
     if(this.intervId) {
@@ -144,7 +167,7 @@ class Index extends React.Component {
       payload: {code, phone}
     })
   }
-  
+
   render() {
     console.log(this.props, 'props')
     const { dispatch } = this.props;
@@ -158,8 +181,8 @@ class Index extends React.Component {
     const iconSize = '24px';
     return (
       <Layout title={'登录'}>
-        <div className={styles.normal}>   
-          <div className={styles.content}> 
+        <div className={styles.normal}>
+          <div className={styles.content}>
             <Flex justify="center" className={styles.logo}>
               <img src={logo} alt="logo" style={{width: '110px', height: '110px'}} />
             </Flex>
@@ -167,7 +190,7 @@ class Index extends React.Component {
               <List className={styles.myList}>
                 <InputItem
                   clear
-                  style={{fontSize: '16px',opacity: 0.4}}  
+                  style={{fontSize: '16px',opacity: 0.4}}
                   labelNumber={2}
                   maxLength={12}
                   placeholder="请输入手机号"
@@ -178,17 +201,17 @@ class Index extends React.Component {
                 ><div style={{
                   width: iconSize,
                   height: iconSize,
-                  background: 'url(' + require('../../assets/login/login-phone.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}  
+                  background: 'url(' + require('../../assets/login/login-phone.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
                 /></InputItem>
               </List>
               <WhiteSpace />
               <List className={styles.myList}>
                 <InputItem
                   clear
-                  style={{fontSize: '16px',opacity: 0.4}}  
-                  extra={<div 
-                      onClick={() => this.getCheckCode()} 
-                      style={{backgroundColor: isSend===1? '#CECECE':'#57493F'}} 
+                  style={{fontSize: '16px',opacity: 0.4}}
+                  extra={<div
+                      onClick={() => this.getCheckCode()}
+                      style={{backgroundColor: isSend===1? '#CECECE':'#57493F'}}
                       className={styles.getCheckCode}
                   >{timeoutInfo}</div>}
                   labelNumber={2}
@@ -200,21 +223,21 @@ class Index extends React.Component {
                   <div style={{
                     width: iconSize,
                     height: iconSize,
-                    background: 'url(' + require('../../assets/login/login-key.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}  
+                    background: 'url(' + require('../../assets/login/login-key.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
                   />
                 </InputItem>
               </List>
-              <List className={styles.myList}>
+              <List className={styles.myListLogin}>
                 <Button onClick={this.submit} className={styles.deleteButton}>登录</Button>
               </List>
             </Flex>
-            
+
             <Flex className={styles.register} align="center" justify="center">
               <Flex.Item>
                 <Link to="/register"> 新用户注册 </Link>
               </Flex.Item>
             </Flex>
-            
+
             <Flex className={styles.copyright} direction="column">
               <Flex.Item>
               {Constant.company}

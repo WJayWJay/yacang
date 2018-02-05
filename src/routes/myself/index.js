@@ -94,15 +94,24 @@ class Index extends React.Component {
     )
   }
 
+  toFinishInfo = () => {
+    let pathname = '/login';
+    if(this.props.isLogin) {
+      pathname = '/addDebit';
+    }
+    this.props.dispatch(routerRedux.push({
+      pathname
+    }));
+  }
+
   renderSelf() {
     const { isLogin, info } = this.props;
-    console.log(isLogin, info, 'mysel')
-    const username = info ? info.customerName||info.companyPhone : ''; 
+    const username = info ? info.customerName||info.companyPhone : '';
     const iconSize = '16px';
     return (
       <Layout title={'我的'}>
         <div className={styles.normal}>
-          {isLogin? <NoticeBar mode="closable" icon={
+          {info && info.stat !== 'CERTIFICATION'? <NoticeBar onClick={this.toFinishInfo} mode="closable" icon={
             <div style={{
               width: iconSize,
               height: iconSize,

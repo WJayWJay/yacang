@@ -80,6 +80,9 @@ function RouterConfig({ history, app }) {
           component: () => import('./routes/cardCenter/index')
         })} />
         <Route path="/userInfo" exact component={dynamic({ app,
+          models: () => [
+            import('./models/card'),
+          ],
           component: () => import('./routes/userInfo/index')
         })} />
         <Route path="/register" exact component={dynamic({ app,
@@ -95,6 +98,9 @@ function RouterConfig({ history, app }) {
           component: () => import('./routes/forget2/index')
         })} />
         <Route path="/revisePass" exact component={dynamic({ app,
+          models: () => [
+            import('./models/card'),
+          ],
           component: () => import('./routes/revisePass/index')
         })} />
         <Route path="/login" exact component={withRouter( dynamic({ app,
@@ -121,7 +127,7 @@ function RouterConfig({ history, app }) {
         <Route path="/result" exact component={dynamic({ app,
           component: () => import('./routes/result/index')
         })} />
-        
+
       </Switch>
     </Router>
   );

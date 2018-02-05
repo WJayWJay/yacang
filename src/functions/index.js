@@ -1,7 +1,7 @@
 
 
 export function cacheUserInfo() {
-  
+
 }
 
 export function getFileValueProps(value) {
@@ -14,9 +14,14 @@ export function getFileValueProps(value) {
       value,
     };
 }
-  
+
 export function getValueFromFileEvent({ target }) {
     return {
         target,
     };
+}
+export function isWeixin() {
+  let ua = navigator && navigator.userAgent;
+  ua = ua && ua.toLowerCase();
+  return /micromessenger/i.test(ua);
 }

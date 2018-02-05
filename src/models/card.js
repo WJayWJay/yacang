@@ -1,4 +1,4 @@
-import { bindCreditCard, listCard, bindCardDebit, sendCreditSmsCode, imageUpload } from '../services/card';
+import { bindCreditCard, listCard, bindCardDebit, sendCreditSmsCode, imageUpload, revisePass } from '../services/card';
 // import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
@@ -16,7 +16,7 @@ export default {
     creditInfo: {
       bankCard: '',
       phoneNumber: '',
-      cvv2: '', 
+      cvv2: '',
       validDate: '',
       smsCode: ''
     },
@@ -27,7 +27,7 @@ export default {
       bankCard: '',
       idCardNo: '',
       phoneNumber: '',
-      password: '', 
+      password: '',
       confirmPassword: '',
       smsCode: ''
     },
@@ -36,7 +36,8 @@ export default {
     },
     imageSrc: {
 
-    }
+    },
+    passwords: {}
   },
 
   subscriptions: {
@@ -59,7 +60,7 @@ export default {
 
   effects: {
     *sendSmsCode({ payload: { type } }, { call, put, select}) {  // eslint-disable-line
-      
+
       let bankCard = '';
       let phoneNumber = '';
       if( type === 'credit') {
@@ -94,7 +95,7 @@ export default {
       }
     },
     *fetchCard({ payload: { type } }, { call, put, select}) {  // eslint-disable-line
-      
+
       const { data } = yield call(listCard, {});
       console.log(data, 'cardList')
       if( data && data['success'] && data['result'] ) {
@@ -120,13 +121,13 @@ export default {
     },
     *bindDebit({ payload: info }, { call, put, select}) {
       let debitInfo = yield select(state => state.card.debitInfo);
-      console.log(debitInfo)
       const { data } = yield call(bindCardDebit, debitInfo);
       console.log( data , 'debit')
       if(data && data['success']) {
         Toast.success('绑定成功!');
         yield put(routerRedux.push({
-          pathname: '/cardCenter'
+          // pathname: '/cardCenter'
+          pathname: '/result'
         }));
       } else {
         Toast.fail(data.errorMsg || '');
@@ -165,12 +166,36 @@ export default {
       } else {
         Toast.fail(data.errorMsg || '');
       }
+    },
+
+    *revisePassword({ payload: {} }, { call, put, select}) {
+      const passwords = yield select(state => state.card.passwords);
+      const { data } = yield call(revisePass, passwords);
+      if(data && data['success']) {
+        Toast.success('支付密码修改成功！');
+        yield put(routerRedux.push({
+          pathname: '/userinfo',
+        }));
+        yield put({
+          type: 'modifyPassword',
+          payload: {
+            newPassword: '',
+            oldPassword: '',
+            configPassword: ''
+          }
+        })
+      } else {
+        Toast.success(data.errorMsg || '');
+      }
     }
   },
 
   reducers: {
     updateState(state, { payload }) {
       return { ...state, ...payload };
+    },
+    modifyPassword(state, { payload }) {
+      return { ...state, ...{passwords: {...state.passwords, ...payload} } };
     },
     updateImgStatus(state, { payload }) {
       return { ...state, ...{imageStatus: {...state.imageStatus, ...payload} } };
@@ -184,7 +209,7 @@ export default {
     savedDebitFields(state, { payload }) {
       return { ...state, ...{debitInfo: {...state.debitInfo, ...payload} } };
     },
-    
+
   },
 
 };

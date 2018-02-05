@@ -3,6 +3,9 @@ import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 
+
+const whiteList = ['/login', ];
+
 export default {
   namespace: 'app',
   state: {
@@ -16,8 +19,8 @@ export default {
         // if (pathname === '/users') {
         //   dispatch({ type: 'fetch', payload: query });
         // }
-        
-        if(location) {
+
+        if(location && whiteList.indexOf(location.pathname) === -1) {
           dispatch({
             type: 'updateState',
             payload: {

@@ -1,7 +1,7 @@
 import post from '../utils/post';
 import postData from '../utils/postData';
 
-import { cardList, cardCreditBind, bindDebitCard, sendCreditSms, imgUpload } from '../apis'
+import { cardList, cardCreditBind, bindDebitCard, sendCreditSms, imgUpload, revisePassApi } from '../apis'
 
 
 export function listCard(obj) {
@@ -9,7 +9,7 @@ export function listCard(obj) {
     initiationID: Date.now().toString(16)
   };
   data = Object.assign({}, data, obj || {});
-  
+
   return post(cardList(), data);
 }
 export function bindCreditCard(obj) {
@@ -17,7 +17,7 @@ export function bindCreditCard(obj) {
     initiationID: Date.now().toString(16)
   };
   data = Object.assign({}, data, obj || {});
-  
+
   return post(cardCreditBind(), data);
 }
 export function bindCardDebit(obj) {
@@ -25,7 +25,7 @@ export function bindCardDebit(obj) {
     initiationID: Date.now().toString(16)
   };
   data = Object.assign({}, data, obj || {});
-  
+
   return post(bindDebitCard(), data);
 }
 
@@ -34,7 +34,7 @@ export function sendCreditSmsCode(obj) {
     initiationID: Date.now().toString(16)
   };
   data = Object.assign({}, data, obj || {});
-  
+
   return post(sendCreditSms(), data);
 }
 export function imageUpload(formData) {
@@ -43,4 +43,12 @@ export function imageUpload(formData) {
   }
   formData.append('initiationID', Date.now().toString(16));
   return postData(imgUpload(), formData);
+}
+
+export function revisePass(obj) {
+  let data ={
+    initiationID: Date.now().toString(16)
+  };
+  data = Object.assign({}, data, obj || {});
+  return postData(revisePassApi(), data);
 }

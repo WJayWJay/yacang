@@ -15,7 +15,7 @@ html, body, :global(#root) {
   margin-bottom: 66px;
 }
 .myList {
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
   width: 80%;
   &:last-child {
     :global(.am-list-body) {
@@ -27,15 +27,33 @@ html, body, :global(#root) {
       }
     }
   }
-  
+
   :global(.am-list-body) {
+    border-top: none;
     &::before {
       height: 0 !important;
     }
     :global(.am-list-item) {
       padding-left: 0 !important;
       :global(.am-list-line) {
-        padding-left: 0; 
+        padding-left: 0;
+      }
+    }
+  }
+}
+
+.myListLogin {
+  margin-bottom: 10px;
+  width: 80%;
+  :global(.am-list-body) {
+    border: none;
+    &::before {
+      height: 0 !important;
+    }
+    :global(.am-list-item) {
+      padding-left: 0 !important;
+      :global(.am-list-line) {
+        padding-left: 0;
       }
     }
   }

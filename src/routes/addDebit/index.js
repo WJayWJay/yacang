@@ -16,7 +16,7 @@ class AddDebitCard extends React.Component {
     smsInfo: '获取验证码',
     itime: 60,
     sendDisabled: false,
-    agreeColor: '#8C8C9E', 
+    agreeColor: '#8C8C9E',
   };
   intervId = 0;
 
@@ -101,10 +101,10 @@ class AddDebitCard extends React.Component {
       type: 'card/cacheDebitInfo',
       payload: {}
     });
-    dispatch({
-      type: 'card/bindDebit',
-      payload: {}
-    });
+
+    dispatch(routerRedux.push({
+      pathname: '/uploadId'
+    }));
   }
 
   renderAlertIcon = (tag) => {
@@ -118,12 +118,12 @@ class AddDebitCard extends React.Component {
       agreeColor: this.state.agreeColor === blue ? gray: blue
     })
   }
-  
+
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
     const creditInfo = this.props.debitInfo || {};
     return (
-      <Layout title={'添加银行卡'}>
+      <Layout title={'实名认证'}>
         <div className={styles.normal}>
           <WhiteSpace />
           <List renderHeader={() => '为保证您的账户安全，请完成验证'}>
@@ -203,11 +203,11 @@ class AddDebitCard extends React.Component {
             maxLength={6}
             placeholder="请输入验证码"
             error={!!getFieldError('smsCode')}
-            extra={<Button 
-                    disabled={this.state.sendDisabled} 
-                    onClick={this.getCode} 
-                    inline 
-                    className={styles.getSmsCode} 
+            extra={<Button
+                    disabled={this.state.sendDisabled}
+                    onClick={this.getCode}
+                    inline
+                    className={styles.getSmsCode}
                     type="primary">{this.state.smsInfo || ''}</Button>}
           >验证码</InputItem>
         </List>
@@ -237,7 +237,7 @@ class AddDebitCard extends React.Component {
             type="password"
           >确认密码</InputItem>
         </List>
-          
+
 
           <Flex className={styles.userProto}>
               <Icon onClick={this.agreeProto} type="check-circle-o" color={this.state.agreeColor} size={'xs'} /><span className={styles.agree} >同意</span><span className={styles.agreeUserProto} >《 用户协议 》</span>

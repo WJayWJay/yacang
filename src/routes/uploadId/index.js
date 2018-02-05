@@ -27,7 +27,7 @@ class AddBankCard extends React.Component {
 
   submit = () => {
     const { dispatch, imageStatus } = this.props;
-    
+
     let errors = [];
     imgTypes.forEach(element => {
       if(!imageStatus[element]) {
@@ -49,7 +49,7 @@ class AddBankCard extends React.Component {
         case 'bankCard':
           err = '您的银行卡正面照还未上传呢。。。';
           break;
-      
+
         default:
           err = '未知错误!';
           break;
@@ -57,10 +57,11 @@ class AddBankCard extends React.Component {
       Toast.fail(err);
       return;
     }
-    
-    dispatch(routerRedux.push({
-      pathname: '/result'
-    }));
+
+    dispatch({
+      type: 'card/bindDebit',
+      payload: {}
+    });
   }
 
   toUpload = (e, item) => {
@@ -70,7 +71,7 @@ class AddBankCard extends React.Component {
       fileRef.click();
     }
   }
-  
+
   checkSize = (rule, value, callback) => {
     if (value && value.target) {
       const files = value.target.files;
@@ -86,7 +87,7 @@ class AddBankCard extends React.Component {
       callback();
     }
   }
-  
+
   render() {
     const { getFieldProps } = this.props.form;
     const {creditInfo, imageStatus} = this.props;
@@ -96,7 +97,7 @@ class AddBankCard extends React.Component {
       {id: 2, title: '手持身份证', subTitle: '请上传手持身份证正面', extra: '', imageCategory: '0005', tag: 'idCardTwo' },
       {id: 3, title: '银行卡正面', subTitle: '请上传银行卡正面', extra: '', imageCategory: '0006', tag: 'bankCard' },
     ];
-    
+
     return (
       <Layout title={'实名认证'}>
         <div className={styles.normal}>
@@ -114,7 +115,7 @@ class AddBankCard extends React.Component {
                     <span className={styles.title}>{item.title}</span>
                     <span className={styles.title + ' ' +styles.subTitle}>{item.subTitle}</span>
                   </Item>
-                  <input className={'needsClick'} accept="image/*" style={{display: "none"}} type="file" 
+                  <input className={'needsClick'} accept="image/*" style={{display: "none"}} type="file"
                     {...getFieldProps('attachment'+item.id, {
                       initialValue: '',
                       getValueProps: getFileValueProps,
@@ -129,7 +130,7 @@ class AddBankCard extends React.Component {
               })
             }
           </List>
-          
+
 
           <Flex style={{marginTop: '51px'}}>
             <Flex.Item>
@@ -180,7 +181,7 @@ const AddBankCardForm = createForm({
       Toast.fail('应用出现了点问题，请联系管理员！');
       return;
     }
-    
+
     props.dispatch({
       type: 'card/cardImageUpload',
       payload: {formData: fileData, type: type}

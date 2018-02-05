@@ -45,4 +45,20 @@ export function bindDebitCard() {
 export function imgUpload() {
   return API + '/image/upload/1';
 }
+export function revisePassApi() {
+  return API + '/customer/customerPasswordUpdate';
+}
 
+export function weixinLogin() {
+  return API + '/login/applyOpenid';
+}
+
+export function wxUserApi(REDIRECT_URI,) {
+  // const APPID = 'wx2f5543b30ccc34de';
+  const APPID = 'wx9aab973ed1a43224';
+  const SCOPE = 'snsapi_base';
+  let state = Date.now().toString(16);
+  REDIRECT_URI = REDIRECT_URI || window.location.href;
+  REDIRECT_URI = encodeURIComponent(REDIRECT_URI);
+  return `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}&state=${state}#wechat_redirect`;
+}
