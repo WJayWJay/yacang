@@ -21,12 +21,12 @@ export default {
       return history.listen(({ pathname, query }) => {
         console.log(pathname, query)
         if(pathname === '/productList') {
-          
+
         }
         // const re = pathToRegexp('/productList');
         // const match = re.exec(pathname);
         // if ( Array.isArray(match) ) {
-        //   let productNo = match[1]; 
+        //   let productNo = match[1];
         //   dispatch({ type: 'fetch', payload: {productNo} });
         // }
       });

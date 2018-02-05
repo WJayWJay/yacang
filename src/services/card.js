@@ -50,5 +50,6 @@ export function revisePass(obj) {
     initiationID: Date.now().toString(16)
   };
   data = Object.assign({}, data, obj || {});
-  return postData(revisePassApi(), data);
+  return post(revisePassApi(), data);
 }
+

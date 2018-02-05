@@ -15,6 +15,9 @@ export function registerApi() {
 export function codeApi() {
   return API + '/msg/applyMsg';
 }
+export function subMemberQueryApi() {
+  return API + '/customer/subMemberQuery';
+}
 
 export function getProduct() {
   return API + '/product/getProductInfo';
@@ -47,6 +50,10 @@ export function imgUpload() {
 }
 export function revisePassApi() {
   return API + '/customer/customerPasswordUpdate';
+}
+
+export function resetPassApi() {
+  return API + '/customer/customerResetPassword';
 }
 
 export function weixinLogin() {

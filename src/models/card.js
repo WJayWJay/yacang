@@ -1,4 +1,5 @@
 import { bindCreditCard, listCard, bindCardDebit, sendCreditSmsCode, imageUpload, revisePass } from '../services/card';
+
 // import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
@@ -37,7 +38,7 @@ export default {
     imageSrc: {
 
     },
-    passwords: {}
+    passwords: {},
   },
 
   subscriptions: {
@@ -183,11 +184,11 @@ export default {
             oldPassword: '',
             configPassword: ''
           }
-        })
+        });
       } else {
         Toast.success(data.errorMsg || '');
       }
-    }
+    },
   },
 
   reducers: {

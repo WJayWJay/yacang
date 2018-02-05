@@ -1,4 +1,4 @@
-import { login, register, code, userinfo, wxUserInfo } from '../services/user';
+import { login, register, code, userinfo, wxUserInfo, getMemberData, resetPass} from '../services/user';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
@@ -15,7 +15,10 @@ export default {
     info: {},
     isLogin: 0,
     codeSend: 0,
-    tokenId: ''
+    tokenId: '',
+    members: [],
+    resetPasswords: {},
+    resetSmsSend: -1,
   },
 
   subscriptions: {
@@ -45,6 +48,47 @@ export default {
   },
 
   effects: {
+    *resetPassword({ payload: {} }, { call, put, select}) {
+      const resetPasswords = yield select(state => state.card.resetPasswords);
+      const { data } = yield call(resetPass, resetPasswords);
+      if(data && data['success']) {
+        Toast.success('支付密码重置成功！');
+        yield put(routerRedux.push({
+          pathname: '/login',
+        }));
+        yield put({
+          type: 'resetPasswords',
+          payload: {
+            newPassword: '',
+            oldPassword: '',
+            configPassword: ''
+          }
+        });
+      } else {
+        Toast.success(data.errorMsg || '');
+      }
+    },
+    *fetchResetCode({ payload: { type } }, { call, put, select}) {  // eslint-disable-line
+
+      const resetPasswords = yield select(state => state.user.resetPasswords);
+
+      const { data } = yield call(code, resetPasswords);
+      console.log('resetPasswords', data)
+      if( data && data['success'] ) {
+        Toast.success('验证码已发送, 请注意查收!');
+        yield put({
+          type: 'updateState',
+          payload: {resetSmsSend: 0}
+        })
+      } else {
+        Toast.fail(data && data.errorMsg || '发生错误');
+        let smsData = yield select(state => state.user.resetSmsSend);
+        yield put({
+          type: 'updateState',
+          payload: {resetSmsSend: smsData + 3}
+        })
+      }
+    },
     *getUserInfoByWx({ payload: { code } }, { call, put, select}) {  // eslint-disable-line
       const { data } = yield call(wxUserInfo, {wechatCode: code});
       console.log(data, 'wxuserinfo...')
@@ -133,9 +177,27 @@ export default {
         }
       }
     },
+    *getMemberInfo({ payload: { } }, { call, put, select}) {  // eslint-disable-line
+      const { data } = yield call(getMemberData, {});
+      if(data && data['success']) {
+        let members = data.result && data.result.subMemberQueryInResponseList;
+        yield put({
+          type: 'updateState',
+          payload: { members }
+        })
+      } else {
+        // Toast.fail(data && data.errorMsg || '发生错误');
+      }
+    },
   },
 
   reducers: {
+    updateState(state, { payload }) {
+      return { ...state, ...payload };
+    },
+    resetPasswords(state, { payload }) {
+      return { ...state, ...{resetPasswords: {...state.resetPasswords, ...payload} } };
+    },
     save(state, { payload: {data: info} }) {
       return { ...state, info, isLogin: 1 };
     },
