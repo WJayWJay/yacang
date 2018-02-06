@@ -5,7 +5,7 @@ import styles from './layout.less'
 
 const Layout = (props) => {
   return (
-    <div>
+    <div className={styles.layContainer}>
       {!props.hidden ?<NavBar
         mode="light"
         onLeftClick={() => props.back? props.back(): window.history.back()}

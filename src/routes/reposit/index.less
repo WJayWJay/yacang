@@ -41,11 +41,18 @@ html, body, :global(#root) {
   width: 100%;
 }
 
+.contentContainer {
+  overflow:auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch; /* ios5+ */
+}
+
+
 .content {
   font-size: 16px;
   width: 100%;
   padding-bottom: 10px;
-  
+
   .inviteContainer {
     // position: fixed;
     // bottom: 0;

@@ -24,72 +24,72 @@ class Index extends React.Component {
     selectedTab: 'redTab',
     fullScreen: true
   }
-  
+
   componentDidMount() {
-    
+
   }
   componentWillUnmount() {
-    
+
   }
-  
-  
+
+
   renderSelf() {
 
     return (
       <Layout title={'提现'}>
-        <div className={styles.normal}>   
-          <div className={styles.content}> 
-            
+        <div className={styles.normal}>
+          <div className={styles.content}>
+
             <List renderHeader={() => '提现信用卡'} className="my-list">
-              <Item 
+              <Item
               className={styles.listItem}
               thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
               arrow='horizontal'
               multipleLine onClick={() => {}}>
-                招商银行 <Brief>尾号2528 信用卡</Brief> 
+                招商银行 <Brief>尾号2528 信用卡</Brief>
               </Item>
             </List>
             <WhiteSpace />
             <List renderHeader={() => '到账银行'} className="my-list">
-              <Item 
+              <Item
               className={styles.listItem}
               thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
               arrow='horizontal'
               multipleLine onClick={() => {}}>
-                招商银行 <Brief>尾号2528 信用卡</Brief> 
+                招商银行 <Brief>尾号2528 信用卡</Brief>
               </Item>
             </List>
 
             <WhiteSpace />
             <List renderHeader={() => '选择支付方式'} className="my-list">
-              <Item 
+              <Item
               className={styles.listItem}
               extra={<Radio checked={true} className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
               multipleLine onClick={() => {}}>
-                极速到账 <Brief>提现手续费  0.01%</Brief> 
+                极速到账 <Brief>提现手续费  0.01%</Brief>
               </Item>
 
-              <Item 
+              <Item
               className={styles.listItem}
               extra={<Radio className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
               multipleLine onClick={() => {}}>
-                极速到账 + 额外获得积分 <Brief>提现手续费  0.015%</Brief> 
+                极速到账 + 额外获得积分 <Brief>提现手续费  0.015%</Brief>
               </Item>
 
-              <Item 
+              <Item
               className={styles.listItem}
               extra={<Radio className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
               multipleLine onClick={() => {}}>
-                普通到账 + 额外获得积分 <Brief>提现手续费  0.015%</Brief> 
+                普通到账 + 额外获得积分 <Brief>提现手续费  0.015%</Brief>
               </Item>
             </List>
-            
+
             <Flex className={styles.inviteContainer}>
               <Button className={styles.invite}>
               立即提现
               </Button>
             </Flex>
-            
+
           </div>
         </div>
       </Layout>
@@ -117,7 +117,7 @@ class Index extends React.Component {
   render() {
     const iconSize = '26px';
     return (
-      <div style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
+      <div className={styles.contentContainer} style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#33A3F4"
@@ -125,8 +125,8 @@ class Index extends React.Component {
           hidden={this.state.hidden}
         >
           <TabBar.Item
-            title="雅藏"
-            key="雅藏"
+            title="汇藏"
+            key="汇藏"
             icon={<div style={{
               width: iconSize,
               height: iconSize,

@@ -108,7 +108,8 @@ class ListProduct extends React.Component {
       listHeight: tabHeight - 38 + 24 + 'px',
       tabHeigh: tabHeight,
       hasMore: true,
-      page: 1
+      page: 1,
+      isInited: false,
     }
   }
 
@@ -136,8 +137,12 @@ class ListProduct extends React.Component {
           hasMore: !!nextProps.hasMore
         });
       }
-      if(nextProps.category && Array.isArray(nextProps.category) && nextProps.category> 0 && !nextProps.currentCat) {
+
+      if(Array.isArray(nextProps.category) && nextProps.category.length> 0 && !this.state.isInited) {
         let tab = nextProps.category[0];
+        this.setState({
+          isInited: true
+        });
         this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: tab.id } });
       }
     }
@@ -293,7 +298,7 @@ class ListProduct extends React.Component {
   render() {
     const { showed } = this.state;
     const { category } = this.props;
-    console.log('lllloading', this.props.loading)
+
     let tabs = [
     ];
     if(category.length > 0) {
@@ -349,7 +354,7 @@ ListProduct.propTypes = {
 };
 
 function mapStateToProps(state) {
-  console.log(state)
+  // console.log(state)
   const { list,hasMore,category,currentCat } = state.product;
 
   return {

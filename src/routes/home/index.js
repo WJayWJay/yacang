@@ -132,7 +132,7 @@ class Index extends React.Component {
   }
 
   renderMy = () => {
-    
+
   }
 
   renderContent(pageText) {
@@ -140,7 +140,7 @@ class Index extends React.Component {
       return this.renderHome();
     }
     if(pageText === 'myself') {
-      
+
     }
     return (
       <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
@@ -157,7 +157,7 @@ class Index extends React.Component {
 
     const iconSize = '26px';
     return (
-      <div style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
+      <div className={styles.contentContainer} style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#33A3F4"
@@ -165,8 +165,8 @@ class Index extends React.Component {
           hidden={this.state.hidden}
         >
           <TabBar.Item
-            title="雅藏"
-            key="雅藏"
+            title="汇藏"
+            key="汇藏"
             icon={<div style={{
               width: iconSize,
               height: iconSize,

@@ -132,7 +132,6 @@ class Index extends React.Component {
   }
 
   onChange = (value) => {
-    console.log(value)
     if (value.replace(/\s/g, '').length < 11 || !value.startsWith('1')) {
       this.setState({
         hasError: true,

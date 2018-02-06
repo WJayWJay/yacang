@@ -23,7 +23,7 @@ html, body, :global(#root) {
       transform: scaleY(0.5);
     }
     :global(.am-list-line) {
-      padding-left: 0; 
+      padding-left: 0;
       &::after {
         height: 0 !important;
       }
@@ -33,6 +33,12 @@ html, body, :global(#root) {
 .normal {
   /* margin-top: 31px; */
   width: 100%;
+}
+
+.contentContainer {
+  overflow:auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch; /* ios5+ */
 }
 
 .content {
@@ -87,5 +93,5 @@ html, body, :global(#root) {
 
     }
   }
-  
+
 }

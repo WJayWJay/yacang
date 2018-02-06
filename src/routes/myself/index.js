@@ -76,7 +76,16 @@ class Index extends React.Component {
       'notice': '/about',
     }
     if(item && item.id && map[item.id]) {
-      this.props.history.push(map[item.id]);
+      let pathname = map[item.id]
+      if(!this.props.isLogin) {
+        pathname = '/login'
+        if(item.id === 'about') {
+          pathname = map[item.id]
+        }
+      }
+      this.props.dispatch(routerRedux.push({
+        pathname: pathname
+      }))
     }
   }
 
@@ -139,7 +148,7 @@ class Index extends React.Component {
                   <Flex className={styles.tabsFlexFont} align='start'>{tabsInfo[0].title}</Flex>
                 </Flex>
                 <div className={styles.whiteLine}></div>
-                <Flex onClick={()=> this.props.history.push('/cardCenter')} direction='column' className={styles.tabsFlex}>
+                <Flex onClick={()=> isLogin?this.props.history.push('/cardCenter'):this.props.history.push('/login') } direction='column' className={styles.tabsFlex}>
                   <Flex className={styles.tabsFlexImg} align='end'>
                     <img style={{ width: '35px', height: '27px'}} src={tabsInfo[1].icon} alt={tabsInfo[1].title} />
                   </Flex>
@@ -187,7 +196,7 @@ class Index extends React.Component {
   render() {
     const iconSize = '26px';
     return (
-      <div style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
+      <div className={styles.contentContainer} style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0, overflow: "auto" } : { height: 400 }}>
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#33A3F4"
@@ -195,8 +204,8 @@ class Index extends React.Component {
           hidden={this.state.hidden}
         >
           <TabBar.Item
-            title="雅藏"
-            key="雅藏"
+            title="汇藏"
+            key="汇藏"
             icon={<div style={{
               width: iconSize,
               height: iconSize,

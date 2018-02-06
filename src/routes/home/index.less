@@ -5,6 +5,12 @@
   width: 100%;
 }
 
+.contentContainer {
+  overflow:auto;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch; /* ios5+ */
+}
+
 .content {
   font-size: 16px;
   margin-top: 10px;
@@ -70,7 +76,7 @@
   height: 80px;
 }
 .notify {
-  border: 1px solid #FFA177; 
+  border: 1px solid #FFA177;
   color:#FFA177;
   height: 18px;
   font-size: 12px;
