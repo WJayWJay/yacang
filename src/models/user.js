@@ -94,12 +94,25 @@ export default {
       console.log(data, 'wxuserinfo...')
       if(data && data['success']) {
         Toast.success('授权登录成功！');
-        Cache.set(userKey, data.result, true);
-        Cache.set(tokenKey, data.result.tokenId);
-        Cache.set(loginKey, 1);
-        yield put( routerRedux.push({
-          pathname: '/home',
-        }) )
+        if(data.result) {
+          Cache.set(userKey, data.result, true);
+          Cache.set(tokenKey, data.result.tokenId || '');
+          Cache.set(loginKey, 1);
+          if(data.result.companyPhone) {
+            yield put(routerRedux.push({
+              pathname: '/myself',
+            }))
+          } else {
+            yield put(routerRedux.push({
+              pathname: '/register',
+            }))
+          }
+        } else {
+          yield put(routerRedux.push({
+            pathname: '/register',
+          }))
+        }
+
       } else {
         yield put({
           type: 'logout',

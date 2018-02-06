@@ -33,6 +33,7 @@ class Index extends React.Component {
   componentWillReceiveProps(nextProps) {
   }
 
+
   renderHome() {
     const { swiperList, tagList } = this.props;
     const first = ['国内藏馆1', '臻至美玉', '名家书画', '臻至美玉', '名家书画'];
@@ -154,7 +155,6 @@ class Index extends React.Component {
   }
 
   render() {
-
     const iconSize = '26px';
     return (
       <div className={styles.contentContainer} style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
