@@ -59,9 +59,9 @@ export default {
         yield put({
           type: 'resetPasswords',
           payload: {
-            newPassword: '',
-            oldPassword: '',
-            configPassword: ''
+            messages: '',
+            configPassword: '',
+            newPassword: ''
           }
         });
       } else {
@@ -149,7 +149,7 @@ export default {
         Cache.set(userKey, data.result, true);
         Cache.set(tokenKey, data.result.tokenId);
         Cache.set(loginKey, 1);
-        
+
         if(locationQuery && locationQuery.uri) {
           window.location.href = locationQuery.uri;
         } else {

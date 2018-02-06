@@ -1,8 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-// import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
+import PropTypes from 'prop-types';
 import { Flex, List, InputItem, Toast } from 'antd-mobile';
 import { createForm } from 'rc-form';
+
+import { isPhone } from '../../functions'
 import Layout from '../../components/layout';
 import Button from '../../components/button';
 
@@ -59,7 +62,6 @@ class Index extends React.Component {
 
   getCode = (e) => {
     e.preventDefault();
-    console.log('jjjjj')
     const { getFieldError } = this.props.form;
     if(!!getFieldError('messages')) {
       Toast.show('验证码格式错误！');
@@ -74,18 +76,38 @@ class Index extends React.Component {
     });
     this.props.dispatch({
       type: 'user/fetchResetCode',
-      payload: {type: 'debit'}
+      payload: {type: ''}
     });
+  }
+  submit = (e) => {
+    const { dispatch } = this.props;
+    let errors = null;
+    this.props.form.validateFields((error, values) => {
+      console.log(error, values)
+      if(error) {
+        errors = error;
+        return ;
+      }
+    });
+
+    if(errors) {
+      return;
+    }
+
+    dispatch(routerRedux.push({
+      pathname: '/forget2'
+    }));
   }
 
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
+    const { resetPasswords } = this.props;
     return (
       <Layout title={'忘记密码'}>
         <div className={styles.normal}>
           <div className={styles.content}>
             <Flex direction="column">
-              <List renderHeader={() => '为保证您的账户安全，请完成身份'} className={styles.myList}>
+              {/* <List renderHeader={() => '为保证您的账户安全，请完成身份'} className={styles.myList}>
                 <InputItem
                   clear
                   {...getFieldProps('realName', {
@@ -104,14 +126,21 @@ class Index extends React.Component {
                   style={{fontSize: '16px',opacity: 0.5}}
                   placeholder="请输入身份证号"
                 >身份证</InputItem>
-              </List>
-              <List style={{marginTop: '11px'}} className={styles.myList}>
+              </List> */}
+
+              <List renderHeader={() => '为保证您的账户安全，请完成身份'} style={{marginTop: '11px'}} className={styles.myList}>
                 <InputItem
                   clear
                   {...getFieldProps('companyPhone', {
-                    initialValue: '',
+                    initialValue: resetPasswords.companyPhone || '',
                     rules: [{
-                      required: true,
+                      validator: (rule, value, cb) => {
+                        if(!isPhone(value)) {
+                          cb(new Error('手机号格式错误！'));
+                        } else {
+                          cb();
+                        }
+                      }
                     }],
                   })}
                   error={!!getFieldError('companyPhone')}
@@ -144,7 +173,7 @@ class Index extends React.Component {
               </List>
             </Flex>
 
-            <Button className={styles.saveButton}>保存</Button>
+            <Button onClick={this.submit} className={styles.saveButton}>下一步</Button>
           </div>
         </div>
       </Layout>
@@ -153,6 +182,7 @@ class Index extends React.Component {
 }
 
 Index.propTypes = {
+  resetPasswords: PropTypes.object
 };
 
 function mapStateToProps(state) {

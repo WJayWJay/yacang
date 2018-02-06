@@ -25,3 +25,6 @@ export function isWeixin() {
   ua = ua && ua.toLowerCase();
   return /micromessenger/i.test(ua);
 }
+export function isPhone(number) {
+  return /^1[3456789]\d{9}$/.test(number);
+}

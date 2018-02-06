@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { WhiteSpace, WingBlank, Tabs, Flex, Menu, Icon, ListView } from 'antd-mobile';
-import Layout from '../../components/layout'
+import Layout from '../../components/layout';
+import Spinner from '../../components/Spinner';
 
 import styles from './index.less';
 
@@ -115,7 +116,7 @@ class ListProduct extends React.Component {
     const { dispatch } = this.props;
     const { page } = this.state;
     this.rData = [];
-    
+
     dispatch({
       type: 'product/fetchCategory',
       payload: {}
@@ -128,7 +129,7 @@ class ListProduct extends React.Component {
       if(nextProps.list) {
         // this.rData = this.rData.concat(genData(nextProps.list));
         this.rData = genData(nextProps.list);
-        
+
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(this.rData),
           isLoading: false,
@@ -162,7 +163,7 @@ class ListProduct extends React.Component {
             borderBottom: '1px solid #F6F6F6',
           }}
         >{obj.title}</div> */}
-        
+
         <div style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}>
           <img className={styles.productImg} style={{ height: '108px',width: '108px', marginRight: '15px' }} src={obj.imageUrl || testImg} alt={obj.productName} />
           {/* <div className={styles.productImg}></div> */}
@@ -181,7 +182,7 @@ class ListProduct extends React.Component {
             </Flex>
           </Flex>
         </div>
-        
+
       </div>
     );
   };
@@ -292,7 +293,7 @@ class ListProduct extends React.Component {
   render() {
     const { showed } = this.state;
     const { category } = this.props;
-
+    console.log('lllloading', this.props.loading)
     let tabs = [
     ];
     if(category.length > 0) {
@@ -313,6 +314,7 @@ class ListProduct extends React.Component {
 
     return (
       <Layout title={'商品列表'}>
+        <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
             <div className={styles.selectContainer}>
@@ -325,7 +327,7 @@ class ListProduct extends React.Component {
               </Flex>
               { showed ? this.renderSelect(showed): null}
             </div>
-            <Tabs 
+            <Tabs
               onChange={this.tabChange}
               tabs={tabs}>
               {this.renderContent}
@@ -347,11 +349,11 @@ ListProduct.propTypes = {
 };
 
 function mapStateToProps(state) {
-  // console.log(state)
+  console.log(state)
   const { list,hasMore,category,currentCat } = state.product;
-  console.log(category)
+
   return {
-    list,hasMore,category, currentCat
+    list,hasMore,category, currentCat, loading: state.loading.global || false,
   }
 }
 
