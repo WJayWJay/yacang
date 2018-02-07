@@ -181,7 +181,7 @@ export default {
         return ;
       }
       const { data } = yield call(code, {companyPhone: phone, 'msgType': '001'});
-      console.log('fetchCode', data)
+      
       if( data && data['success'] ) {
         Toast.success('验证码已发送, 请注意查收!');
         yield put({type: 'changeCodeSend', payload: { codeSend: 1}});
@@ -195,7 +195,7 @@ export default {
     *getMemberInfo({ payload: { } }, { call, put, select}) {  // eslint-disable-line
       const { data } = yield call(getMemberData, {});
       if(data && data['success']) {
-        let members = data.result && data.result.subMemberQueryInResponseList;
+        let members = data.result && data.result.subMemberQueryInResponseList || [];
         yield put({
           type: 'updateState',
           payload: { members }

@@ -143,7 +143,7 @@ class ListProduct extends React.Component {
         this.setState({
           isInited: true
         });
-        this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: tab.id } });
+        this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: tab.categoryNo || ''} });
       }
     }
   }

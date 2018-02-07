@@ -22,7 +22,10 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-
+    this.props.dispatch({
+      type: 'user/getMemberInfo',
+      payload: {}
+    });
   }
   componentWillUnmount() {
 

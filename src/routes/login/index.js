@@ -168,14 +168,6 @@ class Index extends React.Component {
   }
 
   render() {
-    console.log(this.props, 'props')
-    const { dispatch } = this.props;
-    // if(this.props.isLogin) {
-    //   dispatch(routerRedux.push('/home'))
-    //   return <div />
-    // }
-    console.log(this.props.location)
-    console.log(this.props.history)
     const {isSend, timeoutInfo} = this.state;
     const iconSize = '24px';
     return (
@@ -214,6 +206,7 @@ class Index extends React.Component {
                       className={styles.getCheckCode}
                   >{timeoutInfo}</div>}
                   labelNumber={2}
+                  type={'number'}
                   ref={el => this.codeInput = el}
                   placeholder="请输入验证码"
                   maxLength={6}

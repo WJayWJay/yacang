@@ -104,7 +104,6 @@ class Index extends React.Component {
   }
 
   toFinishInfo = () => {
-    console.log('jjjj')
     let pathname = '/login';
     if(this.props.isLogin) {
       pathname = '/addDebit';
@@ -121,7 +120,7 @@ class Index extends React.Component {
     return (
       <Layout title={'我的'}>
         <div className={styles.normal}>
-          {info && info.stat !== 'CERTIFICATION'? <NoticeBar onClick={this.toFinishInfo} mode="closable" icon={
+          {info && info.stat !== 'CERTIFICATION'? <div onClick={this.toFinishInfo}><NoticeBar mode="link" icon={
             <div style={{
               width: iconSize,
               height: iconSize,
@@ -129,7 +128,7 @@ class Index extends React.Component {
             />
           }>
             为了您的账户安全，请先完善个人资料！
-          </NoticeBar>: null}
+          </NoticeBar></div>: null}
           <div className={styles.content}>
             <Flex onClick={this.toLogin} className={styles.head} direction="column">
               <Flex>

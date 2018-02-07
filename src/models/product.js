@@ -40,7 +40,6 @@ export default {
       console.log(payload)
       const { data } = yield call(productList, payload);
       let hasMore = true;
-      console.log('fetch', data)
       if(payload && payload.categoryNo) {
         yield put({type: 'updateState', currentCat: payload.categoryNo});
       }
@@ -53,11 +52,13 @@ export default {
             hasMore = false;
           }
         }
-        yield put({type: 'save', payload: { data: data.result.results||[], total: data.result.totalSize, hasMore}})
+        yield put({type: 'save', payload: { data: data.result.results||[], total: data.result.totalSize}});
+        
       }
     },
     *fetchCategory({ payload: {}}, { call, put, select}) {
       let categoryData = Cache.get(categoryKey);
+
       if(categoryData) {
         yield put({
           type: 'updateState',
@@ -77,12 +78,12 @@ export default {
   },
 
   reducers: {
-    save(state, { payload: {data: list, total, page, hasMore} }) {
-      return { ...state, list, total, page, hasMore };
+    save(state, { payload: {data: list, total, page} }) {
+      return { ...state, list, total, page };
     },
     updateState(state, { payload }) {
       return {...state, ...payload}
-    }
+    },
   },
 
 };
