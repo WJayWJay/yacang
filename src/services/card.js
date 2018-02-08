@@ -1,7 +1,9 @@
 import post from '../utils/post';
 import postData from '../utils/postData';
 
-import { cardList, cardCreditBind, bindDebitCard, sendCreditSms, imgUpload, revisePassApi } from '../apis'
+import { cardList, cardCreditBind, bindDebitCard,
+  sendCreditSms, imgUpload, revisePassApi,
+  dualMsgApi, sellteTypeApi } from '../apis'
 
 
 export function listCard(obj) {
@@ -46,10 +48,18 @@ export function imageUpload(formData) {
 }
 
 export function revisePass(obj) {
-  let data ={
-    initiationID: Date.now().toString(16)
-  };
+  let data ={};
   data = Object.assign({}, data, obj || {});
   return post(revisePassApi(), data);
+}
+export function dualMsgService(obj) {
+  let data ={};
+  data = Object.assign({}, data, obj || {});
+  return post(dualMsgApi(), data);
+}
+export function sellteTypeService(obj) {
+  let data ={};
+  data = Object.assign({}, data, obj || {});
+  return post(sellteTypeApi(), data);
 }
 

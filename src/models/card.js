@@ -1,4 +1,8 @@
-import { bindCreditCard, listCard, bindCardDebit, sendCreditSmsCode, imageUpload, revisePass } from '../services/card';
+import { bindCreditCard, listCard,
+   bindCardDebit, sendCreditSmsCode,
+   imageUpload, revisePass,
+   dualMsgService, sellteTypeService
+} from '../services/card';
 
 // import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
@@ -39,6 +43,8 @@ export default {
 
     },
     passwords: {},
+    channelResultNo: '',
+    sellteType: []
   },
 
   subscriptions: {
@@ -183,6 +189,37 @@ export default {
             newPassword: '',
             oldPassword: '',
             configPassword: ''
+          }
+        });
+      } else {
+        Toast.success(data.errorMsg || '');
+      }
+    },
+    *getSellteType({ payload }, { call, put, select}) {
+      const { data } = yield call(sellteTypeService, payload);
+      if(data && data['success']) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            sellteType: data.result,
+          }
+        });
+      } else {
+        Toast.success(data.errorMsg || '');
+      }
+    },
+    // quick pay 快捷支付(申请交易短信)
+    *applyDualMsg({ payload }, { call, put, select}) {
+      const { data } = yield call(dualMsgService, payload);
+      if(data && data['success']) {
+        Toast.success('交易短信获取成功！');
+        // yield put(routerRedux.push({
+        //   pathname: '/userinfo',
+        // }));
+        yield put({
+          type: 'updateState',
+          payload: {
+            channelResultNo: data.result.channelResultNo,
           }
         });
       } else {

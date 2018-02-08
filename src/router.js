@@ -122,6 +122,9 @@ function RouterConfig({ history, app }) {
           component: () => import('./routes/manager/index')
         })} />
         <Route path="/reposit" exact component={dynamic({ app,
+          models: () => [
+            import('./models/card'),
+          ],
           component: () => import('./routes/reposit/index')
         })} />
         <Route path="/result" exact component={dynamic({ app,

@@ -5,6 +5,7 @@ import { Flex, List, WhiteSpace, Toast, Radio, TabBar } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
+import Spinner from '../../components/Spinner';
 
 import styles from './index.less';
 
@@ -26,7 +27,10 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-
+    this.props.dispatch({
+      type: 'card/getSellteType',
+      payload: {}
+    });
   }
   componentWillUnmount() {
 
@@ -37,6 +41,7 @@ class Index extends React.Component {
 
     return (
       <Layout title={'提现'}>
+        <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
 
@@ -62,14 +67,20 @@ class Index extends React.Component {
 
             <WhiteSpace />
             <List renderHeader={() => '选择支付方式'} className="my-list">
-              <Item
-              className={styles.listItem}
-              extra={<Radio checked={true} className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
-              multipleLine onClick={() => {}}>
-                极速到账 <Brief>提现手续费  0.01%</Brief>
-              </Item>
+              {
+                this.props.sellteType.map((item) => {
+                  return (<Item
+                    key={item.settleType}
+                    className={styles.listItem}
+                    extra={<Radio checked={true} className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
+                    multipleLine onClick={() => {}}>
+                    {item.settleTypeDsc || ''}
+                    {/* <Brief>提现手续费  0.015%</Brief> */}
+                  </Item>)
+                })
+              }
 
-              <Item
+              {/* <Item
               className={styles.listItem}
               extra={<Radio className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
               multipleLine onClick={() => {}}>
@@ -81,7 +92,7 @@ class Index extends React.Component {
               extra={<Radio className={styles.myRadio} onChange={e => console.log('checkbox', e)}></Radio>}
               multipleLine onClick={() => {}}>
                 普通到账 + 额外获得积分 <Brief>提现手续费  0.015%</Brief>
-              </Item>
+              </Item> */}
             </List>
 
             <Flex className={styles.inviteContainer}>
@@ -211,9 +222,12 @@ Index.propTypes = {
 };
 function mapStateToProps( state ) {
   // console.log(state)
-  const { isLogin, codeSend: isSend } = state.user
+  const { isLogin } = state.user
+  // console.log(state)
   return {
-    isLogin, isSend
+    isLogin,
+    loading: state.loading.global || false,
+    sellteType: Array.isArray(state.card.sellteType)? state.card.sellteType : []
   }
 }
 export default connect( mapStateToProps )(Index);

@@ -59,6 +59,12 @@ export function resetPassApi() {
 export function weixinLogin() {
   return API + '/login/applyOpenid';
 }
+export function dualMsgApi() {
+  return API + '/quickpay/applyDualMsg';
+}
+export function sellteTypeApi() {
+  return API + '/sellteType/sellteTypeQuery';
+}
 
 export function wxUserApi(REDIRECT_URI,) {
   // const APPID = 'wx2f5543b30ccc34de';

@@ -27,6 +27,9 @@ const post = function post(url, data = {}, header = {}) {
   let body = {};
   headers = Object.assign({}, headers, header);
   body = Object.assign({}, body, data);
+  if(body instanceof Object && !body.initiationID) {
+    body.initiationID = Date.now().toString(16);
+  }
   body = queryString.stringify( body );
   options = {
     method: 'POST',
@@ -34,7 +37,7 @@ const post = function post(url, data = {}, header = {}) {
     headers
   };
   options = Object.assign({}, options);
-  
+
   return request(url, options);
 }
 export default post;
