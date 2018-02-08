@@ -62,6 +62,12 @@ export function weixinLogin() {
 export function dualMsgApi() {
   return API + '/quickpay/applyDualMsg';
 }
+export function quickDualApi() {
+  return API + '/quickpay/quickDual';
+}
+export function cashierDeskApi() {
+  return API + '/cashierDesk/pay';
+}
 export function sellteTypeApi() {
   return API + '/sellteType/sellteTypeQuery';
 }

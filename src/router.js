@@ -130,6 +130,9 @@ function RouterConfig({ history, app }) {
         <Route path="/result" exact component={dynamic({ app,
           component: () => import('./routes/result/index')
         })} />
+        <Route path="/shareYc" exact component={dynamic({ app,
+          component: () => import('./routes/shareYc/index')
+        })} />
 
       </Switch>
     </Router>

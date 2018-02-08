@@ -3,7 +3,9 @@ import postData from '../utils/postData';
 
 import { cardList, cardCreditBind, bindDebitCard,
   sendCreditSms, imgUpload, revisePassApi,
-  dualMsgApi, sellteTypeApi } from '../apis'
+  dualMsgApi, sellteTypeApi, quickDualApi,
+  cashierDeskApi,
+} from '../apis'
 
 
 export function listCard(obj) {
@@ -63,3 +65,13 @@ export function sellteTypeService(obj) {
   return post(sellteTypeApi(), data);
 }
 
+export function quickDualService(obj) {
+  let data ={};
+  data = Object.assign({}, data, obj || {});
+  return post(quickDualApi(), data);
+}
+export function cashierDeskService(obj) {
+  let data ={};
+  data = Object.assign({}, data, obj || {});
+  return post(cashierDeskApi(), data);
+}

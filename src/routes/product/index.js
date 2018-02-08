@@ -4,7 +4,7 @@ import { Link } from 'dva/router';
 import { Button, WhiteSpace, WingBlank } from 'antd-mobile';
 import Layout from '../../components/layout'
 
-import styles from './index.css';
+import styles from './index.less';
 
 function Product() {
   return (

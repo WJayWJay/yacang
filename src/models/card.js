@@ -1,7 +1,8 @@
 import { bindCreditCard, listCard,
    bindCardDebit, sendCreditSmsCode,
    imageUpload, revisePass,
-   dualMsgService, sellteTypeService
+   dualMsgService, sellteTypeService,
+   quickDualService
 } from '../services/card';
 
 // import pathToRegexp from 'path-to-regexp';
@@ -222,6 +223,20 @@ export default {
             channelResultNo: data.result.channelResultNo,
           }
         });
+      } else {
+        Toast.success(data.errorMsg || '');
+      }
+    },
+    // quick pay  快捷支付(提交交易)
+    *quickDual({ payload }, { call, put, select}) {
+      const passwords = yield select(state => state.card.passwords);
+      const { data } = yield call(quickDualService, payload);
+      if(data && data['success']) {
+        Toast.success('交易成功！');
+        // yield put(routerRedux.push({
+        //   pathname: '/userinfo',
+        // }));
+        
       } else {
         Toast.success(data.errorMsg || '');
       }
