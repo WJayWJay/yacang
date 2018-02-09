@@ -35,10 +35,22 @@ class CardCenter extends React.Component {
   }
 
   revisePwd = () => {
-    const { dispatch } = this.props;
-    dispatch(routerRedux.push({
-      pathname: '/revisePass',
-    }));
+    const { isLogin, info, dispatch } = this.props;
+    if(!isLogin) {
+      dispatch(routerRedux.push({
+        pathname: '/login'
+      }));
+    } else {
+      if(info.stat === 'CERTIFICATION') {
+        dispatch(routerRedux.push({
+          pathname: '/revisePass'
+        }));
+      } else {
+        dispatch(routerRedux.push({
+          pathname: '/addDebit'
+        }));
+      }
+    }
   }
 
   render() {

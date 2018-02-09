@@ -17,6 +17,7 @@ export default {
     codeSend: 0,
     tokenId: '',
     members: [],
+    inviteAward: '',
     resetPasswords: {'msgType': '003'},
     resetSmsSend: -1,
   },
@@ -181,7 +182,7 @@ export default {
         return ;
       }
       const { data } = yield call(code, {companyPhone: phone, 'msgType': '001'});
-      
+
       if( data && data['success'] ) {
         Toast.success('验证码已发送, 请注意查收!');
         yield put({type: 'changeCodeSend', payload: { codeSend: 1}});
@@ -196,10 +197,15 @@ export default {
       const { data } = yield call(getMemberData, {});
       if(data && data['success']) {
         let members = data.result && data.result.subMemberQueryInResponseList || [];
+        let inviteAward = data.result && data.result.inviteAward || '0.00';
         yield put({
           type: 'updateState',
           payload: { members }
-        })
+        });
+        yield put({
+          type: 'updateState',
+          payload: { inviteAward }
+        });
       } else {
         // Toast.fail(data && data.errorMsg || '发生错误');
       }

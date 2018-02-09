@@ -20,9 +20,9 @@ class Index extends React.Component {
     hasError: false,
     phone: '',
   }
-  
-  
-  
+
+
+
   render() {
     const { info } = this.props;
     const userInfo = Object.assign({}, info);
@@ -30,8 +30,8 @@ class Index extends React.Component {
     return (
       <Layout title={'立即邀请'}>
       <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0,background: '#57493F', marginTop:'45px' }} >
-        <div className={styles.normal}>   
-          <div className={styles.content}> 
+        <div className={styles.normal}>
+          <div className={styles.content}>
             <Flex className={styles.coloumn1} >
               <Flex className={styles.headContainer}>
                 <img src={headIcon} alt="logo" style={{width: '56px', height: '56px'}} />
@@ -45,9 +45,10 @@ class Index extends React.Component {
                 </Flex>
               </Flex>
             </Flex>
-            <Flex justify="center" className={styles.two}>
-              <img src={ewmIcon} alt="logo" style={{width: '289px', height: '289px'}} />
+            <Flex justify="center">
+              <img src={ewmIcon} alt="logo" style={{width: '80%', height: '80%'}} />
             </Flex>
+            <WhiteSpace style={{height: '20px'}} />
             <Flex justify="center" className={styles.last}>
               我的邀请码：{ userInfo.invitationCode || '' }
             </Flex>

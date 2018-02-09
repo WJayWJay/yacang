@@ -100,12 +100,15 @@ class ListProduct extends React.Component {
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
     const winHeight = window.innerHeight;
-    let tabHeight = winHeight - 45 -43.5 -10;
+    console.log(winHeight, 'winHeight')
+    let tabHeight = winHeight - 45 -43.5 - 10;
+
     this.state = {
       dataSource,
       showed: false,
       data: [],
-      listHeight: tabHeight - 38 + 24 + 'px',
+      // listHeight: tabHeight - 38 + 24 + 50 + 'px',
+      listHeight: tabHeight + 'px',
       tabHeigh: tabHeight,
       hasMore: true,
       page: 1,
@@ -215,13 +218,13 @@ class ListProduct extends React.Component {
           ref={el => this.lv = el}
           dataSource={this.state.dataSource}
           renderHeader={() => <span></span>}
-          renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
+          renderFooter={() => (<div style={{ padding: 10, textAlign: 'center' }}>
             {hasMore ? this.state.isLoading ? '加载中...' : '加载完成' : '没有更多了...'}
           </div>)}
           renderBodyComponent={() => <MyBody />}
           renderRow={row}
           renderSeparator={separator}
-          className="am-list"
+          className={styles.amList}
           style={{
             height: this.state.listHeight,
             overflow: 'auto',
@@ -239,7 +242,6 @@ class ListProduct extends React.Component {
 
   tabChange = (tab, index) => {
     const { dispatch } = this.props;
-    const { page } = this.state;
     console.log(tab, index)
 
     let currentPage = 1;
@@ -322,7 +324,7 @@ class ListProduct extends React.Component {
         <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
-            <div className={styles.selectContainer}>
+            {/* <div className={styles.selectContainer}>
               <Flex className={styles.flexListSelect}>
                 {selectLists.map((item) => (
                   <Flex justify="center" onClick={this.onSelectClick.bind(this, item)} key={item.id} className={styles.flexList}>
@@ -331,7 +333,7 @@ class ListProduct extends React.Component {
                 ))}
               </Flex>
               { showed ? this.renderSelect(showed): null}
-            </div>
+            </div> */}
             <Tabs
               onChange={this.tabChange}
               tabs={tabs}>

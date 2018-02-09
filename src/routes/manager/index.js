@@ -1,14 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { Flex, List, InputItem, WhiteSpace, Toast } from 'antd-mobile';
+
+import PropTypes from 'prop-types';
+
+import { routerRedux } from 'dva/router';
+import { Flex, List, Toast } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
 
 import styles from './index.less';
-
-import logo from '../../assets/login-logo.png';
 
 const Item = List.Item;
 
@@ -41,9 +42,14 @@ class Index extends React.Component {
       </Item>);
   }
 
+  toInvite = () => {
+    this.props.dispatch(routerRedux.push({
+      pathname: '/share'
+    }));
+  }
+
   render() {
     const { members } = this.props;
-    const iconSize = '24px';
     return (
       <Layout title={'成员管理'}>
         <div className={styles.normal}>
@@ -51,7 +57,7 @@ class Index extends React.Component {
             <Flex justify="center" className={styles.availableMoney}>
               <Flex direction='column'>
                 <Flex className={styles.money}>
-                  0.00
+                  {this.props.inviteAward || ''}
                 </Flex>
                 <Flex className={styles.moneyDesc}>
                   可分利润额（元）
@@ -75,7 +81,7 @@ class Index extends React.Component {
             </List>
 
             <Flex className={styles.inviteContainer}>
-              <Button className={styles.invite}>
+              <Button onClick={this.toInvite} className={styles.invite}>
               立即邀请
               </Button>
             </Flex>
@@ -88,12 +94,14 @@ class Index extends React.Component {
 }
 
 Index.propTypes = {
+  members: PropTypes.array
 };
 function mapStateToProps( state ) {
   // console.log(state)
-  const { members } = state.user
+  const { members, isLogin, inviteAward } = state.user
+
   return {
-    members
+    isLogin, members: Array.isArray(state.user.members) ? members: [], inviteAward
   }
 }
 export default connect( mapStateToProps )(Index);

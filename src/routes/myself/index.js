@@ -70,7 +70,7 @@ class Index extends React.Component {
   toLink = (item) => {
     const map = {
       'about': '/about',
-      'share': '/share',
+      'share': '/shareYc',
       'manager': '/manager',
       'feedback': '/about',
       'notice': '/about',
@@ -86,6 +86,24 @@ class Index extends React.Component {
       this.props.dispatch(routerRedux.push({
         pathname: pathname
       }))
+    }
+  }
+  toCardCenter = () => {
+    const { isLogin, info, dispatch } = this.props;
+    if(!isLogin) {
+      dispatch(routerRedux.push({
+        pathname: '/login'
+      }));
+    } else {
+      if(info.stat === 'CERTIFICATION') {
+        dispatch(routerRedux.push({
+          pathname: '/cardCenter'
+        }));
+      } else {
+        dispatch(routerRedux.push({
+          pathname: '/addDebit'
+        }));
+      }
     }
   }
 
@@ -147,7 +165,7 @@ class Index extends React.Component {
                   <Flex className={styles.tabsFlexFont} align='start'>{tabsInfo[0].title}</Flex>
                 </Flex>
                 <div className={styles.whiteLine}></div>
-                <Flex onClick={()=> isLogin?this.props.history.push('/cardCenter'):this.props.history.push('/login') } direction='column' className={styles.tabsFlex}>
+                <Flex onClick={this.toCardCenter} direction='column' className={styles.tabsFlex}>
                   <Flex className={styles.tabsFlexImg} align='end'>
                     <img style={{ width: '35px', height: '27px'}} src={tabsInfo[1].icon} alt={tabsInfo[1].title} />
                   </Flex>

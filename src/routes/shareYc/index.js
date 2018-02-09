@@ -43,15 +43,15 @@ class Index extends React.Component {
     });
   }
 
-  
-  
+
+
   render() {
     const { info } = this.props;
 
     return (
       <Layout title={'分享雅藏'}>
-      <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0,background: '#ffffff', marginTop:'45px' }} >
-        <div className={styles.normal}>   
+      <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0,background: '#ffffff', marginTop:'45px', overflow: 'auto' }} >
+        <div className={styles.normal}>
           <div className={styles.content}>
             <WhiteSpace style={{ height: '41px'}} />
             <Flex justify="center" className={styles.logo}>
@@ -68,7 +68,7 @@ class Index extends React.Component {
             <WhiteSpace />
             <Flex justify="center" className={styles.desc2}>
               <div>便捷交易，快速取现</div>
-            </Flex>            
+            </Flex>
             <WhiteSpace style={{ height: '34px'}} />
             <Flex justify="center" className={styles.logo}>
               <img src={ewmIcon} alt="logo" style={{width: '209px', height: '209px'}} />
@@ -77,6 +77,7 @@ class Index extends React.Component {
             <Flex justify="center" className={styles.desc2}>
               <div>扫码即可下载雅藏</div>
             </Flex>
+            <WhiteSpace style={{ height: '119px'}} />
           </div>
           <Flex className={styles.share}>
             <Button onClick={this.showShareActionSheetMulpitleLine} className={styles.shareButton}>向朋友推荐雅藏</Button>

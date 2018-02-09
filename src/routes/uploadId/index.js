@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
-import { Flex, InputItem, List , WhiteSpace, Icon, DatePicker, Toast} from 'antd-mobile';
+// import { routerRedux } from 'dva/router';
+import { Flex, List , Toast} from 'antd-mobile';
 import { createForm } from 'rc-form';
 
 import Layout from '../../components/layout';
