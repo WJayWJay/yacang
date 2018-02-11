@@ -123,9 +123,23 @@ function RouterConfig({ history, app }) {
         })} />
         <Route path="/reposit" exact component={dynamic({ app,
           models: () => [
+            import('./models/trade'),
             import('./models/card'),
           ],
           component: () => import('./routes/reposit/index')
+        })} />
+        <Route path="/selectSellte" exact component={dynamic({ app,
+          models: () => [
+            import('./models/trade'),
+          ],
+          component: () => import('./routes/selectSellte/index')
+        })} />
+        <Route path="/selectBank" exact component={dynamic({ app,
+          models: () => [
+            import('./models/trade'),
+            import('./models/card'),
+          ],
+          component: () => import('./routes/selectBank/index')
         })} />
         <Route path="/result" exact component={dynamic({ app,
           component: () => import('./routes/result/index')

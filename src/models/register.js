@@ -23,7 +23,7 @@ export default {
 
   effects: {
     *userRegister({ payload: { code: messages, phone: phoneNumber, inviteCode: invitationCode } }, { call, put, select}) {
-      const { data } = yield call(register, {messages, phoneNumber, invitationCode});
+      const { data } = yield call(register, {messages, phoneNumber, invitationCode, cumSource: 2});
       if(data && data['success']) {
         Toast.success('注册成功!');
         yield put({type: 'saveRegisterStatus', payload: {status: 0}});
