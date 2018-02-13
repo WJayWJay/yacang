@@ -100,7 +100,6 @@ class ListProduct extends React.Component {
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
     const winHeight = window.innerHeight;
-    console.log(winHeight, 'winHeight')
     let tabHeight = winHeight - 45 -43.5 - 10;
 
     this.state = {

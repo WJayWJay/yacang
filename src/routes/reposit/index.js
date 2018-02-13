@@ -133,11 +133,11 @@ class Index extends React.Component {
     prompt(
       '请输入支付密码',
       <div>
-      <div className={styles.mAdditional} >到账金额</div>
-      <WhiteSpace />
-      <div className={styles.moneyAlert}>{'¥'+ (tradeInfo.payMoney / 100)}</div>
-      <WhiteSpace style={{height: '20px'}} />
-      <div className={styles.moneyAddition}>额外扣除 <span>¥0.10</span> 手续费</div>
+        <div className={styles.mAdditional} >到账金额</div>
+        <WhiteSpace />
+        <div className={styles.moneyAlert}>{'¥'+ (tradeInfo.payMoney / 100)}</div>
+        <WhiteSpace style={{height: '20px'}} />
+        <div className={styles.moneyAddition}>额外扣除 <span>¥0.10</span> 手续费</div>
       </div>,
       password => {
         dispatch({
@@ -292,6 +292,15 @@ class Index extends React.Component {
                 moneyKeyboardAlign={'left'}
                 {...getFieldProps('payMoney', {
                   initialValue: '',
+                  normalize: (v, prev) => {
+                    if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {
+                      if (v === '.') {
+                        return '0.';
+                      }
+                      return prev;
+                    }
+                    return v;
+                  },
                   rules: [{
                     required: true,
                     validator: (rule, value, cb) => {
@@ -303,8 +312,9 @@ class Index extends React.Component {
                     }
                   }],
                 })}
+                clear
                 error={!!getFieldError('payMoney')}
-                type="money"
+                type="digit"
                 placeholder="请输入消费金额"
               ></InputItem>
             </List>

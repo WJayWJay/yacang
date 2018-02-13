@@ -141,6 +141,19 @@ function RouterConfig({ history, app }) {
           ],
           component: () => import('./routes/selectBank/index')
         })} />
+        <Route path="/tradeList" exact component={dynamic({ app,
+          models: () => [
+            import('./models/trade'),
+            import('./models/card'),
+          ],
+          component: () => import('./routes/tradeList/index')
+        })} />
+        <Route path="/orderDetail/:id" exact component={dynamic({ app,
+          models: () => [
+            import('./models/trade'),
+          ],
+          component: () => import('./routes/orderDetail/index')
+        })} />
         <Route path="/result" exact component={dynamic({ app,
           component: () => import('./routes/result/index')
         })} />

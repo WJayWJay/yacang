@@ -1,9 +1,7 @@
-import { listCard,
-   bindCardDebit, sendCreditSmsCode,
-   imageUpload, revisePass,
+import { sendCreditSmsCode,
    dualMsgService, sellteTypeService,
-   quickDualService
-} from '../services/card';
+   quickDualService, orderListService, orderDetailService
+} from '../services/trade';
 
 // import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
@@ -30,6 +28,14 @@ export default {
     creditInfo: {},
     channelResultNo: '',
     sellteType: [],
+    tradeList: {
+      total: 0,
+      hasMore: true,
+      orderList: [],
+      getListError: null,
+      orderDetail: {},
+    },
+    pageCount: 10,
   },
 
   subscriptions: {
@@ -37,10 +43,7 @@ export default {
       history.listen((location) => {
         console.log(location)
         if(['/checkcode', '/addBankCard'].indexOf(location.pathname) > -1) {
-          let data = Cache.get(creditInfoKey);
-          console.log('cache...',data)
-          if(data) {
-          }
+          
         }
       })
     },
@@ -75,19 +78,6 @@ export default {
         })
       }
     },
-    *fetchCard({ payload: { type } }, { call, put, select}) {  // eslint-disable-line
-
-      const { data } = yield call(listCard, {});
-      console.log(data, 'cardList')
-      if( data && data['success'] && data['result'] ) {
-        yield put({
-          type: 'updateState',
-          payload: {cardList: data['result']}
-        });
-      }
-    },
-    
-
     *getSellteType({ payload }, { call, put, select}) {
       const { data } = yield call(sellteTypeService, payload);
       if(data && data['success']) {
@@ -142,11 +132,65 @@ export default {
         Toast.success(data.errorMsg || '');
       }
     },
+    
+    *orderList({ payload }, { call, put, select}) {
+      let pageCount = yield select(s => s.trade.pageCount);
+      let hasMore = true;
+      hasMore = yield select(s => s.trade.tradeList.hasMore);
+      if(!hasMore) return;
+      if(Object.prototype.toString.call(payload) !== "[object Object]") {
+        payload = {};
+      }
+      if(!payload.hasOwnProperty('pageCount')) {
+        payload.pageCount = pageCount;
+      }
+      payload.bizType = 'DRAWCASH';
+      const { data } = yield call(orderListService, payload);
+      if(data && data['success']) {
+        let prevList = yield select(s => s.trade.tradeList.orderList);
+        let orderList = data.result && data.result.results || [];
+
+        if(orderList.length < payload.pageCount) {
+          hasMore = false;
+        }
+        // orderList = prevList.concat(orderList);
+        let total = data.result && data.result.totalSize | 0;
+        yield put({
+          type: 'updateTradeList',
+          payload: {orderList: orderList, total: total, hasMore: hasMore}
+        });
+      } else {
+        // Toast.success(data.errorMsg || '');
+        yield put({
+          type: 'updateTradeList',
+          payload: {
+            getListError: {err: payload, errmsg: 'data.errorMsg', page: payload.currentPage}
+          }
+        });
+      }
+    },
+    *orderDetail({ payload }, { call, put, select}) {
+      const { data } = yield call(orderDetailService, payload);
+      if(data && data['success']) {
+        let result = data.result;
+        result = Array.isArray(result)? result[0]? result[0]: {} : {};
+        yield put({
+          type: 'updateTradeList',
+          payload: {orderDetail: result}
+        });
+      } else {
+        Toast.success(data.errorMsg || '');
+      }
+    },
+    
   },
 
   reducers: {
     updateState(state, { payload }) {
       return { ...state, ...payload };
+    },
+    updateTradeList(state, { payload }) {
+      return { ...state, ...{tradeList: {...state.tradeList, ...payload} } };
     },
     updateTradeInfo(state, { payload }) {
       return { ...state, ...{tradeInfo: {...state.tradeInfo, ...payload} } };

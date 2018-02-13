@@ -71,6 +71,12 @@ export function cashierDeskApi() {
 export function sellteTypeApi() {
   return API + '/sellteType/sellteTypeQuery';
 }
+export function orderListApi() {
+  return API + '/order/queryOrderList';
+}
+export function orderDetailApi() {
+  return API + '/order/queryOrderDetail';
+}
 
 export function wxUserApi(REDIRECT_URI,) {
   // const APPID = 'wx2f5543b30ccc34de';
