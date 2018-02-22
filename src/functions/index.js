@@ -59,3 +59,7 @@ export function deepCopy(arr1) {
   }
   return arr;
 }
+
+export function isObject(obj) {
+  return Object.prototype.toString.call(obj) === '[object Object]';
+}

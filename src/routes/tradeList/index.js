@@ -90,6 +90,7 @@ class Index extends React.Component {
 
   toDetail = (obj) => {
     const { dispatch } = this.props;
+    
     dispatch(routerRedux.push({
       pathname: `/orderDetail/${obj.orderNo}`
     }));
