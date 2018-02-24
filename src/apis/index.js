@@ -71,6 +71,9 @@ export function cashierDeskApi() {
 export function sellteTypeApi() {
   return API + '/sellteType/sellteTypeQuery';
 }
+export function queryPreArrivalAmountApi() {
+  return API + '/quickpay/queryPreArrivalAmount';
+}
 export function orderListApi() {
   return API + '/order/queryOrderList';
 }

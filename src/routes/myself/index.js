@@ -106,6 +106,24 @@ class Index extends React.Component {
       }
     }
   }
+  toTradeList = () => {
+    const { isLogin, info, dispatch } = this.props;
+    if(!isLogin) {
+      dispatch(routerRedux.push({
+        pathname: '/login'
+      }));
+    } else {
+      if(info.stat === 'CERTIFICATION') {
+        dispatch(routerRedux.push({
+          pathname: '/tradeList'
+        }));
+      } else {
+        dispatch(routerRedux.push({
+          pathname: '/addDebit'
+        }));
+      }
+    }
+  }
 
   renderContent(pageText) {
     if(pageText === 'home') {
@@ -172,7 +190,7 @@ class Index extends React.Component {
                   <Flex className={styles.tabsFlexFont} align='start'>{tabsInfo[1].title}</Flex>
                 </Flex>
                 <div className={styles.whiteLine}></div>
-                <Flex direction='column' className={styles.tabsFlex}>
+                <Flex onClick={this.toTradeList} direction='column' className={styles.tabsFlex}>
                   <Flex className={styles.tabsFlexImg} align='end'>
                     <img style={{ width: '35px', height: '27px'}} src={tabsInfo[2].icon} alt={tabsInfo[2].title} />
                   </Flex>

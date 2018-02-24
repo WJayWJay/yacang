@@ -196,6 +196,9 @@ class Index extends React.Component {
       </div>
     );
   }
+  renderListAnother = () => {
+    return <div>暂无内容</div>
+  }
 
   renderSelf = () => {
     const tabs = [
@@ -215,7 +218,7 @@ class Index extends React.Component {
             {this.renderList()}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
-            Content of second tab
+            {this.renderListAnother()}
           </div>
         </Tabs>
     </div>

@@ -17,8 +17,17 @@ import jianhangIcon from '../../assets/card/card-jianhang.png';
 
 const Item = List.Item;
 const Brief = Item.Brief;
-const prompt = Modal.prompt;
 
+function closest(el, selector) {
+  const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
+  while (el) {
+    if (matchesSelector.call(el, selector)) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
 
 class Index extends React.Component {
 
@@ -33,6 +42,9 @@ class Index extends React.Component {
     itime: 60,
     sendDisabled: false,
     agreeColor: '#8C8C9E',
+
+    inputTradePwd: false,
+    password: ''
   }
 
   componentDidMount() {
@@ -56,6 +68,11 @@ class Index extends React.Component {
     console.log(nextProps.tradeSmsSend, 'jjjjj')
     if(nextProps.tradeSmsSend === 0) {
       this.startInterv();
+      setTimeout(()=> {
+        this.setState({
+          inputTradePwd: false
+        })
+      },500);
     } else {
       this.intervId && clearInterval(this.intervId);
       this.setState({
@@ -92,18 +109,104 @@ class Index extends React.Component {
   getCode = (e) => {
     e.preventDefault();
     const { getFieldError } = this.props.form;
-    if(!!getFieldError('smsCode')) {
-      Toast.show('验证码格式错误！');
-      return;
+    
+    let err = this.checkError();
+    if(!err) {
+      return ;
     }
+
+    this.props.dispatch({
+      type: 'trade/queryPreArrivalAmount', // arrivalAmount
+      payload: {}
+    })
+
+    this.showModal('inputTradePwd');
+  }
+
+  toGetCode = (value) => {
+
     this.setState({
       sendDisabled: true,
     });
     this.props.dispatch({
       type: 'trade/sendSmsCode',
-      payload: {type: 'debit'}
+      payload: {type: 'applyDualMsg'}
     });
+    
   }
+
+  onChange = (value) => {
+    if(/^\d+$/.test(value)) {
+      if(value.length === 6) {
+        this.toGetCode(value);
+      }
+      this.props.dispatch({
+        type: 'trade/updateTradeInfo',
+        payload: {password: value},
+      });
+      this.setState({
+        password: value
+      })
+    }
+  }
+  ModelItem = () => {
+    const { tradeInfo, dispatch } = this.props;
+    let payMoney = (tradeInfo.payMoney | 0) / 100;
+    return (<Modal
+      visible={this.state.inputTradePwd}
+      transparent
+      closable={true}
+      maskClosable={false}
+      onClose={this.onClose('inputTradePwd')}
+      title="请输入支付密码"
+      // footer={[{ text: 'Ok', onPress: () => { console.log('ok'); this.onClose('inputTradePwd')(); } }]}
+      wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+    >
+      <div>
+        <div className={styles.mAdditional} >到账金额</div>
+        <WhiteSpace />
+        <div className={styles.moneyAlert}>{'¥'+ payMoney}</div>
+        <WhiteSpace style={{height: '20px'}} />
+        <div className={styles.moneyAddition}>额外扣除 <span>¥{this.props.arrivalAmount || 0}</span> 手续费</div>
+        <WhiteSpace style={{height: '20px'}} />        
+        <InputItem
+          className={styles.myPwdInput}
+          style={{border: '1px solid #979797', borderRadius: '6px', height: '50px', width: '100%', textIndent: '10px'}}
+          type="password"
+          maxLength={6}
+          placeholder="请输入交易密码"
+          error={this.state.hasError}
+          onErrorClick={this.onErrorClick}
+          onChange={this.onChange}
+          value={this.state.password}
+        />
+        <WhiteSpace style={{height: '24px'}} />
+        <div onClick={() => this.toLink('/forget')} style={{fontSize: '16px', color: '#646464', textAlign: 'center'}}>
+        忘记密码？
+        </div>
+        <WhiteSpace style={{height: '20px'}} />
+      </div>
+    </Modal>);
+  }
+
+  checkError = () => {
+    const { tradeInfo } = this.props;
+
+    if(!tradeInfo.payMoney || isNaN(parseInt(tradeInfo.payMoney, 10))) {
+      Toast.fail('消费金额填写错误！');
+      return;
+    }
+    if(!tradeInfo.settleType) {
+      Toast.fail('请选择到账方式！');
+      return;
+    }
+    if(!tradeInfo.bankCardID || tradeInfo.bankCardID.length < 10 || tradeInfo.phoneNumber < 6) {
+      Toast.fail('请选择消费信用卡！');
+      return;
+    }
+    return true;
+  }
+
 
   submit = (e) => {
     // check error
@@ -129,31 +232,12 @@ class Index extends React.Component {
       return;
     }
 
-
-    prompt(
-      '请输入支付密码',
-      <div>
-        <div className={styles.mAdditional} >到账金额</div>
-        <WhiteSpace />
-        <div className={styles.moneyAlert}>{'¥'+ (tradeInfo.payMoney / 100)}</div>
-        <WhiteSpace style={{height: '20px'}} />
-        <div className={styles.moneyAddition}>额外扣除 <span>¥0.10</span> 手续费</div>
-      </div>,
-      password => {
-        dispatch({
-          type: 'trade/updateTradeInfo',
-          payload: {password: password}
-        });
-        setTimeout(() => {
-          dispatch({
-            type: 'trade/applyDualMsg',
-            payload: {}
-          })
-        }, 100)
-      },
-      'secure-text',
-    )
+    this.props.dispatch({
+        type: 'trade/quickDual',
+        payload: {}
+    });
   }
+
 
   renderSelf = () => {
     const tabs = [
@@ -170,15 +254,97 @@ class Index extends React.Component {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
         {this.renderTab()}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
-        Content of second tab
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
-        Content of third tab
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
+        {this.renderLinkTab()}
       </div>
     </Tabs>
     </Layout>);
   }
+
+  renderLinkTab = () => {
+    const { getFieldProps, getFieldError } = this.props.form;
+    const { tradeInfo } = this.props;
+    let payMoney = tradeInfo.payMoney | 0;
+    payMoney = payMoney / 100;
+    return (
+      <div style={{ width: '100%'}} title={'提现'}>
+        <Spinner loading={this.props.loading} />
+        <div className={styles.normal}>
+          <div className={styles.content}>
+            <List renderHeader={() => ''} className="my-list">
+              <InputItem
+                className={styles.inputMoney}
+                moneyKeyboardAlign={'left'}
+                {...getFieldProps('payMoney', {
+                  initialValue: payMoney || '',
+                  normalize: (v, prev) => {
+                    if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {
+                      if (v === '.') {
+                        return '0.';
+                      }
+                      return prev;
+                    }
+                    return v;
+                  },
+                  rules: [{
+                    required: true,
+                    validator: (rule, value, cb) => {
+                      if(value - 10 < 0) {
+                        cb(new Error('提现金额10元以上！'))
+                      } else {
+                        cb();
+                      }
+                    }
+                  }],
+                })}
+                clear
+                error={!!getFieldError('payMoney')}
+                type="digit"
+                placeholder="请输入消费金额"
+              ></InputItem>
+            </List>
+            <List renderHeader={() => '请选择支付方式'} className="my-list">
+              {this.renderPayType()}
+            </List>
+            
+            <Flex className={styles.inviteContainer}>
+              <Button onClick={this.tosubmit} className={styles.invite}>
+              立即消费
+              </Button>
+            </Flex>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  tosubmit = () => {
+
+  }
+
+
+  selectPayType = () => {
+    console.log('select')
+  }
+
+  renderPayType = () => {
+    let items = [
+      {title: '支付宝'},
+      {title: '微信支付'},
+      {title: '其他支付'},
+    ];
+    return (items.map(item =><Item
+      className={styles.listItem}
+      key={item.title}
+      thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
+      arrow='horizontal'
+      multipleLine onClick={this.selectPayType}>
+        {item.title || ''}
+    </Item>))
+  }
+
+
+
 
   toLink = (link) => {
     if(link) {
@@ -203,6 +369,12 @@ class Index extends React.Component {
         </Item>
       );
     }
+    const sTypes = {
+      'T0_INTEGRAL': '0.01%',
+      'T0_NOINTEGRAL': '0.015%',
+      'T1_INTEGRAL': '0.015%',
+      'T1_NOINTEGRAL': '0.015%',
+    };
     return this.props.sellteType.filter(item => item.settleType === settleType)
     .map(ritem => {
       return (
@@ -213,7 +385,7 @@ class Index extends React.Component {
           arrow='horizontal'
           multipleLine
           onClick={this.toLink.bind(this, '/selectSellte')}>
-            {ritem.settleTypeDsc || ''}<Brief>提现手续费  0.015%</Brief>
+            {ritem.settleTypeDsc || ''}<Brief>提现手续费  {sTypes[settleType] || ''}</Brief>
         </Item>
       );
     });
@@ -279,19 +451,19 @@ class Index extends React.Component {
   renderTab = () => {
     const { getFieldProps, getFieldError } = this.props.form;
     const { tradeInfo } = this.props;
-    
+    let payMoney = tradeInfo.payMoney | 0;
+    payMoney = payMoney / 100;
     return (
       <div style={{ width: '100%'}} title={'提现'}>
         <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
-
             <List renderHeader={() => ''} className="my-list">
               <InputItem
                 className={styles.inputMoney}
                 moneyKeyboardAlign={'left'}
                 {...getFieldProps('payMoney', {
-                  initialValue: '',
+                  initialValue: payMoney || '',
                   normalize: (v, prev) => {
                     if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {
                       if (v === '.') {
@@ -389,6 +561,36 @@ class Index extends React.Component {
     )
   }
 
+  onWrapTouchStart = (e) => {
+    // fix touch to scroll background page on iOS
+    if (!/iPhone|iPod|iPad/i.test(navigator.userAgent)) {
+      return;
+    }
+    const pNode = closest(e.target, '.am-modal-content');
+    if (!pNode) {
+      e.preventDefault();
+    }
+  }
+
+  showModal = key => {
+    this.setState({
+      [key]: true,
+    });
+    this.setState({
+      password: ''
+    })
+  }
+
+  onClose = key => () => {
+    this.setState({
+      [key]: false,
+    });
+    this.setState({
+      password: ''
+    })
+  }
+
+
   render() {
     const iconSize = '26px';
     return (
@@ -477,6 +679,8 @@ class Index extends React.Component {
             {this.renderContent('myself')}
           </TabBar.Item>
         </TabBar>
+
+        {this.ModelItem()}
       </div>
     );
   }
@@ -486,12 +690,22 @@ Index.propTypes = {
   tradeInfo: PropTypes.object
 };
 
+function mul(x) {
+  let s = '' + x;
+  if(s.indexOf('.') === -1) return (x|0) * 100;
+  let arr = s.split('.');
+  let first = parseInt(arr[0], 10) * 100;
+  if(!arr[1]) return first;
+  let second = arr[1].substr(0, 2);
+  second = second.length === 2? parseInt(second, 10): (second | 0) * 10;
+  return first + second;
+}
+
 const RepositIndex = createForm({
   onValuesChange(props, value) {
-    console.log('onvalueChange...', value);
     if(value && value.payMoney) {
       let money = parseFloat(value.payMoney);
-      money = money * 100 | 0;
+      money = mul(money) | 0;
       props.dispatch({
         type: 'trade/updateTradeInfo',
         payload: {payMoney: money},
@@ -517,7 +731,8 @@ function mapStateToProps( state ) {
     tradeInfo: state.trade.tradeInfo || {},
     creditInfo: state.trade.creditInfo || {},
     sellteType: state.trade.sellteType || [],
-    cardList: cards
+    cardList: cards,
+    arrivalAmount: state.trade.arrivalAmount
   }
 }
 export default connect( mapStateToProps )(RepositIndex);

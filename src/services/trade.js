@@ -1,6 +1,6 @@
 import post from '../utils/post';
 import {
-  sendCreditSms,
+  sendCreditSms, queryPreArrivalAmountApi,
   dualMsgApi, sellteTypeApi, quickDualApi,
   cashierDeskApi, orderListApi, orderDetailApi
 } from '../apis'
@@ -23,6 +23,11 @@ export function sellteTypeService(obj) {
   let data ={};
   data = Object.assign({}, data, obj || {});
   return post(sellteTypeApi(), data);
+}
+export function queryPreArrivalAmountService(obj) {
+  let data ={};
+  data = Object.assign({}, data, obj || {});
+  return post(queryPreArrivalAmountApi(), data);
 }
 
 export function quickDualService(obj) {

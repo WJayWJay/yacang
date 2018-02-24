@@ -1,15 +1,12 @@
 import { sendCreditSmsCode,
    dualMsgService, sellteTypeService,
-   quickDualService, orderListService, orderDetailService
+   quickDualService, orderListService, orderDetailService,
+   queryPreArrivalAmountService
 } from '../services/trade';
 
 // import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
-import Cache from '../utils/cache';
-
-const creditInfoKey = 'creditInfoKey@cache';
-const debitInfoKey = 'debitInfoKey@cache';
 
 export default {
 
@@ -35,6 +32,9 @@ export default {
       getListError: null,
       orderDetail: {},
     },
+
+    arrivalAmount: '0',
+
     pageCount: 10,
   },
 
@@ -59,10 +59,17 @@ export default {
       bankCard = tradeInfo.bankCardID;
       phoneNumber = tradeInfo.phoneNumber;
 
-      const { data } = yield call(sendCreditSmsCode, {bankCard: bankCard, phoneNumber: phoneNumber});
+      // const { data } = yield call(sendCreditSmsCode, {bankCard: bankCard, phoneNumber: phoneNumber});
+      const { data } = yield call(dualMsgService, tradeInfo);
       let payload = {};
       if(data && data['success']) {
         Toast.success('短信验证码已发送，请注意查收!');
+        yield put({
+          type: 'updateState',
+          payload: {
+            channelResultNo: data.result.channelResultNo,
+          }
+        });
         payload['tradeSmsSend'] = 0
         yield put({
           type: 'updateState',
@@ -88,7 +95,33 @@ export default {
           }
         });
       } else {
-        Toast.success(data.errorMsg || '');
+        Toast.fail(data.errorMsg || '');
+      }
+    },
+    *queryPreArrivalAmount({ payload }, { call, put, select}) {
+      yield put({
+        type: 'updateState',
+        payload: {
+          arrivalAmount: 0,
+        }
+      });
+      const tradeInfo = yield select(state => state.trade.tradeInfo);
+      let payType = '0';
+      const { data } = yield call(queryPreArrivalAmountService, {
+        payMoney: tradeInfo.payMoney,
+        bankCardID: tradeInfo.bankCardID,
+        settleType: tradeInfo.settleType,
+        payType: payType,
+      });
+      if(data && data['success']) {
+        yield put({
+          type: 'updateState',
+          payload: {
+            arrivalAmount: (data.result.arrivalAmount | 0) / 100,
+          }
+        });
+      } else {
+        Toast.fail(data.errorMsg || '');
       }
     },
     // quick pay 快捷支付(申请交易短信)
@@ -106,30 +139,32 @@ export default {
         //     channelResultNo: data.result.channelResultNo,
         //   }
         // });
-        const { data: qData } = yield call(quickDualService, {smsCode: tradeInfo.smsCode, channelResultNo:  data.result.channelResultNo});
-        if(qData && qData.success) {
-          Toast.success('交易成功！');
-          yield put(routerRedux.push({
-            pathname: '/myself'
-          }))
-        } else {
-          Toast.success(data.errorMsg || '');          
-        }
+        // const { data: qData } = yield call(quickDualService, {smsCode: tradeInfo.smsCode, channelResultNo:  data.result.channelResultNo});
+        // if(qData && qData.success) {
+        //   Toast.success('交易成功！');
+        //   yield put(routerRedux.push({
+        //     pathname: '/myself'
+        //   }))
+        // } else {
+        //   Toast.success(data.errorMsg || '');          
+        // }
       } else {
         Toast.success(data.errorMsg || '');
       }
     },
     // quick pay  快捷支付(提交交易)
     *quickDual({ payload }, { call, put, select}) {
-      const { data } = yield call(quickDualService, payload);
+      const tradeInfo = yield select(state => state.trade.tradeInfo);
+      const channelResultNo = yield select(state => state.trade.channelResultNo);
+      // const { data } = yield call(quickDualService, payload);
+      const { data } = yield call(quickDualService, {smsCode: tradeInfo.smsCode, channelResultNo: channelResultNo});
       if(data && data['success']) {
         Toast.success('交易成功！');
-        // yield put(routerRedux.push({
-        //   pathname: '/userinfo',
-        // }));
-        
+        yield put(routerRedux.push({
+          pathname: '/tradeList',
+        }));
       } else {
-        Toast.success(data.errorMsg || '');
+        Toast.fail(data.errorMsg || '');
       }
     },
     
