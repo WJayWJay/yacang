@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Flex, List, InputItem, Toast, Modal, TabBar, Tabs, Badge, WhiteSpace } from 'antd-mobile';
+import { Flex, List, InputItem, Toast, Modal, TabBar, Tabs, Badge, WhiteSpace, Icon } from 'antd-mobile';
 import { createForm } from 'rc-form';
+import queryString from 'query-string';
+
 
 import PropTypes from 'prop-types';
 
@@ -44,7 +46,10 @@ class Index extends React.Component {
     agreeColor: '#8C8C9E',
 
     inputTradePwd: false,
-    password: ''
+    password: '',
+
+    selectPayType: 0,
+    initialPage: 0,
   }
 
   componentDidMount() {
@@ -244,10 +249,19 @@ class Index extends React.Component {
       { title: <Badge text={''}>无卡快捷</Badge> },
       { title: <Badge text={''}>跳转支付</Badge> },
     ];
-
+    const { history } = this.props;
+    let search = history.location.search;
+    search = queryString.parse(search);
+    console.log(search, 'ssss')
+    let initialPage = search.initialPage | 0;
+    console.log(initialPage, 'initialPage')
+    
+    initialPage = initialPage < 2? initialPage: 0;
+    
+    console.log(initialPage, 'ijiiiii')
     return (<Layout title={'提现'}>
       <Tabs tabs={tabs}
-        initialPage={0}
+        initialPage={initialPage}
         onChange={(tab, index) => { console.log('onChange', index, tab); }}
         onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
       >
@@ -303,6 +317,9 @@ class Index extends React.Component {
                 placeholder="请输入消费金额"
               ></InputItem>
             </List>
+            <List renderHeader={() => '选择到账方式'} className="my-list">
+              {this.renderSettle(1)}
+            </List>
             <List renderHeader={() => '请选择支付方式'} className="my-list">
               {this.renderPayType()}
             </List>
@@ -319,42 +336,74 @@ class Index extends React.Component {
   }
 
   tosubmit = () => {
+    const { tradeInfo, dispatch, paySelectType: selectPayType } = this.props;
+    if(!selectPayType) {
+      Toast.fail('请选择支付方式！');
+      return;
+    } else if(selectPayType === 1) {
+      Toast.fail('支付宝支付方式暂未开通！');
+      return;
+    } else if(selectPayType === 2) {
+      Toast.fail('微信支付方式暂未开通！');
+      return;
+    }
+    if(!tradeInfo.payMoney || isNaN(parseFloat(tradeInfo.payMoney, 10))) {
+      Toast.fail('消费金额填写错误！');
+      return;
+    }
 
+    if(!tradeInfo.settleType) {
+      Toast.fail('请选择到账方式！');
+      return;
+    }
+    this.props.dispatch({
+      type: 'trade/cashierDesk',
+      payload: {}
+    });
   }
 
 
-  selectPayType = () => {
+  selectPayType = (item) => {
     console.log('select')
+    if( !item || !item.type) return;
+    this.props.dispatch({
+      type: 'trade/updateState',
+      payload: {paySelectType: item.type}
+    });
   }
 
   renderPayType = () => {
     let items = [
-      {title: '支付宝'},
-      {title: '微信支付'},
-      {title: '其他支付'},
+      {title: '支付宝', type: 1, src: require('../../assets/reposit/syt_zfb.png')},
+      {title: '微信支付', type: 2, src: require('../../assets/reposit/syt_wx.png')},
+      {title: '其他支付', type: 3, src: require('../../assets/reposit/syt_qtzf.png')},
     ];
+    let selectPayType = this.props.paySelectType;
     return (items.map(item =><Item
       className={styles.listItem}
       key={item.title}
-      thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
-      arrow='horizontal'
-      multipleLine onClick={this.selectPayType}>
-        {item.title || ''}
+      extra={<Icon color={selectPayType === item.type ? '#00B402': '#565656'} type={selectPayType === item.type ? 'check-circle':'check-circle-o'} />}
+      // thumb={<img className={styles.listItemIcon} src={item.src} alt="zhaoshang" />}
+      multipleLine 
+      onClick={() =>this.selectPayType(item)}>
+        <img style={{ width: '124px', height: '50px'}} src={item.src} alt={item.title} />
     </Item>))
   }
 
 
 
 
-  toLink = (link) => {
+  toLink = (link, params) => {
     if(link) {
+      let search = params ? '?'+queryString.stringify(params): '';
       this.props.dispatch(routerRedux.push({
-        pathname: link
+        pathname: link,
+        search: search
       }))
     }
   }
 
-  renderSettle = () => {
+  renderSettle = (type) => {
     const { tradeInfo } = this.props;
     let settleType = tradeInfo.settleType || '';
     if(!settleType) {
@@ -364,7 +413,7 @@ class Index extends React.Component {
           extra={''}
           arrow='horizontal'
           multipleLine
-          onClick={this.toLink.bind(this, '/selectSellte')}>
+          onClick={this.toLink.bind(this, '/selectSellte', {type: type})}>
             选择到账方式
         </Item>
       );
@@ -384,7 +433,7 @@ class Index extends React.Component {
           extra={''}
           arrow='horizontal'
           multipleLine
-          onClick={this.toLink.bind(this, '/selectSellte')}>
+          onClick={this.toLink.bind(this, '/selectSellte', {type: type})}>
             {ritem.settleTypeDsc || ''}<Brief>提现手续费  {sTypes[settleType] || ''}</Brief>
         </Item>
       );
@@ -505,7 +554,7 @@ class Index extends React.Component {
             </List>
 
             <List renderHeader={() => '选择到账方式'} className="my-list">
-              {this.renderSettle()}
+              {this.renderSettle(0)}
             </List>
             <List renderHeader={() => '到账银信用卡预留手机号' + (tradeInfo.phoneNumber ? tradeInfo.phoneNumber: '')} className="my-list">
               <InputItem
@@ -732,7 +781,8 @@ function mapStateToProps( state ) {
     creditInfo: state.trade.creditInfo || {},
     sellteType: state.trade.sellteType || [],
     cardList: cards,
-    arrivalAmount: state.trade.arrivalAmount
+    arrivalAmount: state.trade.arrivalAmount,
+    paySelectType: state.trade.paySelectType
   }
 }
 export default connect( mapStateToProps )(RepositIndex);

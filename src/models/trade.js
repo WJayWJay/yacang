@@ -1,7 +1,7 @@
 import { sendCreditSmsCode,
    dualMsgService, sellteTypeService,
    quickDualService, orderListService, orderDetailService,
-   queryPreArrivalAmountService
+   queryPreArrivalAmountService, cashierDeskService
 } from '../services/trade';
 
 // import pathToRegexp from 'path-to-regexp';
@@ -36,6 +36,7 @@ export default {
     arrivalAmount: '0',
 
     pageCount: 10,
+    paySelectType: 0,
   },
 
   subscriptions: {
@@ -158,6 +159,20 @@ export default {
       const channelResultNo = yield select(state => state.trade.channelResultNo);
       // const { data } = yield call(quickDualService, payload);
       const { data } = yield call(quickDualService, {smsCode: tradeInfo.smsCode, channelResultNo: channelResultNo});
+      if(data && data['success']) {
+        Toast.success('交易成功！');
+        yield put(routerRedux.push({
+          pathname: '/tradeList',
+        }));
+      } else {
+        Toast.fail(data.errorMsg || '');
+      }
+    },
+    // 收银台支付(提交交易)
+    *cashierDesk({ payload }, { call, put, select}) {
+      const tradeInfo = yield select(state => state.trade.tradeInfo);
+      // const { data } = yield call(quickDualService, payload);
+      const { data } = yield call(cashierDeskService, {payMoney: tradeInfo.payMoney, settleType: tradeInfo.settleType});
       if(data && data['success']) {
         Toast.success('交易成功！');
         yield put(routerRedux.push({

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { List, } from 'antd-mobile';
+import queryString from 'query-string';
 
 import Layout from '../../components/layout';
 
@@ -36,14 +37,18 @@ class Index extends React.Component {
   }
 
   selected = (item) => {
-    console.log(item, 'aa')
     const {dispatch} = this.props;
     dispatch({
       type: 'trade/updateTradeInfo',
       payload: {settleType: item.settleType}
     });
+    const { history } = this.props;
+    let search = history.location.search;
+    search = queryString.parse(search);
+    let initialPage = search.type | 0;
     dispatch(routerRedux.push({
-      pathname: '/reposit'
+      pathname: '/reposit',
+      search: queryString.stringify({initialPage: initialPage})
     }))
   }
 
@@ -82,7 +87,6 @@ class Index extends React.Component {
 Index.propTypes = {
 };
 function mapStateToProps( state ) {
-  console.log(state,'select')
   const { isLogin, info } = state.user
   return {
     isLogin, 
