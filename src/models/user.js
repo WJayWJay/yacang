@@ -27,7 +27,6 @@ export default {
       let isLogin = Cache.get(loginKey);
       let info = Cache.get(userKey);
       let tokenId = Cache.get(tokenKey);
-      console.log(info, isLogin, 'user model')
       if(isLogin && tokenId) {
         dispatch({
           type: 'updateLogin',
@@ -74,7 +73,6 @@ export default {
       const resetPasswords = yield select(state => state.user.resetPasswords);
 
       const { data } = yield call(code, resetPasswords);
-      console.log('resetPasswords', data)
       if( data && data['success'] ) {
         Toast.success('验证码已发送, 请注意查收!');
         yield put({
@@ -92,7 +90,6 @@ export default {
     },
     *getUserInfoByWx({ payload: { code } }, { call, put, select}) {  // eslint-disable-line
       const { data } = yield call(wxUserInfo, {wechatCode: code});
-      console.log(data, 'wxuserinfo...')
       if(data && data['success']) {
         Toast.success('授权登录成功！');
         if(data.result) {
@@ -127,7 +124,7 @@ export default {
     },
     *getUserInfo({ payload: { } }, { call, put, select}) {  // eslint-disable-line
       const { data } = yield call(userinfo, {});
-      console.log(data, 'userinfo...')
+      // console.log(data, 'userinfo...')
       if(data && data['success']) {
         Cache.set(userKey, data.result, true);
         Cache.set(tokenKey, data.result.tokenId);
@@ -146,7 +143,6 @@ export default {
     *fetch({ payload: { page } }, { call, put, select}) {  // eslint-disable-line
       // yield put({ type: 'save' });
       const { data } = yield call(register, {pageNo: page});
-      console.log('fetch', data)
       if( data && data['success'] && data['result'] ) {
         yield put({type: 'save', payload: { data: data.result.results, total: data.result.totalSize}})
       }
@@ -229,7 +225,6 @@ export default {
       return { ...state, info };
     },
     changeCodeSend(state, {payload: {codeSend}}) {
-      console.log(codeSend, 'change')
       return { ...state, codeSend };
     },
     logout(state, {payload: {}}) {

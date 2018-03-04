@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
+import { routerRedux, Link } from 'dva/router';
 import { Flex, List, InputItem, Toast, Modal, TabBar, Tabs, Badge, WhiteSpace, Icon } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import queryString from 'query-string';
@@ -15,7 +15,6 @@ import Spinner from '../../components/Spinner';
 import styles from './index.less';
 
 import zhaoshangIcon from '../../assets/card/card-zhaoshang.png';
-import jianhangIcon from '../../assets/card/card-jianhang.png';
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -70,7 +69,6 @@ class Index extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.tradeSmsSend, 'jjjjj')
     if(nextProps.tradeSmsSend === 0) {
       this.startInterv();
       setTimeout(()=> {
@@ -113,7 +111,7 @@ class Index extends React.Component {
 
   getCode = (e) => {
     e.preventDefault();
-    const { getFieldError } = this.props.form;
+    // const { getFieldError } = this.props.form;
     
     let err = this.checkError();
     if(!err) {
@@ -155,7 +153,7 @@ class Index extends React.Component {
     }
   }
   ModelItem = () => {
-    const { tradeInfo, dispatch } = this.props;
+    const { tradeInfo } = this.props;
     let payMoney = (tradeInfo.payMoney | 0) / 100;
     return (<Modal
       visible={this.state.inputTradePwd}
@@ -214,10 +212,6 @@ class Index extends React.Component {
 
 
   submit = (e) => {
-    // check error
-    // this.props.dispatch({
-    //   type: 'trade/applyDualMsg'
-    // })
     const { tradeInfo, dispatch } = this.props;
 
     if(!tradeInfo.payMoney || isNaN(parseInt(tradeInfo.payMoney, 10))) {
@@ -236,29 +230,38 @@ class Index extends React.Component {
       Toast.fail('请选择消费信用卡！');
       return;
     }
-
-    this.props.dispatch({
+    dispatch({
         type: 'trade/quickDual',
         payload: {}
     });
   }
 
-
   renderSelf = () => {
+    const {isLogin, info, history } = this.props;
+    if( !isLogin ) {
+      return (
+        <Layout title={'提现'}>
+          <Flex style={{padding: '10px', position: 'fixed', height: '85%', width: '100%'}} justify ={'center'}>您还未登录！<Link to='/login'>去登录？</Link></Flex>
+        </Layout>
+      );
+    }
+    if(info.stat !== 'CERTIFICATION') { 
+      return (
+        <Layout title={'提现'}>
+          <Flex style={{padding: '10px', position: 'fixed', height: '85%', width: '100%'}} justify ={'center'}>您还未实名，需实名才能使用！<Link to='/addDebit'>去实名？</Link></Flex>
+        </Layout>
+      );
+    }
     const tabs = [
       { title: <Badge text={''}>无卡快捷</Badge> },
       { title: <Badge text={''}>跳转支付</Badge> },
     ];
-    const { history } = this.props;
     let search = history.location.search;
     search = queryString.parse(search);
-    console.log(search, 'ssss')
     let initialPage = search.initialPage | 0;
-    console.log(initialPage, 'initialPage')
     
     initialPage = initialPage < 2? initialPage: 0;
     
-    console.log(initialPage, 'ijiiiii')
     return (<Layout title={'提现'}>
       <Tabs tabs={tabs}
         initialPage={initialPage}
@@ -356,7 +359,7 @@ class Index extends React.Component {
       Toast.fail('请选择到账方式！');
       return;
     }
-    this.props.dispatch({
+    dispatch({
       type: 'trade/cashierDesk',
       payload: {}
     });
@@ -364,7 +367,6 @@ class Index extends React.Component {
 
 
   selectPayType = (item) => {
-    console.log('select')
     if( !item || !item.type) return;
     this.props.dispatch({
       type: 'trade/updateState',
@@ -768,13 +770,13 @@ const RepositIndex = createForm({
   },
 })(Index);
 function mapStateToProps( state ) {
-  // console.log(state)
-  const { isLogin } = state.user
+  const { isLogin, info } = state.user
   // console.log(state)
   let cards = state.card.cardList;
   cards = Array.isArray(cards) ? cards : [];
   return {
     isLogin,
+    info: info || {},
     loading: state.loading.global || false,
     tradeSmsSend: state.trade.tradeSmsSend,
     tradeInfo: state.trade.tradeInfo || {},

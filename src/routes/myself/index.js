@@ -58,7 +58,7 @@ class Index extends React.Component {
     if(isLogin) {
       this.props.history.push('/userinfo');
     } else {
-      console.log(encodeURIComponent(window.location.href))
+      // console.log(encodeURIComponent(window.location.href))
       dispatch(routerRedux.push({
         pathname: '/login',
         // query: {uri: encodeURIComponent(window.location.href)}
@@ -278,12 +278,11 @@ class Index extends React.Component {
                 background: 'url(' + require('../../assets/tabbar/tab-tx-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
               />
             }
-            title="提现"
-            key="提现"
+            title="收银台"
+            key="收银台"
             // badge={'new'}
             selected={this.state.selectedTab === 'redTab'}
             onPress={() => {
-              // this.toLink('/reposit')
               this.toTabLink('/reposit')
             }}
             data-seed="logId1"
@@ -324,7 +323,6 @@ class Index extends React.Component {
 Index.propTypes = {
 };
 function mapStateToProps( state ) {
-  console.log(state,'myself')
   const { isLogin, info, codeSend: isSend } = state.user
   return {
     isLogin, isSend, info

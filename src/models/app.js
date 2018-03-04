@@ -1,6 +1,6 @@
-import { login, register, code } from '../services/user';
-import { Toast } from 'antd-mobile';
-import { routerRedux } from 'dva/router';
+import { register } from '../services/user';
+// import { Toast } from 'antd-mobile';
+// import { routerRedux } from 'dva/router';
 import queryString from 'query-string';
 
 
@@ -37,7 +37,6 @@ export default {
     *fetch({ payload: { page } }, { call, put, select}) {  // eslint-disable-line
       // yield put({ type: 'save' });
       const { data } = yield call(register, {pageNo: page});
-      console.log('fetch', data)
       if( data && data['success'] && data['result'] ) {
         yield put({type: 'save', payload: { data: data.result.results, total: data.result.totalSize}})
       }

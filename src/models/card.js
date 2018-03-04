@@ -51,10 +51,8 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
       history.listen((location) => {
-        console.log(location)
         if(['/checkcode', '/addBankCard'].indexOf(location.pathname) > -1) {
           let data = Cache.get(creditInfoKey);
-          console.log('cache...',data)
           if(data) {
             dispatch({
               type: 'savedCreditFields',
@@ -105,7 +103,6 @@ export default {
     *fetchCard({ payload: { type } }, { call, put, select}) {  // eslint-disable-line
 
       const { data } = yield call(listCard, {});
-      console.log(data, 'cardList')
       if( data && data['success'] && data['result'] ) {
         yield put({
           type: 'updateState',
@@ -115,9 +112,7 @@ export default {
     },
     *bindCredit({ payload: info }, { call, put, select}) {
       let creditInfo = yield select(state => state.card.creditInfo);
-      console.log(creditInfo)
       const { data } = yield call(bindCreditCard, creditInfo);
-      console.log( data , 'bindcre')
       if(data && data['success']) {
         Toast.success('绑定成功!');
         yield put(routerRedux.push({
@@ -130,7 +125,6 @@ export default {
     *bindDebit({ payload: info }, { call, put, select}) {
       let debitInfo = yield select(state => state.card.debitInfo);
       const { data } = yield call(bindCardDebit, debitInfo);
-      console.log( data , 'debit')
       if(data && data['success']) {
         Toast.success('绑定成功!');
         yield put(routerRedux.push({
@@ -143,18 +137,15 @@ export default {
     },
     *cacheCreditInfo({ payload: info }, { call, put, select}) {
       const creditInfo = yield select(state => state.card.creditInfo);
-      console.log('creditInfo***',creditInfo)
       Cache.set(creditInfoKey, creditInfo);
     },
     *cacheDebitInfo({ payload: info }, { call, put, select}) {
       const debitInfo = yield select(state => state.card.debitInfo);
-      console.log('info***',debitInfo)
       Cache.set(debitInfoKey, debitInfo);
     },
     *cardImageUpload({ payload: {formData, type} }, { call, put, select}) {
       const imageStatus = yield select(state => state.card.imageStatus);
       const { data } = yield call(imageUpload, formData);
-      console.log(data, 'imgupload')
 
       if(data && data['success']) {
         Toast.success('图片上传成功!');
