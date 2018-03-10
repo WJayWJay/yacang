@@ -40,15 +40,15 @@ class CardCenter extends React.Component {
       return (<Flex align='center' justify='center'><Flex.Item style={{textAlign: 'center', padding: '15px'}}>无相关订单信息</Flex.Item></Flex>)
     }
 
-    const stat = {
-      'FAIL': '支付失败',
-      'UNCONFIRMED': '已受理',
-      'SUCCESS': '支付成功',
-    };
+    // const stat = {
+    //   'FAIL': '支付失败',
+    //   'UNCONFIRMED': '已受理',
+    //   'SUCCESS': '支付成功',
+    // };
     const statColors = {
-      'FAIL': '#FF4343',
-      'UNCONFIRMED': '#3D67F7',
-      'SUCCESS': '#8A8A9D',
+      '支付失败': '#FF4343',
+      '已受理': '#3D67F7',
+      '支付成功': '#8A8A9D',
     };
     return (
       <Layout title={'个人信息'}>
@@ -62,19 +62,19 @@ class CardCenter extends React.Component {
                {'¥' + (detail.payMoney || '')}
               </Flex.Item>
               <Flex.Item style={{ padding: '10px 10px 15px', marginLeft: '0', color: statColors[detail.orderStat]}}>
-              {stat[detail.orderStat] || ''}
+              {detail.orderStat || ''}
               </Flex.Item>
             </Flex>
             <List className={styles.myList}>
               <Item extra={ (detail.payBankName || '') + `(${detail.payBankCard})` || ''}>信用卡</Item>
-              <Item extra={ (detail.intoBankName || '') + `(${detail.intoBankCard})`}>储蓄卡</Item>
+              <Item extra={ (detail.intoBankName || '') + `(${detail.intoBankCard})` || ''}>储蓄卡</Item>
               <Item extra={ detail.orderNo || ''}>提现订单号</Item>
               <Item extra={ detail.payFee || ''}>提现服务费</Item>
               <Item extra={ detail.settleFee || ''}>到账服务费</Item>
               <Item extra={ detail.couponFee || ''}>优惠券抵扣</Item>
             </List>
             <WhiteSpace />
-            <List>
+            <List className={styles.myList}>
               <Item extra={ detail.totalFee || ''}>合计</Item>
               <Item extra={ detail.payMoney || ''}>实际支付金额</Item>
             </List>

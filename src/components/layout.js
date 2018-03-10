@@ -4,9 +4,11 @@ import { NavBar, Icon } from 'antd-mobile'
 import styles from './layout.less'
 
 const Layout = (props) => {
+  const hidden = props.hidden || false;
+  document.title = props.title || '汇藏';
   return (
     <div className={styles.layContainer}>
-      {!props.hidden ?<NavBar
+      {hidden ?<NavBar
         mode="light"
         onLeftClick={() => props.back? props.back(): window.history.back()}
         icon={<Icon type="left" />}
@@ -22,7 +24,7 @@ const Layout = (props) => {
 };
 
 Layout.propTypes = {
-
+  
 };
 
 export default Layout;

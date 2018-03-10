@@ -155,10 +155,6 @@ class ListProduct extends React.Component {
   }
 
   row = (rowData, sectionID, rowID) => {
-    // console.log( '****' ,rowData, '****')
-    // console.log(sectionID, rowID, 'tttttttt');
-
-    // console.log(rowData)
     const obj = rowData;
     return (
       <div onClick={() => this.toDetail(obj)} key={rowID} style={{ padding: '0 15px' }}>

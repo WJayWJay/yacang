@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { deepCopy } from '../../functions';
 
 import Layout from '../../components/layout';
-import Button from '../../components/button';
+// import Button from '../../components/button';
 import Spinner from '../../components/Spinner';
 
 import styles from './index.less';
@@ -35,10 +35,16 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     const dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
+      rowHasChanged: (row1, row2) => {
+        // console.log(row1, row2, '9999')
+        return row1.orderNo !== row2.orderNo;
+      },
     });
     const winHeight = window.innerHeight;
-    let tabHeight = winHeight - 45 -43.5 - 10;
+    let tabHeight = winHeight -43.5 - 10;
+
+    this.rData = [];
+
     this.state = {
       dataSource,
       showed: false,
@@ -54,20 +60,21 @@ class Index extends React.Component {
   
   componentDidMount() {
     const {page, pageCount} = this.state;
-    this.props.dispatch({
-      type: 'trade/orderList',
-      payload: {currentPage: page}
-    });
+    // this.props.dispatch({
+    //   type: 'trade/orderList',
+    //   payload: {currentPage: page}
+    // });
+    this.fetchData();
   }
 
   fetchData = () => {
     const {page, pageCount} = this.state;
-    this.rData = [];
-    const { hasMore } = this.props;
-    if(!hasMore) return;
+    console.log(page)
+    const { hasMore, isLoading } = this.props;
+    if(!hasMore || isLoading) return;
     this.props.dispatch({
       type: 'trade/orderList',
-      payload: {currentPage: page}
+      payload: {currentPage: page, type: 'DRAWCASH'}
     });
     this.setState({
       page: page+1
@@ -80,7 +87,6 @@ class Index extends React.Component {
         // this.rData = genData(nextProps.orderList);
         // console.log('llllogggg', nextProps)
         this.rData = genData(nextProps.orderList);
-
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(this.rData),
         });
@@ -101,16 +107,16 @@ class Index extends React.Component {
     if(!obj) {
       return <div>暂无内容</div>
     }
-    console.log(obj)
-    const stat = {
-      'FAIL': '支付失败',
-      'UNCONFIRMED': '已受理',
-      'SUCCESS': '支付成功',
-    };
+    // console.log(obj)
+    // const stat = {
+    //   'FAIL': '支付失败',
+    //   'UNCONFIRMED': '已受理',
+    //   'SUCCESS': '支付成功',
+    // };
     const statColors = {
-      'FAIL': '#FF4343',
-      'UNCONFIRMED': '#3D67F7',
-      'SUCCESS': '#8A8A9D',
+      '支付失败': '#FF4343',
+      '已受理': '#3D67F7',
+      '支付成功': '#8A8A9D',
     };
     return (
       <div onClick={() => this.toDetail(obj)} key={rowID} style={{ padding: '0 15px' }}>
@@ -138,7 +144,7 @@ class Index extends React.Component {
               {obj.payMoney}
               </Flex>
               <Flex justify='end' style={{flex: 1, fontSize: '14px', color: statColors[obj.orderStat]}}>
-              {stat[obj.orderStat] || ''}              
+              {obj.orderStat || ''}              
               </Flex>
             </Flex>
           </Flex>
@@ -153,6 +159,7 @@ class Index extends React.Component {
     const { hasMore, orderList } = this.props;
     const { tabHeigh } = this.state;
     const row = (rowData, sectionID, rowID) => {
+      // console.log(rowData, sectionID, rowID, 'ssss')
       return this.row(rowData, sectionID, rowID);
     }
     
@@ -160,10 +167,10 @@ class Index extends React.Component {
       <div
         key={`${sectionID}-${rowID}`}
         style={{ 
-          display: 'none',
+          // display: 'none',
           backgroundColor: '#F5F5F9',
           // height: 1,
-          borderTop: '1px solid #ECECED',
+          // borderTop: '1px solid #ECECED',
           borderBottom: '1px solid #ECECED',
         }}
       />
@@ -196,6 +203,13 @@ class Index extends React.Component {
       </div>
     );
   }
+
+  onEndReached = (e) => {
+    console.log('to end')
+    this.fetchData();
+  }
+
+
   renderListAnother = () => {
     return <div>暂无内容</div>
   }
@@ -205,7 +219,7 @@ class Index extends React.Component {
       { title: <Badge text={''}>提现</Badge> },
       { title: <Badge text={''}>还款</Badge> },
     ];
-
+    
     return (<Layout title={'交易记录'}>
       <Spinner loading={this.props.loading} />
       <div className={styles.content}>
@@ -261,6 +275,8 @@ function mapStateToProps( state ) {
     isLogin,
     loading: state.loading.global || false,
     hasMore:  state.trade.tradeList.hasMore,
+    isLoading:  state.trade.tradeList.isLoading,
+    randomTime:  state.trade.randomTime,
     orderList: list
   }
 }

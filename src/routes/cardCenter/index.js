@@ -59,7 +59,7 @@ class CardCenter extends React.Component {
   renderCard(item) {
     item = item || {};
     return (
-      <Item className={styles.column}>
+      <Item key={(item.bankCard + item.id) || Date.now()} className={styles.column}>
         <Flex direction={'column'}>
           <WhiteSpace style={{height: '32px', width: '100%'}} />
           <Flex className={[styles.flex]}>

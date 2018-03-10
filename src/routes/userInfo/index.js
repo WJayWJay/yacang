@@ -36,12 +36,12 @@ class CardCenter extends React.Component {
 
   revisePwd = () => {
     const { isLogin, info, dispatch } = this.props;
-    if(!isLogin) {
+    if (!isLogin) {
       dispatch(routerRedux.push({
         pathname: '/login'
       }));
     } else {
-      if(info.stat === 'CERTIFICATION') {
+      if (info.stat === 'CERTIFICATION') {
         dispatch(routerRedux.push({
           pathname: '/revisePass'
         }));
@@ -52,14 +52,27 @@ class CardCenter extends React.Component {
       }
     }
   }
+  toLinkTo = (link) => {
+    const { isLogin, info, dispatch } = this.props;
+    console.log(link)
+    if (!isLogin) {
+      dispatch(routerRedux.push({
+        pathname: '/login'
+      }));
+    } else {
+      dispatch(routerRedux.push({
+        pathname: link
+      }));
+    }
+  }
 
   render() {
     const { isLogin, info, cardList } = this.props;
     let userInfo = Object.assign({}, info);
-    if(!isLogin) {
+    if (!isLogin) {
       this.props.history.push({
         pathname: '/login',
-        query: {uri: encodeURI(window.location.href)}
+        query: { uri: encodeURI(window.location.href) }
       });
       return;
     }
@@ -73,13 +86,13 @@ class CardCenter extends React.Component {
         <div className={styles.normal}>
           <div className={styles.content}>
             <List className={styles.myList}>
-              <Item extra={ userInfo.customerName || userInfo.companyPhone || ''}>姓名</Item>
-              <Item extra={'----'}>身份证</Item>
-              <Item extra={ userInfo.companyPhone || ''}>手机号码</Item>
+              <Item extra={userInfo.customerName || userInfo.companyPhone || ''}>姓名</Item>
+              <Item extra={cardList.length > 0 ? cardList[0].idCardNo : '----'}>身份证</Item>
+              <Item extra={userInfo.companyPhone || ''}>手机号码</Item>
             </List>
             <List renderHeader={() => '账户状态'} className={styles.myList}>
-              <Item extra={!userInfo.stat ? '未实名': stats[userInfo.stat]} arrow="horizontal" onClick={() => {}}>账户状态</Item>
-              <Item extra={cardList.length + "张"} arrow="horizontal" onClick={() => {}}>我的银行卡</Item>
+              <Item extra={!userInfo.stat ? '未实名' : stats[userInfo.stat]} arrow="horizontal" onClick={() => { }}>账户状态</Item>
+              <Item onClick={() => this.toLinkTo('/cardCenter')} extra={cardList.length + "张"} arrow="horizontal" >我的银行卡</Item>
               <Item extra="" arrow="horizontal" onClick={this.revisePwd}>修改支付密码</Item>
             </List>
           </div>
@@ -95,7 +108,7 @@ CardCenter.propTypes = {
   info: PropTypes.object
 };
 
-function mapStateToProps( state ) {
+function mapStateToProps(state) {
   const { isLogin, info } = state.user
   return {
     isLogin, info, cardList: state.card.cardList

@@ -31,20 +31,26 @@ export default {
       orderList: [],
       getListError: null,
       orderDetail: {},
+      isLoading: false,
+      tradeListPage: 1
     },
 
     arrivalAmount: '0',
 
     pageCount: 10,
     paySelectType: 0,
+    randomTime: Date.now()
   },
 
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
       history.listen((location) => {
-        console.log(location)
-        if(['/checkcode', '/addBankCard'].indexOf(location.pathname) > -1) {
-          
+        // console.log(location)
+        if(['/tradeList'].indexOf(location.pathname) > -1) {
+          dispatch({
+            type: 'updateState',
+            payload: {randomTime: Date.now()}
+          })
         }
       })
     },
@@ -184,17 +190,25 @@ export default {
     },
     
     *orderList({ payload }, { call, put, select}) {
-      let pageCount = yield select(s => s.trade.pageCount);
-      let hasMore = true;
-      hasMore = yield select(s => s.trade.tradeList.hasMore);
-      if(!hasMore) return;
+      let pageCount = yield select(s => s.trade.pageCount),
+      hasMore = yield select(s => s.trade.tradeList.hasMore),
+      isLoading = yield select(s => s.trade.tradeList.isLoading);
       if(Object.prototype.toString.call(payload) !== "[object Object]") {
         payload = {};
       }
+      const tListArr = ['DRAWCASH', 'REPAYMENT'];
+      let type = payload.type;
+
+      if(!hasMore || isLoading || tListArr.indexOf( type ) === -1) return;
+      
       if(!payload.hasOwnProperty('pageCount')) {
         payload.pageCount = pageCount;
       }
-      payload.bizType = 'DRAWCASH';
+      payload.bizType = type;
+      yield put({
+        type: 'updateTradeList',
+        payload: {isLoading: true}
+      });
       const { data } = yield call(orderListService, payload);
       if(data && data['success']) {
         let prevList = yield select(s => s.trade.tradeList.orderList);
@@ -203,18 +217,20 @@ export default {
         if(orderList.length < payload.pageCount) {
           hasMore = false;
         }
-        // orderList = prevList.concat(orderList);
+        
+        orderList = prevList.concat(orderList);
         let total = data.result && data.result.totalSize | 0;
+        let tradeListPage = yield select(s => s.trade.tradeList.tradeListPage);
         yield put({
           type: 'updateTradeList',
-          payload: {orderList: orderList, total: total, hasMore: hasMore}
+          payload: {orderList: orderList, total: total, hasMore: hasMore, isLoading: false, tradeListPage: tradeListPage +1}
         });
       } else {
         // Toast.success(data.errorMsg || '');
         yield put({
           type: 'updateTradeList',
           payload: {
-            getListError: {err: payload, errmsg: 'data.errorMsg', page: payload.currentPage}
+            getListError: {err: payload, errmsg: data.errorMsg, page: payload.currentPage, isLoading: false}
           }
         });
       }

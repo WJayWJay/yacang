@@ -16,7 +16,7 @@ class Index extends React.Component {
     value: '',
   }
 
-  submit = () => {
+  submit = (e) => {
     const { dispatch } = this.props;
     let errors = [];
     this.props.form.validateFields((error, values) => {
@@ -26,7 +26,8 @@ class Index extends React.Component {
       }
     });
 
-    if(!errors.length) {
+    if(errors.length > 0) {
+      console.log(errors)
       return;
     }
 
@@ -52,6 +53,7 @@ class Index extends React.Component {
                       required: true,
                     }],
                   })}
+                  type={'password'}
                   error={!!getFieldError('oldPassword')}
                   style={{fontSize: '16px',opacity: 0.5, color: '#16153A'}}
                   placeholder="请输入旧支付密码"
@@ -65,6 +67,7 @@ class Index extends React.Component {
                       required: true,
                     }],
                   })}
+                  type={'password'}
                   error={!!getFieldError('newPassword')}
                   style={{fontSize: '16px',opacity: 0.5, color: '#16153A'}}
                   placeholder="请输入新支付密码"
@@ -77,6 +80,7 @@ class Index extends React.Component {
                       required: true,
                     }],
                   })}
+                  type={'password'}
                   error={!!getFieldError('configPassword')}
                   style={{fontSize: '16px',opacity: 0.5, color: '#16153A'}}
                   placeholder="请再次输入新支付密码"
@@ -84,7 +88,7 @@ class Index extends React.Component {
               </List>
             </Flex>
 
-            <Button className={styles.saveButton}>完成修改</Button>
+            <Button onClick={this.submit} className={styles.saveButton}>完成修改</Button>
           </div>
         </div>
       </Layout>
