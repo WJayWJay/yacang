@@ -8,7 +8,7 @@ import Button from '../../components/button';
 
 import styles from './index.less';
 
-import Constant from '../../constant'
+import Constant from '../../constant';
 
 
 class CardDetail extends React.Component {

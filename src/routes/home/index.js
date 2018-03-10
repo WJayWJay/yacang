@@ -144,7 +144,7 @@ class Index extends React.Component {
 
     }
     return (
-      <div style={{ backgroundColor: 'white', height: '100%', textAlign: 'center' }}>
+      <div style={{ backgroundColor: 'white', height: '101%', textAlign: 'center' }}>
         {pageText}
       </div>
     )

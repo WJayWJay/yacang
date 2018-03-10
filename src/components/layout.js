@@ -4,11 +4,14 @@ import { NavBar, Icon } from 'antd-mobile'
 import styles from './layout.less'
 
 const Layout = (props) => {
-  const hidden = props.hidden || false;
+  let hidden = props.hidden || false;
+  if(navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1) {
+    hidden = true;
+  }
   document.title = props.title || '汇藏';
   return (
     <div className={styles.layContainer}>
-      {hidden ?<NavBar
+      {!hidden ?<NavBar
         mode="light"
         onLeftClick={() => props.back? props.back(): window.history.back()}
         icon={<Icon type="left" />}
