@@ -70,7 +70,10 @@ function RouterConfig({ history, app }) {
           ],
           component: () => import('./routes/goodsDetail/index')
         })} />
-        <Route path="/cardDetail" exact component={dynamic({ app,
+        <Route path="/cardDetail/:id" exact component={dynamic({ app,
+          models: () => [
+            import('./models/card'),
+          ],
           component: () => import('./routes/cardDetail/index')
         })} />
         <Route path="/cardCenter" exact component={dynamic({ app,

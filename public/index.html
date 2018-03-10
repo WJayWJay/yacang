@@ -11,7 +11,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
   <!-- <script src="//cdn.staticfile.org/fastclick/1.0.6/fastclick.min.js"></script> -->
   <script src="./fastclick.min.js"></script>
-  <!-- <script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script> -->
   <script>
     if ('addEventListener' in document) {
       document.addEventListener('DOMContentLoaded', function() {
@@ -29,7 +28,14 @@
 <body>
 
   <div id="root"></div>
+  <script type="text/javascript">(function(){
+    if(navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1) {
+      var mta = document.createElement("script");
+      mta.src = "//res.wx.qq.com/open/js/jweixin-1.2.0.js";
+      var s = document.getElementsByTagName("body")[0];
+      s.appendChild(mta);
+    }
+  })();</script>
   <script src="index.js"></script>
-
 </body>
 </html>

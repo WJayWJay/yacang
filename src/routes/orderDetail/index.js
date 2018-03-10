@@ -20,7 +20,7 @@ class CardCenter extends React.Component {
 
   componentDidMount() {
     const { location } = this.props;
-    console.log(this.props, 'hhhhh')
+    // console.log(this.props, 'hhhhh')
 
     const re = pathToRegexp('/orderDetail/:id');
     const match = re.exec(location.pathname);

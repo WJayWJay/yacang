@@ -101,7 +101,7 @@ export default {
       }
     },
     *fetchCard({ payload: { type } }, { call, put, select}) {  // eslint-disable-line
-
+      
       const { data } = yield call(listCard, {});
       if( data && data['success'] && data['result'] ) {
         yield put({

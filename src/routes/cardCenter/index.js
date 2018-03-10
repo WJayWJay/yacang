@@ -56,13 +56,19 @@ class CardCenter extends React.Component {
     });
   }
 
+  toCardDetail = (item) => {
+    item.id && this.props.dispatch(routerRedux.push({
+      pathname: '/cardDetail/'+ item.id
+    }))
+  }
+
   renderCard(item) {
     item = item || {};
     return (
       <Item key={(item.bankCard + item.id) || Date.now()} className={styles.column}>
         <Flex direction={'column'}>
           <WhiteSpace style={{height: '32px', width: '100%'}} />
-          <Flex className={[styles.flex]}>
+          <Flex className={[styles.flex]} onClick={() => this.toCardDetail(item)}>
             <Item flex={1}>
               <img style={{width: '45px', height: '48px', borderRadius: '23px'}} alt="" src={ccbLogo} />
             </Item>
@@ -82,6 +88,7 @@ class CardCenter extends React.Component {
               <span>{item.bankCard || ''}</span>
             </Item>
           </Flex>
+
           <WhiteSpace style={{height: '30px', width: '100%'}} />
           <Flex className={styles.flex}>
             <Item flex={1}>

@@ -63,3 +63,61 @@ export function deepCopy(arr1) {
 export function isObject(obj) {
   return Object.prototype.toString.call(obj) === '[object Object]';
 }
+
+export function shareToFriendsCircle(title, imgUrl, link, fn) {
+  fn = typeof link === 'function' ? link: fn;
+  // eslint-disable-next-line
+  window.wx.onMenuShareTimeline({
+    title: title || '汇藏', // 分享标题
+    link: link || window.location.href , // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    imgUrl: imgUrl, // 分享图标
+    success: function (e) {
+    // 用户确认分享后执行的回调函数
+      typeof fn === 'function' && fn(e);
+    },
+  });
+}
+
+export function shareToFriends(title, desc, imgUrl, link, fn) {
+  fn = typeof link === 'function' ? link: fn;
+  // eslint-disable-next-line
+  window.wx.onMenuShareAppMessage({
+    title: title || '汇藏', // 分享标题
+    desc: desc || '', // 分享描述
+    link: link || window.location.href , // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    imgUrl: imgUrl, // 分享图标
+    type: 'link', // 分享类型,music、video或link，不填默认为link
+    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+    success: function (e) {
+    // 用户确认分享后执行的回调函数
+      typeof fn === 'function' && fn(e);
+    },
+  });
+}
+
+export function shareToQQ(title, desc, imgUrl, link, fn) {
+  fn = typeof link === 'function' ? link: fn;
+  // eslint-disable-next-line
+  window.wx.onMenuShareAppMessage({
+    title: title || '汇藏', // 分享标题
+    desc: desc || '', // 分享描述
+    link: link || window.location.href, // 分享链接
+    imgUrl: imgUrl, // 分享图标
+    success: function (e) {
+    // 用户确认分享后执行的回调函数
+      typeof fn === 'function' && fn(e);
+    },
+  });
+}
+
+export function initJsApi() {
+  // eslint-disable-next-line
+  window.wx.config({
+    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: '', // 必填，公众号的唯一标识
+    timestamp: '', // 必填，生成签名的时间戳
+    nonceStr: '', // 必填，生成签名的随机串
+    signature: '',// 必填，签名
+    jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表
+  });
+}
