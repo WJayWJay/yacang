@@ -11,6 +11,7 @@ function RouterConfig({ history, app }) {
     app,
     models: () => [
       import('./models/home'),
+      import('./models/product'),
     ],
     component: () => import('./routes/home/index')
   })

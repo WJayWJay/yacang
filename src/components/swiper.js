@@ -39,7 +39,7 @@ const Swiper = (props) => {
         }}
       >{props.BackRound}</BgElement>
       <QueueAnim name="QueueAnim">
-        <h1 key="h1">{item.title || ''}</h1>
+        <h3 key="h1">{item.title || ''}</h3>
         <p key="p">{item.text || ''}</p>
       </QueueAnim>
   </Element>));

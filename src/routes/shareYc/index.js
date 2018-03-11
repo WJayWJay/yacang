@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
+// import { Link } from 'dva/router';
 import { Flex, ActionSheet, WhiteSpace, Toast } from 'antd-mobile';
 
 import Layout from '../../components/layout';
@@ -50,7 +50,7 @@ class Index extends React.Component {
     const { info } = this.props;
 
     return (
-      <Layout title={'分享雅藏'}>
+      <Layout title={'分享汇藏'}>
       <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0,background: '#ffffff', marginTop:'45px', overflow: 'auto' }} >
         <div className={styles.normal}>
           <div className={styles.content}>
@@ -60,7 +60,7 @@ class Index extends React.Component {
             </Flex>
             <WhiteSpace style={{ height: '10px'}} />
             <Flex justify="center" className={styles.version}>
-              <div>雅藏 APP V1.0</div>
+              <div>汇藏 APP V1.0</div>
             </Flex>
             <WhiteSpace style={{ height: '14px'}} />
             <Flex justify="center" className={styles.desc1}>
@@ -76,12 +76,12 @@ class Index extends React.Component {
             </Flex>
             <WhiteSpace style={{ height: '10px'}} />
             <Flex justify="center" className={styles.desc2}>
-              <div>扫码即可下载雅藏</div>
+              <div>扫码即可下载汇藏</div>
             </Flex>
             <WhiteSpace style={{ height: '119px'}} />
           </div>
           <Flex className={styles.share}>
-            <Button onClick={this.showShareActionSheetMulpitleLine} className={styles.shareButton}>向朋友推荐雅藏</Button>
+            <Button onClick={this.showShareActionSheetMulpitleLine} className={styles.shareButton}>向朋友推荐汇藏</Button>
           </Flex>
         </div>
       </div>

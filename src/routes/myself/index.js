@@ -22,7 +22,7 @@ const tabsInfo= [
 const listInfo= [
   {id: 'manager', title: '成员管理', icon: require('../../assets/myself/wd-cy.png') },
   {id: 'share', title: '推荐给好友', icon: require('../../assets/myself/wd-tj.png') },
-  {id: 'about', title: '关于雅藏', icon: require('../../assets/myself/wd-gy.png') },
+  {id: 'about', title: '关于汇藏', icon: require('../../assets/myself/wd-gy.png') },
   {id: 'feedback', title: '帮助反馈', icon: require('../../assets/myself/wd-bz.png') },
   {id: 'notice', title: '关注公众号', icon: require('../../assets/myself/wd-gz.png') },
 ]

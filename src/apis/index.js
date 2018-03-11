@@ -1,4 +1,6 @@
 
+import Constant from '../constant';
+
 // const API = process.env.NODE_ENV === 'development'? 'http://121.8.160.34:8899/huicang' : '';
 const API = process.env.NODE_ENV === 'development'? '/huicang' : '/huicang';
 
@@ -83,7 +85,7 @@ export function orderDetailApi() {
 
 export function wxUserApi(REDIRECT_URI,) {
   // const APPID = 'wx2f5543b30ccc34de';
-  const APPID = 'wx9aab973ed1a43224';
+  const APPID = Constant.appid;
   const SCOPE = 'snsapi_base';
   let state = Date.now().toString(16);
   REDIRECT_URI = REDIRECT_URI || window.location.href;

@@ -41,6 +41,7 @@ class Index extends React.Component {
       search = queryString.parse(search);
       let code = search.code;
       if(code && code.length > 3) {
+        // console.log(code);return;
         dispatch({
           type: 'user/getUserInfoByWx',
           payload: {code: code}

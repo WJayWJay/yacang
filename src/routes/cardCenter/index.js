@@ -29,7 +29,7 @@ class CardCenter extends React.Component {
 
   toAddCard = () => {
     // const BUTTONS = ['添加信用卡', '添加借记卡', 'Delete', '取消'];
-    const BUTTONS = ['添加信用卡', '添加借记卡', '取消'];
+    const BUTTONS = ['添加信用卡', '取消'];
     ActionSheet.showActionSheetWithOptions({
       options: BUTTONS,
       cancelButtonIndex: BUTTONS.length - 1,
@@ -47,12 +47,14 @@ class CardCenter extends React.Component {
           pathname: '/addBankCard',
         }));
         return;
-      } else if(buttonIndex === 1) {
-        this.props.dispatch(routerRedux.push({
-          pathname: '/addDebit',
-        }));
-        return;
-      } else {
+      } 
+      // else if(buttonIndex === 1) {
+      //   this.props.dispatch(routerRedux.push({
+      //     pathname: '/addDebit',
+      //   }));
+      //   return;
+      // } 
+      else {
         console.log('cancel');
       }
     });

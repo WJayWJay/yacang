@@ -112,6 +112,9 @@ export default {
         }
 
       } else {
+        // yield put(routerRedux.push({
+        //   pathname: '/register',
+        // }));
         yield put({
           type: 'logout',
           payload: {}

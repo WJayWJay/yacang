@@ -47,7 +47,7 @@ class Index extends React.Component {
     inputTradePwd: false,
     password: '',
 
-    selectPayType: 0,
+    selectPayType: 3,
     initialPage: 0,
   }
 
@@ -240,14 +240,14 @@ class Index extends React.Component {
     const {isLogin, info, history } = this.props;
     if( !isLogin ) {
       return (
-        <Layout title={'提现'}>
+        <Layout title={'收银台'}>
           <Flex style={{padding: '10px', position: 'fixed', height: '85%', width: '100%'}} justify ={'center'}>您还未登录！<Link to='/login'>去登录？</Link></Flex>
         </Layout>
       );
     }
     if(info.stat !== 'CERTIFICATION') { 
       return (
-        <Layout title={'提现'}>
+        <Layout title={'收银台'}>
           <Flex style={{padding: '10px', position: 'fixed', height: '85%', width: '100%'}} justify ={'center'}>您还未实名，需实名才能使用！<Link to='/addDebit'>去实名？</Link></Flex>
         </Layout>
       );
@@ -262,7 +262,7 @@ class Index extends React.Component {
     
     initialPage = initialPage < 2? initialPage: 0;
     
-    return (<Layout title={'提现'}>
+    return (<Layout title={'收银台'}>
       <Tabs tabs={tabs}
         initialPage={initialPage}
         onChange={(tab, index) => { console.log('onChange', index, tab); }}

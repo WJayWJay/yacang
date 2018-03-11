@@ -20,13 +20,18 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch({
+    const { dispatch } = this.props;
+    dispatch({
       type: 'home/fetch',
       payload: {type:'msg'}
     });
-    this.props.dispatch({
+    dispatch({
       type: 'home/fetch',
       payload: {type:'img'}
+    });
+    dispatch({
+      type: 'product/fetchCategory',
+      payload: {}
     });
   }
 
@@ -49,7 +54,7 @@ class Index extends React.Component {
             <NoticeBar style={{fontSize: '14px'}} mode="link" action={
               <div className={styles.notify} >去看看</div>
             }>
-              雅藏app全新上线，满满诚意，致收藏家们
+              汇藏app全新上线，满满诚意，致收藏家们
             </NoticeBar>
             <div className={styles.content}>
               <Flex className={styles.flexContainer} direction="column">
@@ -252,9 +257,11 @@ Index.propTypes = {
 function mapStateToProps(state) {
   // const { list, total } = state.user;
   const { isLogin } = state.user
-  const { swiperList, tagList  } = state.home
+  const { swiperList, tagList  } = state.home;
+  const { category } = state.product;
+  
   return {
-    isLogin, swiperList, tagList
+    isLogin, swiperList, tagList, category
   }
 }
 
