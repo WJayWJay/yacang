@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { WhiteSpace, WingBlank, Tabs, Flex, Menu, Icon, ListView } from 'antd-mobile';
+import { routerRedux } from 'dva/router';
+import { WhiteSpace, Tabs, Flex, Menu, Icon, ListView } from 'antd-mobile';
 import Layout from '../../components/layout';
 import Spinner from '../../components/Spinner';
 
@@ -18,8 +18,6 @@ const select1 = [
     label: '顺序',
   },
 ];
-
-
 
 function deepCopy(arr1) {
   var arr = [];
@@ -97,7 +95,7 @@ class ListProduct extends React.Component {
   constructor(props) {
     super(props);
     const dataSource = new ListView.DataSource({
-      rowHasChanged: (row1, row2) => row1 !== row2,
+      rowHasChanged: (row1, row2) => row1.productNo !== row2.productNo,
     });
     const winHeight = window.innerHeight;
     let tabHeight = winHeight - 45 -43.5 - 10;
@@ -119,7 +117,6 @@ class ListProduct extends React.Component {
     const { dispatch } = this.props;
     const { page } = this.state;
     this.rData = [];
-
     dispatch({
       type: 'product/fetchCategory',
       payload: {}

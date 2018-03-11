@@ -43,23 +43,50 @@
     .firstRowOneThird {
       border-bottom: 1px solid #ffffff;
     }
-    .firstRowOneSpecial1 {
-      background-image: url(./../../assets/home/sy-gnsc.png);
-      border-top-left-radius: 5px;
+    // .firstRowOneSpecial1 {
+    //   background-image: url(./../../assets/home/sy-gnsc.png);
+    //   border-top-left-radius: 5px;
+    // }
+    // .secondRowOneSpecial1 {
+    //   background-image: url(./../../assets/home/sy-hwsc.png);
+    // }
+    // .thirdRowOneSpecial1 {
+    //   background-image: url(./../../assets/home/sy-srsc.png);
+    //   border-bottom-left-radius: 5px;
+    // }
+    // .rightTopRadius {
+    //   border-top-right-radius: 5px;
+    // }
+    // .bottomTopRadius {
+    //   border-bottom-right-radius: 5px;
+    // }
+
+    .flexItem {
+      margin-bottom: 6px;
+      .firstRowOneSpecial1 {
+        background-image: url(./../../assets/home/sy-hwsc.png);
+      }
+      &:first-child {
+        .firstRowOneSpecial1 {
+          background-image: url(./../../assets/home/sy-gnsc.png);
+          border-top-left-radius: 5px;
+        }
+        .firstRowOneThird {
+          border-top-right-radius: 5px;
+        }
+      }
+      &:last-child {
+        .firstRowOneSpecial1 {
+          background-image: url(./../../assets/home/sy-srsc.png);
+          border-bottom-left-radius: 5px;
+        }
+        .lastOne {
+          border-bottom-right-radius: 5px;
+        }
+      }
     }
-    .secondRowOneSpecial1 {
-      background-image: url(./../../assets/home/sy-hwsc.png);
-    }
-    .thirdRowOneSpecial1 {
-      background-image: url(./../../assets/home/sy-srsc.png);
-      border-bottom-left-radius: 5px;
-    }
-    .rightTopRadius {
-      border-top-right-radius: 5px;
-    }
-    .bottomTopRadius {
-      border-bottom-right-radius: 5px;
-    }
+
+    
   }
   .flex {
     height: 100px;
