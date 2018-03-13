@@ -1,8 +1,9 @@
-import { login, register, code, userinfo, wxUserInfo, getMemberData, resetPass} from '../services/user';
+import { login, register, code, userinfo, wxUserInfo, getMemberData, resetPass, wxInitJssdk} from '../services/user';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
-import queryString from 'query-string';
+// import queryString from 'query-string';
 import Cache from '../utils/cache';
+import {initJsApi} from '../functions';
 
 const userKey = 'user@info';
 const loginKey = 'isLogin';
@@ -123,6 +124,26 @@ export default {
         //   pathname: '/login',
         //   search: '?uri='+ window.location.href
         // }) )
+      }
+    },
+    *getInitJssdkParams({ payload: { url } }, { call, put, select}) {  // eslint-disable-line
+      // if(!isWeixin()) return;
+      // eslint-disable-line
+      let urls = window.location.protocol + '//' + window.location.host + window.location.pathname;
+      const { data } = yield call(wxInitJssdk, {requestUrl: url || urls});
+      if(data && data.success && data.result) {
+        let configs = data.result || {};
+        // eslint-disable-next-line
+        if(!configs.shaStr || !configs.noncestr) {
+          return;
+        }
+        initJsApi({
+          nonceStr: configs.noncestr,
+          timestamp: (configs.timestamps | 0),
+          signature: configs.shaStr
+        });
+      } else {
+        Toast.fail(data && data.errorMsg, 2);
       }
     },
     *getUserInfo({ payload: { } }, { call, put, select}) {  // eslint-disable-line

@@ -38,7 +38,7 @@ export default {
     arrivalAmount: '0',
 
     pageCount: 10,
-    paySelectType: 0,
+    paySelectType: 3,
     randomTime: Date.now()
   },
 
@@ -93,6 +93,8 @@ export default {
       }
     },
     *getSellteType({ payload }, { call, put, select}) {
+      const isLogin = yield select(s => s.user.isLogin);
+      if(!isLogin) return;
       const { data } = yield call(sellteTypeService, payload);
       if(data && data['success']) {
         yield put({

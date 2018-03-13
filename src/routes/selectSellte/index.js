@@ -53,12 +53,6 @@ class Index extends React.Component {
   }
 
   render() {
-    const sTypes = {
-      'T0_INTEGRAL': '0.01%',
-      'T0_NOINTEGRAL': '0.015%',
-      'T1_INTEGRAL': '0.015%',
-      'T1_NOINTEGRAL': '0.015%',
-    };
     return (
       <Layout title={'我的'}>
         <div className={styles.normal}>
@@ -72,7 +66,7 @@ class Index extends React.Component {
                 arrow='horizontal'
                 multipleLine onClick={() => {this.selected(item)}}>
                 {item.settleTypeDsc || ''}
-                <Brief>提现手续费  {sTypes[item.settleType] || ''}</Brief>
+                <Brief>提现手续费  {item.settlePercent || ''}</Brief>
               </Item>)
             })
           }

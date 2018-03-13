@@ -5,6 +5,7 @@ import { Flex, List, InputItem, Toast, Modal, TabBar, Tabs, Badge, WhiteSpace, I
 import { createForm } from 'rc-form';
 import queryString from 'query-string';
 
+import Constant from '../../constant';
 
 import PropTypes from 'prop-types';
 
@@ -14,7 +15,7 @@ import Spinner from '../../components/Spinner';
 
 import styles from './index.less';
 
-import zhaoshangIcon from '../../assets/card/card-zhaoshang.png';
+// import zhaoshangIcon from '../../assets/card/card-zhaoshang.png';
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -320,6 +321,9 @@ class Index extends React.Component {
                 placeholder="请输入消费金额"
               ></InputItem>
             </List>
+            <List renderHeader={() => '消费信用卡'} className="my-list">
+              {this.renderFromBank(1)}
+            </List>
             <List renderHeader={() => '选择到账方式'} className="my-list">
               {this.renderSettle(1)}
             </List>
@@ -420,12 +424,12 @@ class Index extends React.Component {
         </Item>
       );
     }
-    const sTypes = {
-      'T0_INTEGRAL': '0.01%',
-      'T0_NOINTEGRAL': '0.015%',
-      'T1_INTEGRAL': '0.015%',
-      'T1_NOINTEGRAL': '0.015%',
-    };
+    // const sTypes = {
+    //   'T0_INTEGRAL': '0.01%',
+    //   'T0_NOINTEGRAL': '0.015%',
+    //   'T1_INTEGRAL': '0.015%',
+    //   'T1_NOINTEGRAL': '0.015%',
+    // };
     return this.props.sellteType.filter(item => item.settleType === settleType)
     .map(ritem => {
       return (
@@ -436,20 +440,22 @@ class Index extends React.Component {
           arrow='horizontal'
           multipleLine
           onClick={this.toLink.bind(this, '/selectSellte', {type: type})}>
-            {ritem.settleTypeDsc || ''}<Brief>提现手续费  {sTypes[settleType] || ''}</Brief>
+            {ritem.settleTypeDsc || ''}<Brief>提现手续费  {ritem.settlePercent || ''}</Brief>
         </Item>
       );
     });
   }
 
-  selectBandCard = () => {
+  selectBandCard = (params) => {
     const { dispatch } = this.props;
+    let search = params ? '?'+queryString.stringify(params): '';
     dispatch(routerRedux.push({
-      pathname: '/selectBank'
+      pathname: '/selectBank',
+      search: search
     }));
   }
 
-  renderFromBank = () => {
+  renderFromBank = (type) => {
     const { tradeInfo, creditInfo } = this.props;
     let bankCardID = tradeInfo.bankCardID || '';
     if(!bankCardID) {
@@ -458,7 +464,7 @@ class Index extends React.Component {
           className={styles.listItem}
           arrow='horizontal'
           multipleLine 
-          onClick={this.selectBandCard}
+          onClick={() => this.selectBandCard({type})}
         >
           请选择消费信用卡
         </Item>
@@ -467,9 +473,9 @@ class Index extends React.Component {
     return (              
     <Item
       className={styles.listItem}
-      thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
+      thumb={<img className={styles.listItemIcon} src={Constant.banks[creditInfo.bankCode]} alt="zhaoshang" />}
       arrow='horizontal'
-      multipleLine onClick={this.selectBandCard}>
+      multipleLine onClick={()=>this.selectBandCard({type})}>
         {creditInfo && creditInfo.bankName || ''} <Brief>尾号{creditInfo && creditInfo.bankCard && creditInfo.bankCard.slice( creditInfo.bankCard.length - 4 ) || ''} 信用卡</Brief>
     </Item>)
   }
@@ -492,7 +498,7 @@ class Index extends React.Component {
     return (              
     <Item
       className={styles.listItem}
-      thumb={<img className={styles.listItemIcon} src={zhaoshangIcon} alt="zhaoshang" />}
+      thumb={<img className={styles.listItemIcon} src={Constant.banks[card.bankCode]} alt="bankLogo" />}
       arrow='horizontal'
       multipleLine onClick={() => {}}>
         {card.bankName || ''} <Brief>尾号{card && card.bankCard && card.bankCard.slice( card.bankCard.length - 4 ) || ''} 借记卡</Brief>
@@ -562,7 +568,7 @@ class Index extends React.Component {
               <InputItem
                 type="number"
                 {...getFieldProps('smsCode', {
-                  initialValue: '',
+                  initialValue: tradeInfo.smsCode || '',
                   rules: [{
                     required: true,
                     validator: (rule, value, cb) => {

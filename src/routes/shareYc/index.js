@@ -6,6 +6,8 @@ import { Flex, ActionSheet, WhiteSpace, Toast } from 'antd-mobile';
 import Layout from '../../components/layout';
 import Button from '../../components/button';
 
+import { isWeixin,shareToFriendsCircle, shareToFriends, shareToQQ } from '../../functions';
+
 import styles from './index.less';
 
 import logo from '../../assets/share/logo.png';
@@ -23,24 +25,48 @@ class Index extends React.Component {
   dataList = [
     { url: 'umnHwvEgSyQtXlZjNJTt', title: '微信好友' },
     { url: 'cTTayShKtEIdQVEMuiWt', title: '生活圈' },
+    { url: 'SxpunpETIwdxNjcJamwB', title: 'QQ' },
     // { url: 'OpHiXAcYzmPQHcdlLFrc', title: '发送给朋友' },
     // { url: 'wvEzCMiDZjthhAOcwTOu', title: '新浪微博' },
-    // { url: 'SxpunpETIwdxNjcJamwB', title: 'QQ' },
   ].map(obj => ({
     icon: <img src={`https://gw.alipayobjects.com/zos/rmsportal/${obj.url}.png`} alt={obj.title} style={{ width: 36 }} />,
     title: obj.title,
   }));
 
 
+  componentDidMount() {
+    // console.log(isWeixin())
+    // if(isWeixin()) {
+      this.props.dispatch({
+        type: 'user/getInitJssdkParams',
+        payload: {}
+      });
+    // }
+  }
+
+
   showShareActionSheetMulpitleLine = () => {
-    const data = [[this.dataList[0], this.dataList[1]]];
+    const data = [[this.dataList[0], this.dataList[1], this.dataList[2]]];
     ActionSheet.showShareActionSheetWithOptions({
       options: data,
       message: '分享到',
     },
     (buttonIndex, rowIndex) => {
       console.log(buttonIndex, rowIndex)
-      this.setState({ clicked2: buttonIndex > -1 ? data[rowIndex][buttonIndex].title : 'cancel' });
+      if(!isWeixin()) return;
+      console.log('is weixin');
+      // this.setState({ clicked2: buttonIndex > -1 ? data[rowIndex][buttonIndex].title : 'cancel' });
+      let link = location.protocol + '//' + location.host + location.pathname; //eslint-disable-line
+      let title = '汇藏',
+          desc = '汇聚国内外精品古藏',
+          imgUrl =  link + 'logo.png'; 
+      if(buttonIndex === 0) {
+        shareToFriendsCircle(title, imgUrl, link);
+      } else if (buttonIndex === 1) {
+        shareToFriends(title, desc, imgUrl, link);
+      } else if(buttonIndex === 2) {
+        shareToQQ(title, desc, imgUrl, link);
+      }
     });
   }
 

@@ -83,6 +83,12 @@ export function orderDetailApi() {
   return API + '/order/queryOrderDetail';
 }
 
+
+
+export function wxInitJssdkApi() {
+  return API + '/login/getTicket';
+}
+
 export function wxUserApi(REDIRECT_URI,) {
   // const APPID = 'wx2f5543b30ccc34de';
   const APPID = Constant.appid;

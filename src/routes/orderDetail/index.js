@@ -59,7 +59,7 @@ class CardCenter extends React.Component {
                 {detail.payTime || ''}
               </Flex.Item>
               <Flex.Item style={{ fontSize: '36px', color: '#FF5050', padding: '10px 10px', marginLeft: '0'}}>
-               {'¥' + (detail.payMoney || '')}
+               {'¥' + ((detail.payMoney | 0) /100)}
               </Flex.Item>
               <Flex.Item style={{ padding: '10px 10px 15px', marginLeft: '0', color: statColors[detail.orderStat]}}>
               {detail.orderStat || ''}
@@ -69,14 +69,14 @@ class CardCenter extends React.Component {
               <Item extra={ (detail.payBankName || '') + `(${detail.payBankCard})` || ''}>信用卡</Item>
               <Item extra={ (detail.intoBankName || '') + `(${detail.intoBankCard})` || ''}>储蓄卡</Item>
               <Item extra={ detail.orderNo || ''}>提现订单号</Item>
-              <Item extra={ detail.payFee || ''}>提现服务费</Item>
-              <Item extra={ detail.settleFee || ''}>到账服务费</Item>
-              <Item extra={ detail.couponFee || ''}>优惠券抵扣</Item>
+              <Item extra={ (detail.payFee | 0) /100}>提现服务费</Item>
+              <Item extra={ (detail.settleFee | 0) /100 }>到账服务费</Item>
+              <Item extra={ (detail.couponFee | 0) /100 }>优惠券抵扣</Item>
             </List>
             <WhiteSpace />
             <List className={styles.myList}>
-              <Item extra={ detail.totalFee || ''}>合计</Item>
-              <Item extra={ detail.payMoney || ''}>实际支付金额</Item>
+              <Item extra={ (detail.totalFee | 0) /100 }>合计</Item>
+              <Item extra={ (detail.payMoney | 0) /100 }>实际支付金额</Item>
             </List>
           </div>
 

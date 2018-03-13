@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { WhiteSpace, Tabs, Flex, Menu, Icon, ListView } from 'antd-mobile';
 import Layout from '../../components/layout';
+import queryString from 'query-string';
 import Spinner from '../../components/Spinner';
 
 import styles from './index.less';
@@ -69,24 +70,6 @@ function MyBody(props) {
   );
 }
 
-const data = [
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/dKbkpPXKfvZzWCM.png',
-    title: 'Meet hotel',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png',
-    title: 'McDonald\'s invites you',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-  {
-    img: 'https://zos.alipayobjects.com/rmsportal/hfVtzEhPzTUewPm.png',
-    title: 'Eat the week',
-    des: '不是所有的兼职汪都需要风吹日晒',
-  },
-];
-
 const testImg = 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png';
 
 class ListProduct extends React.Component {
@@ -111,16 +94,24 @@ class ListProduct extends React.Component {
       page: 1,
       isInited: false,
     }
+    this.initCatId = '';
   }
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, history } = this.props;
     const { page } = this.state;
     this.rData = [];
     dispatch({
       type: 'product/fetchCategory',
       payload: {}
     });
+
+    const location = history.location || this.props.location;
+    const search = location && location.search;
+    if(search) {
+      let searchParams = queryString.parse(search);
+      this.initCatId = searchParams && searchParams.cid;
+    }
     // dispatch({ type: 'product/fetch', payload: {page: page} });
   }
 
@@ -129,7 +120,6 @@ class ListProduct extends React.Component {
       if(nextProps.list) {
         // this.rData = this.rData.concat(genData(nextProps.list));
         this.rData = genData(nextProps.list);
-
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(this.rData),
           isLoading: false,
@@ -142,11 +132,15 @@ class ListProduct extends React.Component {
         this.setState({
           isInited: true
         });
-        this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: tab.categoryNo || ''} });
+        this.fetchData(this.initCatId || tab.categoryNo);
       }
     }
   }
-
+  fetchData = (cid) => {
+    const { hasMore, loading } = this.props;
+    if(!cid || (hasMore[cid] === false)) return;
+    this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: cid } });
+  }
   toDetail = (obj) => {
     this.props.history.push(`/goodsDetail/${obj.productNo}`);
   }
@@ -233,32 +227,12 @@ class ListProduct extends React.Component {
   }
 
   tabChange = (tab, index) => {
-    const { dispatch } = this.props;
-    console.log(tab, index)
-
-    let currentPage = 1;
-    dispatch({ type: 'product/fetch', payload: {page: currentPage, categoryNo: tab.id } });
-    this.setState({
-      page: 1,
-    })
+    // dispatch({ type: 'product/fetch', payload: {page: currentPage, categoryNo: tab.id } });
+    this.fetchData(tab.id);
   }
 
   onEndReached = (event) => {
-    // load new data
-    // hasMore: from backend data, indicates whether it is the last page, here is false
-    if (!this.state.hasMore) {
-      return;
-    }
-    console.log('reach end', event);
-
-    // this.setState({ isLoading: true });
-    // this.rData = this.rData.concat(genData(data));
-    // setTimeout(() => {
-    //   this.setState({
-    //     dataSource: this.state.dataSource.cloneWithRows(this.rData),
-    //     isLoading: false,
-    //   });
-    // }, 1000);
+    this.fetchData(this.props.currentCat);
   }
 
   onSelectClick = (item) => {
@@ -290,7 +264,7 @@ class ListProduct extends React.Component {
   }
 
   render() {
-    const { showed } = this.state;
+    // const { showed } = this.state;
     const { category } = this.props;
 
     let tabs = [
@@ -327,6 +301,7 @@ class ListProduct extends React.Component {
               { showed ? this.renderSelect(showed): null}
             </div> */}
             <Tabs
+              initialPage={'PC000054'}
               onChange={this.tabChange}
               tabs={tabs}>
               {this.renderContent}
@@ -350,9 +325,13 @@ ListProduct.propTypes = {
 function mapStateToProps(state) {
   // console.log(state)
   const { list,hasMore,category,currentCat } = state.product;
-
+  // console.log(list, currentCat, hasMore)
+  let lists = list && (({}).toString.call(list) === '[object Object]') && list[currentCat] || [];
   return {
-    list,hasMore,category, currentCat, loading: state.loading.global || false,
+    list: lists,category, 
+    currentCat, 
+    loading: state.loading.global || false, 
+    hasMore: hasMore || {}
   }
 }
 

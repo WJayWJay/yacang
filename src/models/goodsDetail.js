@@ -37,7 +37,7 @@ export default {
   },
 
   reducers: {
-    save(state, { payload: {data: detail, id: id} }) {
+    save(state, { payload: {data: detail, id} }) {
       return { ...state, detail, id };
     },
   },

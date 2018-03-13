@@ -4,6 +4,7 @@ import { routerRedux, Link } from 'dva/router';
 import { List,Flex } from 'antd-mobile';
 import PropTypes from 'prop-types';
 import Layout from '../../components/layout';
+import queryString from 'query-string';
 
 import styles from './index.less';
 
@@ -34,7 +35,7 @@ class Index extends React.Component {
   }
 
   selected = (item) => {
-    console.log(item, 'aa')
+    // console.log(item, 'aa')
     const {dispatch} = this.props;
     dispatch({
       type: 'trade/updateTradeInfo',
@@ -44,8 +45,17 @@ class Index extends React.Component {
       type: 'trade/updateCreditInfo',
       payload: {...item}
     });
+    // dispatch(routerRedux.push({
+    //   pathname: '/reposit'
+    // }))
+
+    const { history } = this.props;
+    let search = history.location.search;
+    search = queryString.parse(search);
+    let initialPage = search.type | 0;
     dispatch(routerRedux.push({
-      pathname: '/reposit'
+      pathname: '/reposit',
+      search: queryString.stringify({initialPage: initialPage})
     }))
   }
 
@@ -57,7 +67,7 @@ class Index extends React.Component {
           {this.props.cardList.length ?
             this.props.cardList.map((item) => {
               return (<Item
-                key={item.settleType}
+                key={item.id}
                 className={styles.listItem}
                 extra={''}
                 arrow='horizontal'

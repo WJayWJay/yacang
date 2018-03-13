@@ -141,7 +141,7 @@ class Index extends React.Component {
             </Flex>
             <Flex direction="column" align='end' style={{ flex: 1, width: '100%' }}>
               <Flex justify='end' style={{flex: 1,  paddingBottom: '10px', fontSize: '18px', color: '#FF4343'}}>
-              {obj.payMoney}
+              {obj.payMoney / 100}
               </Flex>
               <Flex justify='end' style={{flex: 1, fontSize: '14px', color: statColors[obj.orderStat]}}>
               {obj.orderStat || ''}              
