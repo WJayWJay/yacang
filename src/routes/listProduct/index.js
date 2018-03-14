@@ -70,7 +70,8 @@ function MyBody(props) {
   );
 }
 
-const testImg = 'https://zos.alipayobjects.com/rmsportal/XmwCzSeJiqpkuMB.png';
+// eslint-disable-next-line
+const testImg = location.protocol + '//' + location.host + '/' + 'logo.png';
 
 class ListProduct extends React.Component {
 
@@ -86,6 +87,7 @@ class ListProduct extends React.Component {
     this.state = {
       dataSource,
       showed: false,
+      isShowed: false,
       data: [],
       // listHeight: tabHeight - 38 + 24 + 50 + 'px',
       listHeight: tabHeight + 'px',
@@ -93,6 +95,7 @@ class ListProduct extends React.Component {
       hasMore: true,
       page: 1,
       isInited: false,
+      initData: '',
     }
     this.initCatId = '';
   }
@@ -228,7 +231,45 @@ class ListProduct extends React.Component {
 
   tabChange = (tab, index) => {
     // dispatch({ type: 'product/fetch', payload: {page: currentPage, categoryNo: tab.id } });
+    console.log('tttttt', tab)
+    
+    
+    this.setState({isShowed: false, currentTab: index});
     this.fetchData(tab.id);
+  }
+
+
+  onTabClick = (model, index) => {
+    const { category } = this.props;    
+    const {currentTab} = this.state;
+    console.log(model, 'yyyy', index, category)
+    let childrenTab = [];
+    if(category && category.length) {
+      category.forEach(item => {
+        if(model.id === item.categoryNo) {
+          childrenTab = item.children || [];
+          return;
+        }
+      })
+    }
+    if(childrenTab.length) {
+      childrenTab = childrenTab.map(item => {
+        return {
+          label: item.categoryName,
+          value: item.categoryNo
+        }
+      })
+      this.setState({initData: childrenTab});
+      console.log(childrenTab, 'childrenTab')
+    }
+    // console.log(index, this.state.currentTab, '....')
+    if(index === currentTab) {
+      this.showOrHide();
+    }
+  }
+
+  showOrHide = () => {
+    this.setState({isShowed: !this.state.isShowed});
   }
 
   onEndReached = (event) => {
@@ -263,8 +304,10 @@ class ListProduct extends React.Component {
     return menuEl;
   }
 
+
+
   render() {
-    // const { showed } = this.state;
+    const { showed, isShowed } = this.state;
     const { category } = this.props;
 
     let tabs = [
@@ -278,18 +321,45 @@ class ListProduct extends React.Component {
       })
     }
 
-    const selectLists = [
-      {title: '排序', id: 'sort'},
-      {title: '分类', id: 'classes'},
-      {title: '区域', id: 'area'},
-      {title: '筛选', id: 'diff'},
+    // const selectLists = [
+    //   {title: '排序', id: 'sort'},
+    //   {title: '分类', id: 'classes'},
+    //   {title: '区域', id: 'area'},
+    //   {title: '筛选', id: 'diff'},
+    // ];
+
+    const initData = [
+      {
+        value: '1',
+        label: 'Food',
+      }, {
+        value: '2',
+        label: 'Supermarket',
+      },
+      {
+        value: '3',
+        label: 'Extra',
+        isLeaf: true,
+      },
     ];
+
+    const menuEl = (<div style={{position: 'fixed', zIndex: '100', top: '89px', width: '100%'}}>
+      <Menu
+        className="single-foo-menu"
+        data={this.state.initData}
+        value={['1']}
+        level={1}
+        onChange={this.onChange}
+        height={document.documentElement.clientHeight * 0.6}
+      />
+    </div>);
 
     return (
       <Layout title={'商品列表'}>
         <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
+            {isShowed && this.state.initData ? menuEl: null}
             {/* <div className={styles.selectContainer}>
               <Flex className={styles.flexListSelect}>
                 {selectLists.map((item) => (
@@ -302,6 +372,7 @@ class ListProduct extends React.Component {
             </div> */}
             <Tabs
               initialPage={'PC000054'}
+              onTabClick={this.onTabClick}
               onChange={this.tabChange}
               tabs={tabs}>
               {this.renderContent}

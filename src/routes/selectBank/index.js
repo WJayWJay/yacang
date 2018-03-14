@@ -39,7 +39,7 @@ class Index extends React.Component {
     const {dispatch} = this.props;
     dispatch({
       type: 'trade/updateTradeInfo',
-      payload: {bankCardID: item.bankCard, phoneNumber: item.phoneNumber}
+      payload: {bankCardID: item.id, phoneNumber: item.phoneNumber}
     });
     dispatch({
       type: 'trade/updateCreditInfo',

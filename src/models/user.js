@@ -127,7 +127,8 @@ export default {
       }
     },
     *getInitJssdkParams({ payload: { url } }, { call, put, select}) {  // eslint-disable-line
-      // if(!isWeixin()) return;
+      if(!/micromessenger/i.test(window.navigator.userAgent.toLowerCase())) return;
+      
       // eslint-disable-line
       let urls = window.location.protocol + '//' + window.location.host + window.location.pathname;
       urls = window.location.href.split('#')[0];

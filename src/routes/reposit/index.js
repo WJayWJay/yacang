@@ -4,6 +4,7 @@ import { routerRedux, Link } from 'dva/router';
 import { Flex, List, InputItem, Toast, Modal, TabBar, Tabs, Badge, WhiteSpace, Icon } from 'antd-mobile';
 import { createForm } from 'rc-form';
 import queryString from 'query-string';
+import md5 from 'js-md5';
 
 import Constant from '../../constant';
 
@@ -47,6 +48,7 @@ class Index extends React.Component {
 
     inputTradePwd: false,
     password: '',
+    inputTradeLink: false,
 
     selectPayType: 3,
     initialPage: 0,
@@ -112,7 +114,7 @@ class Index extends React.Component {
 
   getCode = (e) => {
     e.preventDefault();
-    // const { getFieldError } = this.props.form;
+    const { getFieldError } = this.props.form;
     
     let err = this.checkError();
     if(!err) {
@@ -125,34 +127,80 @@ class Index extends React.Component {
     })
 
     this.showModal('inputTradePwd');
+    // this.toGetCode();
   }
 
   toGetCode = (value) => {
-
+    // value = md5(value);
     this.setState({
       sendDisabled: true,
     });
     this.props.dispatch({
       type: 'trade/sendSmsCode',
-      payload: {type: 'applyDualMsg'}
+      payload: {type: 'applyDualMsg', password: value}
     });
     
   }
 
+  toSubmitTrade = (value) => {
+    this.props.dispatch({
+      type: 'trade/applyDualMsg',
+      payload: {password: value}
+    });
+  }
+
   onChange = (value) => {
+    // console.log('value', value)
     if(/^\d+$/.test(value)) {
       if(value.length === 6) {
-        this.toGetCode(value);
+        // console.log(value, 'passsss')
+        // this.toSubmitTrade(value);
+        this.toGetCode(md5(value));
       }
-      this.props.dispatch({
-        type: 'trade/updateTradeInfo',
-        payload: {password: value},
-      });
+      // this.props.dispatch({
+      //   type: 'trade/updateTradeInfo',
+      //   payload: {password: value},
+      // });
       this.setState({
         password: value
       })
+    } else {
+      this.setState({
+        password: value
+      });
+      if(value.length === 6) {
+        Toast.fail('密码格式不正确!', 1);
+      }
     }
   }
+
+  toSubmitLink = (value) => {
+    this.props.dispatch({
+      type: 'trade/cashierDesk',
+      payload: {password: value}
+    });
+  }
+  onChangeLink = (value) => {
+    // console.log('value', value)
+    if(/^\d+$/.test(value)) {
+      if(value.length === 6) {
+        // console.log(value, 'passsss')
+        // this.toSubmitTrade(value);
+        this.toSubmitLink(md5(value));
+      }
+      this.setState({
+        password: value
+      })
+    } else {
+      this.setState({
+        password: value
+      });
+      if(value.length === 6) {
+        Toast.fail('密码格式不正确!', 1);
+      }
+    }
+  }
+
   ModelItem = () => {
     const { tradeInfo } = this.props;
     let payMoney = (tradeInfo.payMoney | 0) / 100;
@@ -182,6 +230,46 @@ class Index extends React.Component {
           error={this.state.hasError}
           onErrorClick={this.onErrorClick}
           onChange={this.onChange}
+          value={this.state.password}
+        />
+        <WhiteSpace style={{height: '24px'}} />
+        <div onClick={() => this.toLink('/forget')} style={{fontSize: '16px', color: '#646464', textAlign: 'center'}}>
+        忘记密码？
+        </div>
+        <WhiteSpace style={{height: '20px'}} />
+      </div>
+    </Modal>);
+  }
+
+  ModelItemLink = () => {
+    const { tradeInfo } = this.props;
+    let payMoney = (tradeInfo.payMoney | 0) / 100;
+    return (<Modal
+      visible={this.state.inputTradeLink}
+      transparent
+      closable={true}
+      maskClosable={false}
+      onClose={this.onClose('inputTradeLink')}
+      title="请输入支付密码"
+      // footer={[{ text: 'Ok', onPress: () => { console.log('ok'); this.onClose('inputTradePwd')(); } }]}
+      wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+    >
+      <div>
+        <div className={styles.mAdditional} >到账金额</div>
+        <WhiteSpace />
+        <div className={styles.moneyAlert}>{'¥'+ payMoney}</div>
+        <WhiteSpace style={{height: '20px'}} />
+        <div className={styles.moneyAddition}>额外扣除 <span>¥{this.props.arrivalAmount || 0}</span> 手续费</div>
+        <WhiteSpace style={{height: '20px'}} />        
+        <InputItem
+          className={styles.myPwdInput}
+          style={{border: '1px solid #979797', borderRadius: '6px', height: '50px', width: '100%', textIndent: '10px'}}
+          type="password"
+          maxLength={6}
+          placeholder="请输入交易密码"
+          error={this.state.hasError}
+          onErrorClick={this.onErrorClick}
+          onChange={this.onChangeLink}
           value={this.state.password}
         />
         <WhiteSpace style={{height: '24px'}} />
@@ -235,6 +323,13 @@ class Index extends React.Component {
         type: 'trade/quickDual',
         payload: {}
     });
+
+    // this.props.dispatch({
+    //   type: 'trade/queryPreArrivalAmount', // arrivalAmount
+    //   payload: {}
+    // })
+
+    // this.showModal('inputTradePwd');
   }
 
   renderSelf = () => {
@@ -363,10 +458,22 @@ class Index extends React.Component {
       Toast.fail('请选择到账方式！');
       return;
     }
+    
+    if(!tradeInfo.bankCardID) {
+      Toast.fail('请选择消费信用卡！');
+      return;
+    }
+    // dispatch({
+    //   type: 'trade/cashierDesk',
+    //   payload: {}
+    // });
+
     dispatch({
-      type: 'trade/cashierDesk',
-      payload: {}
-    });
+      type: 'trade/queryPreArrivalAmount', // arrivalAmount
+      payload: {type: 1}
+    })
+
+    this.showModal('inputTradeLink');
   }
 
 
@@ -738,6 +845,7 @@ class Index extends React.Component {
         </TabBar>
 
         {this.ModelItem()}
+        {this.ModelItemLink()}
       </div>
     );
   }

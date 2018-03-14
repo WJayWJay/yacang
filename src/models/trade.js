@@ -57,7 +57,7 @@ export default {
   },
 
   effects: {
-    *sendSmsCode({ payload: { type } }, { call, put, select}) {  // eslint-disable-line
+    *sendSmsCode({ payload: { type, password } }, { call, put, select}) {  // eslint-disable-line
 
       let bankCard = '';
       let phoneNumber = '';
@@ -67,7 +67,8 @@ export default {
       phoneNumber = tradeInfo.phoneNumber;
 
       // const { data } = yield call(sendCreditSmsCode, {bankCard: bankCard, phoneNumber: phoneNumber});
-      const { data } = yield call(dualMsgService, tradeInfo);
+      // const tradeInfo = yield select(state => state.trade.tradeInfo);
+      const { data } = yield call(dualMsgService, Object.assign({}, tradeInfo, {password}));
       let payload = {};
       if(data && data['success']) {
         Toast.success('短信验证码已发送，请注意查收!');
@@ -115,7 +116,7 @@ export default {
         }
       });
       const tradeInfo = yield select(state => state.trade.tradeInfo);
-      let payType = '0';
+      let payType = payload.type || '0';
       const { data } = yield call(queryPreArrivalAmountService, {
         payMoney: tradeInfo.payMoney,
         bankCardID: tradeInfo.bankCardID,
@@ -136,9 +137,13 @@ export default {
     // quick pay 快捷支付(申请交易短信)
     *applyDualMsg({ payload }, { call, put, select}) {
       const tradeInfo = yield select(state => state.trade.tradeInfo);
-      const { data } = yield call(dualMsgService, tradeInfo);
+      const { data } = yield call(dualMsgService, Object.assign({}, tradeInfo, payload));
       if(data && data['success']) {
-        Toast.success('交易短信获取成功！');
+        // Toast.success('交易短信获取成功！');
+        Toast.success('交易成功！');
+        yield put(routerRedux.push({
+          pathname: '/tradeList',
+        }));
         // yield put(routerRedux.push({
         //   pathname: '/userinfo',
         // }));
@@ -180,7 +185,12 @@ export default {
     *cashierDesk({ payload }, { call, put, select}) {
       const tradeInfo = yield select(state => state.trade.tradeInfo);
       // const { data } = yield call(quickDualService, payload);
-      const { data } = yield call(cashierDeskService, {payMoney: tradeInfo.payMoney, settleType: tradeInfo.settleType});
+      const { data } = yield call(cashierDeskService, {
+        bankCardId: tradeInfo.bankCardID,
+        payMoney: tradeInfo.payMoney, 
+        settleType: tradeInfo.settleType,
+        password: payload.password,
+      });
       if(data && data['success']) {
         Toast.success('交易成功！');
         yield put(routerRedux.push({

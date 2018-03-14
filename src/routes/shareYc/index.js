@@ -37,38 +37,35 @@ class Index extends React.Component {
   componentDidMount() {
     // console.log(isWeixin())
     // if(isWeixin()) {
-      this.props.dispatch({
-        type: 'user/getInitJssdkParams',
-        payload: {}
-      });
+      
     // }
   }
 
 
   showShareActionSheetMulpitleLine = () => {
     const data = [[this.dataList[0], this.dataList[1], this.dataList[2]]];
-    ActionSheet.showShareActionSheetWithOptions({
-      options: data,
-      message: '分享到',
-    },
-    (buttonIndex, rowIndex) => {
-      console.log(buttonIndex, rowIndex)
-      if(!isWeixin()) return;
-      console.log('is weixin');
-      // this.setState({ clicked2: buttonIndex > -1 ? data[rowIndex][buttonIndex].title : 'cancel' });
-      let link = location.protocol + '//' + location.host + location.pathname; //eslint-disable-line
-      let title = '汇藏',
-          desc = '汇聚国内外精品古藏',
-          imgUrl =  link + 'logo.png'; 
-      if(buttonIndex === 0) {
-        console.log('share to freinds circle')
-        shareToFriendsCircle(title, imgUrl, link);
-      } else if (buttonIndex === 1) {
-        shareToFriends(title, desc, imgUrl, link);
-      } else if(buttonIndex === 2) {
-        shareToQQ(title, desc, imgUrl, link);
-      }
-    });
+    // ActionSheet.showShareActionSheetWithOptions({
+    //   options: data,
+    //   message: '分享到',
+    // },
+    // (buttonIndex, rowIndex) => {
+    //   console.log(buttonIndex, rowIndex)
+    //   if(!isWeixin()) return;
+    //   console.log('is weixin');
+    //   // this.setState({ clicked2: buttonIndex > -1 ? data[rowIndex][buttonIndex].title : 'cancel' });
+    //   let link = location.protocol + '//' + location.host + location.pathname; //eslint-disable-line
+    //   let title = '汇藏',
+    //       desc = '汇聚国内外精品古藏',
+    //       imgUrl =  link + 'logo.png'; 
+    //   if(buttonIndex === 0) {
+    //     console.log('share to freinds circle')
+    //     shareToFriendsCircle(title, imgUrl, link);
+    //   } else if (buttonIndex === 1) {
+    //     shareToFriends(title, desc, imgUrl, link);
+    //   } else if(buttonIndex === 2) {
+    //     shareToQQ(title, desc, imgUrl, link);
+    //   }
+    // });
   }
 
 
