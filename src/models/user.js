@@ -130,6 +130,7 @@ export default {
       // if(!isWeixin()) return;
       // eslint-disable-line
       let urls = window.location.protocol + '//' + window.location.host + window.location.pathname;
+      urls = window.location.href.split('#')[0];
       const { data } = yield call(wxInitJssdk, {requestUrl: url || urls});
       if(data && data.success && data.result) {
         let configs = data.result || {};

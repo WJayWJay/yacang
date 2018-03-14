@@ -83,6 +83,10 @@ class Index extends React.Component {
           pathname = map[item.id]
         }
       }
+      if(item.id === 'share') {
+        // window.location.href = window.location.protocol + '//' + window.location.host + window.location.pathname + '#' + pathname;
+        // return;
+      }
       this.props.dispatch(routerRedux.push({
         pathname: pathname
       }))

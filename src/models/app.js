@@ -19,7 +19,6 @@ export default {
         // if (pathname === '/users') {
         //   dispatch({ type: 'fetch', payload: query });
         // }
-
         if(location && whiteList.indexOf(location.pathname) === -1) {
           dispatch({
             type: 'updateState',

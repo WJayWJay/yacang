@@ -61,6 +61,7 @@ class Index extends React.Component {
           desc = '汇聚国内外精品古藏',
           imgUrl =  link + 'logo.png'; 
       if(buttonIndex === 0) {
+        console.log('share to freinds circle')
         shareToFriendsCircle(title, imgUrl, link);
       } else if (buttonIndex === 1) {
         shareToFriends(title, desc, imgUrl, link);
