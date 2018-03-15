@@ -140,7 +140,11 @@ export default {
     },
     *bindDebit({ payload: info }, { call, put, select}) {
       let debitInfo = yield select(state => state.card.debitInfo);
-      const { data } = yield call(bindCardDebit, debitInfo);
+      
+      const { data } = yield call(bindCardDebit, Object.assign({}, debitInfo, {
+        password: md5(debitInfo.password),
+        confirmPassword: md5(debitInfo.confirmPassword)
+      }));
       if(data && data['success']) {
         Toast.success('绑定成功!');
         yield put(routerRedux.push({

@@ -20,11 +20,22 @@ class AddDebitCard extends React.Component {
   };
   intervId = 0;
 
+
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'card/savedDebitFields',
+      payload: {
+        confirmPassword: '',
+        password: ''
+      },
+    });
+  }
+
   componentWillUnmount() {
     this.intervId && clearInterval(this.intervId);
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.debitSmsSend, 'jjjjj')
+    // console.log(nextProps.debitSmsSend, 'jjjjj')
     if(nextProps.debitSmsSend === 0) {
       this.startInterv();
     } else {
@@ -140,7 +151,7 @@ class AddDebitCard extends React.Component {
             >姓名</InputItem>
             <InputItem
               {...getFieldProps('idCardNo', {
-                initialValue: creditInfo.realName,
+                initialValue: creditInfo.idCardNo,
                 rules: [{
                   required: true,
                 }],
@@ -215,7 +226,7 @@ class AddDebitCard extends React.Component {
         <List renderHeader={() => '请设置支付密码'}>
           <InputItem
             {...getFieldProps('password', {
-              initialValue: creditInfo.bankType,
+              initialValue: '',
               rules: [{
                 required: true,
               }],
@@ -227,7 +238,7 @@ class AddDebitCard extends React.Component {
 
           <InputItem
             {...getFieldProps('confirmPassword', {
-              initialValue: creditInfo.cvv2,
+              initialValue: '',
               rules: [{
                 required: true,
               }],
