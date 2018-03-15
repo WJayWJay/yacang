@@ -96,6 +96,7 @@ class ListProduct extends React.Component {
       page: 1,
       isInited: false,
       initData: '',
+      currentTab: 0,
     }
     this.initCatId = '';
   }
@@ -133,7 +134,8 @@ class ListProduct extends React.Component {
       if(Array.isArray(nextProps.category) && nextProps.category.length> 0 && !this.state.isInited) {
         let tab = nextProps.category[0];
         this.setState({
-          isInited: true
+          isInited: true,
+          currentTab: 0
         });
         this.fetchData(this.initCatId || tab.categoryNo);
       }
@@ -242,7 +244,7 @@ class ListProduct extends React.Component {
   onTabClick = (model, index) => {
     const { category } = this.props;    
     const {currentTab} = this.state;
-    console.log(model, 'yyyy', index, category)
+    // console.log(model, 'yyyy', index, category)
     let childrenTab = [];
     if(category && category.length) {
       category.forEach(item => {
@@ -260,7 +262,7 @@ class ListProduct extends React.Component {
         }
       })
       this.setState({initData: childrenTab});
-      console.log(childrenTab, 'childrenTab')
+      // console.log(childrenTab, 'childrenTab')
     }
     // console.log(index, this.state.currentTab, '....')
     if(index === currentTab) {
@@ -304,7 +306,13 @@ class ListProduct extends React.Component {
     return menuEl;
   }
 
-
+  onSelectChange = (item) => {
+    // console.log(item, 'iiii');
+    const cid = Array.isArray(item) ? item[0]: item;
+    this.setState({selectedValue: cid})
+    this.fetchData(cid);
+    this.showOrHide();
+  }
 
   render() {
     const { showed, isShowed } = this.state;
@@ -342,18 +350,18 @@ class ListProduct extends React.Component {
         isLeaf: true,
       },
     ];
-
-    const menuEl = (<div style={{position: 'fixed', zIndex: '100', top: '89px', width: '100%'}}>
+    let isWechat = /micromessenger/i.test(window.navigator.userAgent.toLowerCase());
+    const menuEl = (<div style={{position: 'fixed', zIndex: '100', top: isWechat ? '44px':'89px', width: '100%'}}>
       <Menu
         className="single-foo-menu"
         data={this.state.initData}
-        value={['1']}
+        value={[this.state.selectedValue]}
         level={1}
-        onChange={this.onChange}
+        onChange={this.onSelectChange}
         height={document.documentElement.clientHeight * 0.6}
       />
     </div>);
-
+    // console.log(this.state.initData, 'this.state.initData', isShowed)
     return (
       <Layout title={'商品列表'}>
         <Spinner loading={this.props.loading} />
