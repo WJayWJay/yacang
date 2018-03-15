@@ -384,7 +384,7 @@ class Index extends React.Component {
         <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
-            <List renderHeader={() => ''} className="my-list">
+            <List renderHeader={() => ''} className="my-list imputyMoney-list">
               <InputItem
                 className={styles.inputMoney}
                 moneyKeyboardAlign={'left'}
@@ -499,7 +499,7 @@ class Index extends React.Component {
       // thumb={<img className={styles.listItemIcon} src={item.src} alt="zhaoshang" />}
       multipleLine 
       onClick={() =>this.selectPayType(item)}>
-        <img style={{ width: '124px', height: '50px'}} src={item.src} alt={item.title} />
+        <img style={{ width: '114px', height: '40px'}} src={item.src} alt={item.title} />
     </Item>))
   }
 
@@ -547,7 +547,8 @@ class Index extends React.Component {
           arrow='horizontal'
           multipleLine
           onClick={this.toLink.bind(this, '/selectSellte', {type: type})}>
-            {ritem.settleTypeDsc || ''}<Brief>提现手续费  {ritem.settlePercent || ''}</Brief>
+            {ritem.settleTypeDsc || ''} <span style={{fontSize: '12px'}}> 提现手续费  {ritem.settlePercent || ''}</span>
+            {/* <Brief>提现手续费  {ritem.settlePercent || ''}</Brief> */}
         </Item>
       );
     });
@@ -583,7 +584,8 @@ class Index extends React.Component {
       thumb={<img className={styles.listItemIcon} src={Constant.banks[creditInfo.bankCode]} alt="zhaoshang" />}
       arrow='horizontal'
       multipleLine onClick={()=>this.selectBandCard({type})}>
-        {creditInfo && creditInfo.bankName || ''} <Brief>尾号{creditInfo && creditInfo.bankCard && creditInfo.bankCard.slice( creditInfo.bankCard.length - 4 ) || ''} 信用卡</Brief>
+        {creditInfo && creditInfo.bankName || ''} <span style={{fontSize: '12px'}}>尾号{creditInfo && creditInfo.bankCard && creditInfo.bankCard.slice( creditInfo.bankCard.length - 4 ) || ''} 信用卡</span>
+        {/* <Brief>尾号{creditInfo && creditInfo.bankCard && creditInfo.bankCard.slice( creditInfo.bankCard.length - 4 ) || ''} 信用卡</Brief> */}
     </Item>)
   }
   renderRecieveBank = () => {
@@ -608,7 +610,8 @@ class Index extends React.Component {
       thumb={<img className={styles.listItemIcon} src={Constant.banks[card.bankCode]} alt="bankLogo" />}
       arrow='horizontal'
       multipleLine onClick={() => {}}>
-        {card.bankName || ''} <Brief>尾号{card && card.bankCard && card.bankCard.slice( card.bankCard.length - 4 ) || ''} 借记卡</Brief>
+        {card.bankName || ''} <span style={{fontSize: '12px'}}>尾号{card && card.bankCard && card.bankCard.slice( card.bankCard.length - 4 ) || ''} 借记卡</span>
+        {/* <Brief></Brief> */}
     </Item>)
   }
 
@@ -622,7 +625,7 @@ class Index extends React.Component {
         <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
-            <List renderHeader={() => ''} className="my-list">
+            <List renderHeader={() => ''} className="my-list imputyMoney-list">
               <InputItem
                 className={styles.inputMoney}
                 moneyKeyboardAlign={'left'}

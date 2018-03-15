@@ -4,20 +4,23 @@ html, body, :global(#root) {
 
 :global(.my-list) {
   background: #f9f9f9;
+  :global(.am-list-header) {
+    padding-top: 9px !important;
+  }
   :global(.am-list-body) {
     :global(.am-list-line) {
       padding-left: 0;
     }
     .inputMoney {
-      height: 100px;
-      font-size: 30px !important;
+      height: 70px;
+      font-size: 24px !important;
       :global(.fake-input-container) {
         div {
-          font-size: 30px !important;        
+          font-size: 24px !important;        
         }
       }
       input {
-        font-size: 30px;
+        font-size: 24px;
       }
     }
     :global(.am-list-item) {
@@ -26,10 +29,10 @@ html, body, :global(#root) {
     .listItem {
       font-size: 16px;
       padding-left: 15px !important;
-      height: 70px;
+      height: 50px;
       .listItemIcon {
-        width: 48px;
-        height: 48px;
+        width: 36px;
+        height: 36px;
       }
       &::after {
         content: '';
@@ -50,6 +53,13 @@ html, body, :global(#root) {
         padding-left: 0;
       }
     }
+  }
+}
+
+:global(.imputyMoney-list) {
+  :global(.am-list-header) {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
   }
 }
 
@@ -75,10 +85,10 @@ html, body, :global(#root) {
     // position: fixed;
     // bottom: 0;
     width: 100%;
-    margin-top: 48px;
+    margin-top: 20px;
     .invite {
       flex: 1;
-      height: 54px;
+      height: 44px;
       background: #57493F;
       border-radius: 4px;
       font-size: 18px;
