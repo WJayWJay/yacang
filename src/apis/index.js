@@ -57,6 +57,9 @@ export function revisePassApi() {
 export function resetPassApi() {
   return API + '/customer/customerResetPassword';
 }
+export function resetPassSmsApi() {
+  return API + '/customer/applyResetSms';
+}
 
 export function weixinLogin() {
   return API + '/login/applyOpenid';

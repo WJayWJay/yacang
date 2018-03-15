@@ -198,8 +198,6 @@ function mapStateToProps(state) {
 
 const ForgetForm = createForm({
   onValuesChange(props, value) {
-    console.log('onvalueChange...', value);
-
     props.dispatch({
       type: 'user/resetPasswords',
       payload: value,

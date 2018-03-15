@@ -320,36 +320,25 @@ class ListProduct extends React.Component {
 
     let tabs = [
     ];
+    let initCatId = this.initCatId;
+    let initIndex = 0;
+    // console.log(initCatId, '11111')
     if(category.length > 0) {
-      category.forEach(item => {
+      // console.log(this.props.currentCat, '22222', category.length)
+      let currentCat = this.props.currentCat;
+      category.forEach((item, index) => {
         tabs.push({
           id: item.categoryNo,
           title: item.categoryName
-        })
-      })
+        });
+        if( currentCat && currentCat === item.categoryNo) {
+          initIndex = index;
+        }
+      });
     }
 
-    // const selectLists = [
-    //   {title: '排序', id: 'sort'},
-    //   {title: '分类', id: 'classes'},
-    //   {title: '区域', id: 'area'},
-    //   {title: '筛选', id: 'diff'},
-    // ];
+    // console.log('999999', initIndex)
 
-    const initData = [
-      {
-        value: '1',
-        label: 'Food',
-      }, {
-        value: '2',
-        label: 'Supermarket',
-      },
-      {
-        value: '3',
-        label: 'Extra',
-        isLeaf: true,
-      },
-    ];
     let isWechat = /micromessenger/i.test(window.navigator.userAgent.toLowerCase());
     const menuEl = (<div style={{position: 'fixed', zIndex: '100', top: isWechat ? '44px':'89px', width: '100%'}}>
       <Menu
@@ -378,13 +367,13 @@ class ListProduct extends React.Component {
               </Flex>
               { showed ? this.renderSelect(showed): null}
             </div> */}
-            <Tabs
-              initialPage={'PC000054'}
+            {tabs.length ? <Tabs
+              initialPage={initIndex}
               onTabClick={this.onTabClick}
               onChange={this.tabChange}
               tabs={tabs}>
               {this.renderContent}
-            </Tabs>
+            </Tabs>: null}
 
             {/* <div className={styles.listView}>
               {this.renderContent()}

@@ -4,7 +4,7 @@ import { bindCreditCard, listCard,
    dualMsgService, sellteTypeService,
    quickDualService
 } from '../services/card';
-
+import md5 from 'js-md5';
 // import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
@@ -109,6 +109,21 @@ export default {
           type: 'updateState',
           payload: {cardList: data['result']}
         });
+        if(type === 'reposit') {
+          let first = data['result'];
+          first = Array.isArray(first) && first.filter(items => items.bankCardType === '信用卡');
+          if(first && first.length) {
+            let item = first[0];
+            yield put({
+              type: 'trade/updateTradeInfo',
+              payload: {bankCardID: item.id, phoneNumber: item.phoneNumber}
+            });
+            yield put({
+              type: 'trade/updateCreditInfo',
+              payload: {...item}
+            });
+          }
+        }
       }
     },
     *bindCredit({ payload: info }, { call, put, select}) {
@@ -170,7 +185,11 @@ export default {
 
     *revisePassword({ payload: {} }, { call, put, select}) {
       const passwords = yield select(state => state.card.passwords);
-      const { data } = yield call(revisePass, passwords);
+      const { data } = yield call(revisePass, {
+        oldPassword: md5(passwords.oldPassword),
+        newPassword: md5(passwords.newPassword),
+        configPassword: md5(passwords.configPassword),
+      });
       if(data && data['success']) {
         Toast.success('支付密码修改成功！');
         yield put(routerRedux.push({

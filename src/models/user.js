@@ -1,6 +1,7 @@
-import { login, register, code, userinfo, wxUserInfo, getMemberData, resetPass, wxInitJssdk} from '../services/user';
+import { login, register, code, userinfo, wxUserInfo, getMemberData, resetPass, wxInitJssdk, resetPassSmsService} from '../services/user';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
+import md5 from 'js-md5';
 // import queryString from 'query-string';
 import Cache from '../utils/cache';
 import {initJsApi} from '../functions';
@@ -50,12 +51,17 @@ export default {
 
   effects: {
     *resetPassword({ payload: {} }, { call, put, select}) {
-      const resetPasswords = yield select(state => state.card.resetPasswords);
-      const { data } = yield call(resetPass, resetPasswords);
+      const resetPasswords = yield select(state => state.user.resetPasswords);
+      const { data } = yield call(resetPass, {
+        messages: resetPasswords.messages,
+        companyPhone: resetPasswords.companyPhone,
+        newPassword: md5(resetPasswords.newPassword),
+        configPassword: md5(resetPasswords.configPassword)
+      });
       if(data && data['success']) {
         Toast.success('支付密码重置成功！');
         yield put(routerRedux.push({
-          pathname: '/login',
+          pathname: '/myself',
         }));
         yield put({
           type: 'resetPasswords',
@@ -71,9 +77,9 @@ export default {
     },
     *fetchResetCode({ payload: { type } }, { call, put, select}) {  // eslint-disable-line
 
-      const resetPasswords = yield select(state => state.user.resetPasswords);
+      // const resetPasswords = yield select(state => state.user.resetPasswords);
 
-      const { data } = yield call(code, resetPasswords);
+      const { data } = yield call(resetPassSmsService, {});
       if( data && data['success'] ) {
         Toast.success('验证码已发送, 请注意查收!');
         yield put({

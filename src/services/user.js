@@ -1,6 +1,6 @@
 import post from '../utils/post';
 
-import { registerApi, loginApi, weixinLogin, codeApi, getUserInfoApi, subMemberQueryApi, resetPassApi, wxInitJssdkApi } from '../apis'
+import { registerApi, loginApi, weixinLogin, codeApi, getUserInfoApi, subMemberQueryApi, resetPassApi, resetPassSmsApi, wxInitJssdkApi } from '../apis'
 
 export function login(obj) {
   let data ={
@@ -64,6 +64,13 @@ export function resetPass(obj) {
   };
   data = Object.assign({}, data, obj || {});
   return post(resetPassApi(), data);
+}
+export function resetPassSmsService(obj) {
+  let data ={
+    initiationID: Date.now().toString(16)
+  };
+  data = Object.assign({}, data, obj || {});
+  return post(resetPassSmsApi(), data);
 }
 
 export function wxInitJssdk(obj) {

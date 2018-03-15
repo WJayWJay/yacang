@@ -21,7 +21,7 @@ class Index extends React.Component {
     const { dispatch } = this.props;
     let errors = null;
     this.props.form.validateFields((error, values) => {
-      console.log(error, values)
+      // console.log(error, values)
       if(error) {
         errors = error;
         return ;
@@ -61,6 +61,7 @@ class Index extends React.Component {
                       }
                     }],
                   })}
+                  type={'password'}
                   error={!!getFieldError('newPassword')}
                   style={{fontSize: '16px',opacity: 0.5, color: '#16153A'}}
                   placeholder="请输入新支付密码"
@@ -79,6 +80,7 @@ class Index extends React.Component {
                       }
                     }],
                   })}
+                  type={'password'}
                   error={!!getFieldError('configPassword')}
                   style={{fontSize: '16px',opacity: 0.5, color: '#16153A'}}
                   placeholder="请再次输入新支付密码"
@@ -110,7 +112,7 @@ function mapStateToProps(state) {
 
 const Forget2Form = createForm({
   onValuesChange(props, value) {
-    console.log('onvalueChange...', value);
+    // console.log('onvalueChange...', value);
     props.dispatch({
       type: 'user/resetPasswords',
       payload: value,

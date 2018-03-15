@@ -61,7 +61,7 @@ class Index extends React.Component {
     });
     this.props.dispatch({
       type: 'card/fetchCard',
-      payload: {}
+      payload: {type: 'reposit'}
     });
     
   }
@@ -503,9 +503,6 @@ class Index extends React.Component {
     </Item>))
   }
 
-
-
-
   toLink = (link, params) => {
     if(link) {
       let search = params ? '?'+queryString.stringify(params): '';
@@ -543,7 +540,6 @@ class Index extends React.Component {
         <Item
           key={ritem.settleType}
           className={styles.listItem}
-          extra={''}
           arrow='horizontal'
           multipleLine
           onClick={this.toLink.bind(this, '/selectSellte', {type: type})}>

@@ -72,8 +72,8 @@ class Index extends React.Component {
       'about': '/about',
       'share': '/shareYc',
       'manager': '/manager',
-      'feedback': '/about',
-      'notice': '/about',
+      'feedback': '',
+      'notice': '',
     }
     if(item && item.id && map[item.id]) {
       let pathname = map[item.id]
@@ -87,11 +87,18 @@ class Index extends React.Component {
         // window.location.href = window.location.protocol + '//' + window.location.host + window.location.pathname + '#' + pathname;
         // return;
       }
-      this.props.dispatch(routerRedux.push({
+      pathname && this.props.dispatch(routerRedux.push({
         pathname: pathname
       }))
     }
   }
+
+  toReposit = () => {
+    this.props.dispatch(routerRedux.push({
+      pathname: '/reposit'
+    }));
+  }
+
   toCardCenter = () => {
     const { isLogin, info, dispatch } = this.props;
     if(!isLogin) {
@@ -180,7 +187,7 @@ class Index extends React.Component {
             </Flex>
             <Flex className={styles.headAddition}>
               <Flex className={styles.tabs}>
-                <Flex direction='column' className={styles.tabsFlex}>
+                <Flex onClick={this.toReposit} direction='column' className={styles.tabsFlex}>
                   <Flex className={styles.tabsFlexImg} align='end'>
                     <img style={{ width: '35px', height: '27px'}} src={tabsInfo[0].icon} alt={tabsInfo[0].title} />
                   </Flex>

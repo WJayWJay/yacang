@@ -96,10 +96,10 @@ class CardCenter extends React.Component {
           <WhiteSpace style={{height: '30px', width: '100%'}} />
           <Flex className={styles.flex}>
             <Item flex={1}>
-              设置还款提醒
+              {item.bankCardType === '借记卡'? '':'设置还款提醒'}
             </Item>
             <Item flex={1} style={{'textAlign': 'right'}}>
-              <span className={styles.nowBack}>立即还款</span>
+              <span className={styles.nowBack}>{item.bankCardType === '借记卡'? '':'立即还款'}</span>
             </Item>
           </Flex>
         </Flex>

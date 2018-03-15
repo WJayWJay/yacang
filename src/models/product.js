@@ -43,7 +43,7 @@ export default {
       if(!payload.categoryNo || mores[payload.categoryNo] === false) return;
       pages = pages || {};
       let page = pages[payload.categoryNo] || 1;
-      const { data } = yield call(productList, {payload: {page: page, categoryNo:payload.categoryNo}});
+      const { data } = yield call(productList, {page: page, categoryNo:payload.categoryNo});
       let hasMore = true;
       if(payload && payload.categoryNo) {
         yield put({type: 'updateState', payload: {currentCat: payload.categoryNo}});
