@@ -96,8 +96,7 @@ class CardCenter extends React.Component {
               <Item extra="" arrow="horizontal" onClick={this.revisePwd}>修改支付密码</Item>
             </List>
           </div>
-
-          <Button onClick={this.logout} className={styles.deleteButton}>注销账户</Button>
+          <Button onClick={this.logout} className={styles.deleteButton}>退出登录</Button>
         </div>
       </Layout>
     );
