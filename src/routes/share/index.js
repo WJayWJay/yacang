@@ -10,7 +10,7 @@ import styles from './index.less';
 
 import logo from '../../assets/login-logo.png';
 import headIcon from '../../assets/tx.png';
-import ewmIcon from '../../assets/ewm.png';
+import ewmIcon from '../../assets/share/ewm.png';
 
 class Index extends React.Component {
 
