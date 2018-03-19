@@ -1,11 +1,21 @@
 
 .normal {
   .listItem {
+    position: relative;
     font-size: 15px !important;
     color: #16153A;
     padding-left: 0 !important;
+    z-index: 10;
+    .hidden {
+      top: 0;
+      position: absolute;
+      width: 90%;
+      height: 100%;
+      // border: 1px solid red;
+      background-color: transparent;
+    }
     :global(.am-list-line) :global(.am-list-extra) {
-      flex-basis: 20%;
+      flex-basis: 20% !important;
     }
     .title {
       font-size: 15px;

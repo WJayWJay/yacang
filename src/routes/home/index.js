@@ -19,10 +19,14 @@ class Index extends React.Component {
     value: '',
     fullScreen: true,
     selectedTab: 'blueTab',
+    tagIndex: 0
   }
+  _tagChangeInterval = 0;
 
   componentDidMount() {
     const { dispatch } = this.props;
+    
+    
     dispatch({
       type: 'home/fetch',
       payload: { type: 'msg' }
@@ -35,6 +39,16 @@ class Index extends React.Component {
       type: 'product/fetchCategory',
       payload: {}
     });
+    this._tagChangeInterval = setInterval(() => {
+      let len = this.props.tagList.length || 0;
+      let tagIndex  = this.state.tagIndex;
+      len && this.setState({
+        tagIndex: (tagIndex+1) >= len ? 0 : tagIndex + 1
+      });
+    }, 4000);
+  }
+  componentWillUnmount() {
+    this._tagChangeInterval && clearInterval(this._tagChangeInterval);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,18 +86,23 @@ class Index extends React.Component {
   }
 
   renderHome() {
-    const { swiperList, category } = this.props;
+    const { swiperList, category, tagList } = this.props;
     let list = swiperList;
+    let currentTag = tagList[this.state.tagIndex];
+    console.log(currentTag, 'cur')
     return (
       <div style={{ height: '100%', textAlign: 'center' }}>
         <Layout title={'汇藏'}>
           <div className={styles.normal}>
             <Swiper items={list} />
-            <NoticeBar style={{ fontSize: '14px' }} mode="link" action={
+            {currentTag?
+              <NoticeBar 
+              onClick={() => { window.location.href = currentTag.url; }}
+              marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }} style={{ fontSize: '14px' }} mode="link" action={
               <div className={styles.notify} >去看看</div>
             }>
-              汇藏app全新上线，满满诚意，致收藏家们
-            </NoticeBar>
+              {currentTag.title || ''}
+            </NoticeBar>: null}
             <div className={styles.content}>
               <Flex className={styles.flexContainer} direction="column">
                 {category.map(this.renderTagList)}
@@ -121,6 +140,7 @@ class Index extends React.Component {
   }
 
   render() {
+    
     const iconSize = '26px';
     return (
       <div className={styles.contentContainer} style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>

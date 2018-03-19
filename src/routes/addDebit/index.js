@@ -113,9 +113,13 @@ class AddDebitCard extends React.Component {
       payload: {}
     });
 
-    dispatch(routerRedux.push({
-      pathname: '/uploadId'
-    }));
+    // dispatch(routerRedux.push({
+    //   pathname: '/uploadId'
+    // }));
+    dispatch({
+      type: 'card/bindDebit',
+      payload: {}
+    });
   }
 
   renderAlertIcon = (tag) => {

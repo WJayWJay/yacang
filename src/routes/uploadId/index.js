@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 // import { routerRedux } from 'dva/router';
 import { Flex, List , Toast} from 'antd-mobile';
 import { createForm } from 'rc-form';
@@ -58,16 +59,21 @@ class AddBankCard extends React.Component {
       return;
     }
 
-    dispatch({
-      type: 'card/bindDebit',
-      payload: {}
-    });
+    // dispatch({
+    //   type: 'card/bindDebit',
+    //   payload: {}
+    // });
+    dispatch(routerRedux.push({
+      pathname: '/addDebit'
+    }));
   }
 
   toUpload = (e, item) => {
-    console.log(item)
-    let fileRef = this.props.form.getFieldInstance('attachment'+ item.id);
+    console.log(e.target, e);
+    const fileRef = this.props.form.getFieldInstance('attachment'+ item.id);
+    // console.log(fileRef)
     if(fileRef) {
+      // fileRef.click();
       fileRef.click();
     }
   }
@@ -104,18 +110,19 @@ class AddBankCard extends React.Component {
           <List renderHeader={() => '请上传认证图片'}>
             {
               listInfo.map((item) => {
-                return (<div key={item.title}>
+                return (<div key={item.title} >
                   <Item
-                    className={styles.listItem}
+                    className={[styles.listItem, 'needsclick']}
                     key={item.title}
                     arrow="horizontal"
-                    extra={(imageStatus[item.tag] | 0) > 0 ? '已上传': ''}
+                    extra={(imageStatus[item.tag] | 0) > 0 ? '已上传': null}
                     onClick={(e) => { this.toUpload(e, item) }}
                   >
                     <span className={styles.title}>{item.title}</span>
                     <span className={styles.title + ' ' +styles.subTitle}>{item.subTitle}</span>
+                    <div className={[styles.hidden +' needsclick']}></div>
                   </Item>
-                  <input className={'needsClick'} accept="image/*" style={{display: "none"}} type="file"
+                  <input className='needsclick' accept="image/*" style={{ display: 'none' }} type="file"
                     {...getFieldProps('attachment'+item.id, {
                       initialValue: '',
                       getValueProps: getFileValueProps,

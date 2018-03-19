@@ -166,7 +166,7 @@ export default {
     *cardImageUpload({ payload: {formData, type} }, { call, put, select}) {
       const imageStatus = yield select(state => state.card.imageStatus);
       const { data } = yield call(imageUpload, formData);
-
+      // Toast.fail('data'+ JSON.stringify(data))
       if(data && data['success']) {
         Toast.success('图片上传成功!');
         let currentImgStatus = imageStatus[type] | 0;
