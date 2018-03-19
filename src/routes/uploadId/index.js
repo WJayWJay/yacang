@@ -79,13 +79,14 @@ class AddBankCard extends React.Component {
   }
 
   checkSize = (rule, value, callback) => {
+    const size = 1024 * 512;
     if (value && value.target) {
       const files = value.target.files;
       if (files[0]) {
-        if(files[0].size > 10000000) {
-          Toast.fail('图片文件过大，请重新上传');
+        if(files[0].size > size) {
+          Toast.fail('图片文件过大，请上传不大于512kb的图片！');
         }
-        callback(files[0].size > 10000000 ? 'file size must be less than 10M' : undefined);
+        callback(files[0].size > size ? 'file size must be less than 10M' : undefined);
       } else {
         callback();
       }
@@ -107,7 +108,7 @@ class AddBankCard extends React.Component {
     return (
       <Layout title={'实名认证'}>
         <div className={styles.normal}>
-          <List renderHeader={() => '请上传认证图片'}>
+          <List renderHeader={() => '请上传认证图片(图片不大于512kb)'}>
             {
               listInfo.map((item) => {
                 return (<div key={item.title} >
