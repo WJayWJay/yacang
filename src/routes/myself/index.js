@@ -153,7 +153,7 @@ class Index extends React.Component {
   toFinishInfo = () => {
     let pathname = '/login';
     if(this.props.isLogin) {
-      pathname = '/addDebit';
+      pathname = '/uploadId';
     }
     this.props.dispatch(routerRedux.push({
       pathname

@@ -92,8 +92,8 @@ class AddBankCard extends React.Component {
     const { getFieldProps } = this.props.form;
     const {creditInfo, imageStatus} = this.props;
     const listInfo= [
-      {id: 0, title: '身份证正面', subTitle: '', extra: '', imageCategory: '0003', tag: 'idCard' },
-      {id: 1, title: '身份证反面', subTitle: '请上传身份证反面', extra: '', imageCategory: '0004', tag: 'idCardOpposite' },
+      {id: 0, title: '身份证正面', needs: true, subTitle: '', extra: '', imageCategory: '0003', tag: 'idCard' },
+      {id: 1, title: '身份证反面', needs: true, subTitle: '请上传身份证反面', extra: '', imageCategory: '0004', tag: 'idCardOpposite' },
       {id: 2, title: '手持身份证', subTitle: '请上传手持身份证正面', extra: '', imageCategory: '0005', tag: 'idCardTwo' },
       {id: 3, title: '银行卡正面', subTitle: '请上传银行卡正面', extra: '', imageCategory: '0006', tag: 'bankCard' },
     ];
@@ -101,7 +101,7 @@ class AddBankCard extends React.Component {
     return (
       <Layout title={'实名认证'}>
         <div className={styles.normal}>
-          <List renderHeader={() => '请上传认证图片'}>
+          <List renderHeader={() => '请上传认证图片(* 表示必须上传)'}>
             {
               listInfo.map((item) => {
                 return (<div key={item.title}>
@@ -112,7 +112,7 @@ class AddBankCard extends React.Component {
                     extra={(imageStatus[item.tag] | 0) > 0 ? '已上传': ''}
                     onClick={(e) => { this.toUpload(e, item) }}
                   >
-                    <span className={styles.title}>{item.title}</span>
+                    <span className={styles.title}>{item.title}{item.needs && (<span style={{color:'red'}}>*</span>)}</span>
                     <span className={styles.title + ' ' +styles.subTitle}>{item.subTitle}</span>
                   </Item>
                   <input className={'needsClick'} accept="image/*" style={{display: "none"}} type="file"

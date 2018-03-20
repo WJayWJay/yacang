@@ -37,7 +37,7 @@ class Index extends React.Component {
     const { isSend } = this.state;
     console.log(newProps)
     if(newProps.registerStatus === 0) {
-      this.props.dispatch(routerRedux.push('/login'));
+      // this.props.dispatch(routerRedux.push('/login'));
     }
     if(isSend !== newProps.isSend) {
       if(newProps.isSend === 1) {

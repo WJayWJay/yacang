@@ -1,5 +1,10 @@
 import { code, register } from '../services/user';
+import { routerRedux } from 'dva/router';
 import { Toast } from 'antd-mobile';
+
+const userKey = 'user@info';
+const loginKey = 'isLogin';
+const tokenKey = 'user@tokeyId';
 
 export default {
   namespace: 'register',
@@ -26,7 +31,17 @@ export default {
       const { data } = yield call(register, {messages, phoneNumber, invitationCode, cumSource: 2});
       if(data && data['success']) {
         Toast.success('注册成功!');
+        
         yield put({type: 'saveRegisterStatus', payload: {status: 0}});
+        yield put({type: 'user/save', payload: { data: data.result}});
+        yield put({type: 'user/updateLogin', payload: {isLogin: 1, tokenId: data.result.tokenId }});
+        Cache.set(userKey, data.result, true);
+        Cache.set(tokenKey, data.result.tokenId);
+        Cache.set(loginKey, 1);
+
+        yield put(routerRedux.push({
+          pathname: '/home',
+        }))
       } else {
         Toast.fail(data && data.errorMsg || '注册失败');
       }
