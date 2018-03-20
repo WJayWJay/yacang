@@ -44,6 +44,9 @@ export function cardCreditBind() {
 export function sendCreditSms() {
   return API + '/bankCard/applyOpenSms';
 }
+export function applyDebitSms() {
+  return API + '/bankCard/applyDebitSms';
+}
 export function bindDebitCard() {
   return API + '/bankCard/bindDebitCard';
 }

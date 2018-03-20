@@ -4,7 +4,7 @@ import postData from '../utils/postData';
 import { cardList, cardCreditBind, bindDebitCard,
   sendCreditSms, imgUpload, revisePassApi,
   dualMsgApi, sellteTypeApi, quickDualApi,
-  cashierDeskApi,
+  cashierDeskApi,applyDebitSms
 } from '../apis'
 
 
@@ -40,6 +40,14 @@ export function sendCreditSmsCode(obj) {
   data = Object.assign({}, data, obj || {});
 
   return post(sendCreditSms(), data);
+}
+export function applyDebitSmsService(obj) {
+  let data ={
+    initiationID: Date.now().toString(16)
+  };
+  data = Object.assign({}, data, obj || {});
+
+  return post(applyDebitSms(), data);
 }
 export function imageUpload(formData) {
   if(!formData) {

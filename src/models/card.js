@@ -2,7 +2,7 @@ import { bindCreditCard, listCard,
    bindCardDebit, sendCreditSmsCode,
    imageUpload, revisePass,
    dualMsgService, sellteTypeService,
-   quickDualService
+   quickDualService, applyDebitSmsService
 } from '../services/card';
 import md5 from 'js-md5';
 // import pathToRegexp from 'path-to-regexp';
@@ -69,18 +69,21 @@ export default {
 
       let bankCard = '';
       let phoneNumber = '';
+      let serviceApi = '';
       if( type === 'credit') {
         const creditInfo = yield select(state => state.card.creditInfo);
         bankCard = creditInfo.bankCard;
         phoneNumber = creditInfo.phoneNumber;
+        serviceApi = sendCreditSmsCode;
       } else if(type === 'debit') {
         const debitInfo = yield select(state => state.card.debitInfo);
         bankCard = debitInfo.bankCard;
         phoneNumber = debitInfo.phoneNumber;
+        serviceApi = applyDebitSmsService;
       } else {
         return;
       }
-      const { data } = yield call(sendCreditSmsCode, {bankCard: bankCard, phoneNumber: phoneNumber});
+      const { data } = yield call(serviceApi, {bankCard: bankCard, phoneNumber: phoneNumber});
       let payload = {};
       let key = type === 'credit'? 'creditSmsSend': 'debitSmsSend';
       if(data && data['success']) {
@@ -166,7 +169,7 @@ export default {
     *cardImageUpload({ payload: {formData, type} }, { call, put, select}) {
       const imageStatus = yield select(state => state.card.imageStatus);
       const { data } = yield call(imageUpload, formData);
-
+      // Toast.fail('data'+ JSON.stringify(data))
       if(data && data['success']) {
         Toast.success('图片上传成功!');
         let currentImgStatus = imageStatus[type] | 0;

@@ -46,8 +46,11 @@ class CardCenter extends React.Component {
           pathname: '/revisePass'
         }));
       } else {
+        // dispatch(routerRedux.push({
+        //   pathname: '/addDebit'
+        // }));
         dispatch(routerRedux.push({
-          pathname: '/addDebit'
+          pathname: '/uploadId'
         }));
       }
     }

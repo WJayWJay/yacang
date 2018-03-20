@@ -112,7 +112,8 @@ class Index extends React.Component {
         }));
       } else {
         dispatch(routerRedux.push({
-          pathname: '/addDebit'
+          // pathname: '/addDebit'
+          pathname: '/uploadId'
         }));
       }
     }
@@ -130,7 +131,8 @@ class Index extends React.Component {
         }));
       } else {
         dispatch(routerRedux.push({
-          pathname: '/addDebit'
+          // pathname: '/addDebit'
+          pathname: '/uploadId'
         }));
       }
     }
@@ -153,7 +155,8 @@ class Index extends React.Component {
   toFinishInfo = () => {
     let pathname = '/login';
     if(this.props.isLogin) {
-      pathname = '/uploadId';
+        pathname: '/uploadId'
+          // pathname = '/addDebit';
     }
     this.props.dispatch(routerRedux.push({
       pathname

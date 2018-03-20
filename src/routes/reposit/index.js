@@ -344,7 +344,7 @@ class Index extends React.Component {
     if(info.stat !== 'CERTIFICATION') { 
       return (
         <Layout title={'收银台'}>
-          <Flex style={{padding: '10px', position: 'fixed', height: '85%', width: '100%'}} justify ={'center'}>您还未实名，需实名才能使用！<Link to='/addDebit'>去实名？</Link></Flex>
+          <Flex style={{padding: '10px', position: 'fixed', height: '85%', width: '100%'}} justify ={'center'}>您还未实名，需实名才能使用！<Link to='/uploadId'>去实名？</Link></Flex>
         </Layout>
       );
     }
