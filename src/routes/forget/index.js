@@ -67,10 +67,6 @@ class Index extends React.Component {
       Toast.show('验证码格式错误！');
       return;
     }
-    if(!!getFieldError('companyPhone')) {
-      Toast.show('手机号格式错误！');
-      return;
-    }
     this.setState({
       sendDisabled: true,
     });
@@ -101,38 +97,18 @@ class Index extends React.Component {
 
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
-    const { resetPasswords } = this.props;
+    const { resetPasswords, info } = this.props;
     return (
       <Layout title={'忘记密码'}>
         <div className={styles.normal}>
           <div className={styles.content}>
             <Flex direction="column">
-              {/* <List renderHeader={() => '为保证您的账户安全，请完成身份'} className={styles.myList}>
-                <InputItem
-                  clear
-                  {...getFieldProps('realName', {
-                    initialValue: '',
-                    rules: [{
-                      required: true,
-                    }],
-                  })}
-                  error={!!getFieldError('realName')}
-                  style={{fontSize: '16px',opacity: 0.5}}
-                  placeholder="请输入真实姓名"
-                  ref={el => this.autoFocusInst = el}
-                >姓名</InputItem>
-                <InputItem
-                  clear
-                  style={{fontSize: '16px',opacity: 0.5}}
-                  placeholder="请输入身份证号"
-                >身份证</InputItem>
-              </List> */}
 
               <List renderHeader={() => '为保证您的账户安全，请完成身份'} style={{marginTop: '11px'}} className={styles.myList}>
                 <InputItem
                   clear
                   {...getFieldProps('companyPhone', {
-                    initialValue: resetPasswords.companyPhone || '',
+                    initialValue: info.companyPhone || '',
                     rules: [{
                       validator: (rule, value, cb) => {
                         if(!isPhone(value)) {
@@ -143,6 +119,7 @@ class Index extends React.Component {
                       }
                     }],
                   })}
+                  disabled={true}
                   error={!!getFieldError('companyPhone')}
                   style={{fontSize: '16px',opacity: 0.5}}
                   placeholder="请输入手机号码"

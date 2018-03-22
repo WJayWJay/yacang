@@ -305,6 +305,9 @@ class Index extends React.Component {
 
     if(!tradeInfo.payMoney || isNaN(parseInt(tradeInfo.payMoney, 10))) {
       Toast.fail('消费金额填写错误！');
+      if(this.tabPayMoney) {
+        this.tabPayMoney.focus();
+      }
       return;
     }
     if(!tradeInfo.smsCode || tradeInfo.smsCode.length < 4) {
@@ -386,6 +389,7 @@ class Index extends React.Component {
           <div className={styles.content}>
             <List renderHeader={() => ''} className="my-list imputyMoney-list">
               <InputItem
+                ref={i => this.tabLinkPayMoney = i}
                 className={styles.inputMoney}
                 moneyKeyboardAlign={'left'}
                 {...getFieldProps('payMoney', {
@@ -451,6 +455,9 @@ class Index extends React.Component {
     }
     if(!tradeInfo.payMoney || isNaN(parseFloat(tradeInfo.payMoney, 10))) {
       Toast.fail('消费金额填写错误！');
+      if(this.tabLinkPayMoney) {
+        this.tabLinkPayMoney.focus();
+      }
       return;
     }
 
@@ -623,6 +630,7 @@ class Index extends React.Component {
           <div className={styles.content}>
             <List renderHeader={() => ''} className="my-list imputyMoney-list">
               <InputItem
+                ref={i => this.tabPayMoney = i}
                 className={styles.inputMoney}
                 moneyKeyboardAlign={'left'}
                 {...getFieldProps('payMoney', {

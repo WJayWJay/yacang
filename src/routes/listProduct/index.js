@@ -119,6 +119,14 @@ class ListProduct extends React.Component {
     // dispatch({ type: 'product/fetch', payload: {page: page} });
   }
 
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'product/updateState',
+      payload: {currentCat: ''}
+    });
+    this.isInited = false;
+  }
+
   componentWillReceiveProps(nextProps) {
     if(nextProps !== this.props) {
       if(nextProps.list) {
@@ -131,18 +139,19 @@ class ListProduct extends React.Component {
         });
       }
 
-      if(Array.isArray(nextProps.category) && nextProps.category.length> 0 && !this.state.isInited) {
+      if(Array.isArray(nextProps.category) && nextProps.category.length> 0 && !this.isInited) {
         let tab = nextProps.category[0];
         this.setState({
           isInited: true,
           currentTab: 0
         });
+        this.isInited = true;
         this.fetchData(this.initCatId || tab.categoryNo);
       }
     }
   }
   fetchData = (cid) => {
-    const { hasMore, loading } = this.props;
+    const { hasMore } = this.props;
     if(!cid || (hasMore[cid] === false)) return;
     this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: cid } });
   }
@@ -242,9 +251,7 @@ class ListProduct extends React.Component {
 
 
   onTabClick = (model, index) => {
-    const { category } = this.props;    
-    const {currentTab} = this.state;
-    // console.log(model, 'yyyy', index, category)
+    const { category, currentCat } = this.props;
     let childrenTab = [];
     if(category && category.length) {
       category.forEach(item => {
@@ -261,11 +268,10 @@ class ListProduct extends React.Component {
           value: item.categoryNo
         }
       })
-      this.setState({initData: childrenTab});
-      // console.log(childrenTab, 'childrenTab')
+      this.setState({initData: childrenTab, selectedValue: currentCat});
     }
-    // console.log(index, this.state.currentTab, '....')
-    if(index === currentTab) {
+    
+    if(this.tabsRef && index === this.tabsRef.props.initialPage) {
       this.showOrHide();
     }
   }
@@ -315,30 +321,34 @@ class ListProduct extends React.Component {
   }
 
   render() {
-    const { showed, isShowed } = this.state;
+    const {  isShowed } = this.state;
     const { category } = this.props;
 
     let tabs = [
     ];
-    let initCatId = this.initCatId;
+    
     let initIndex = 0;
-    // console.log(initCatId, '11111')
+    
     if(category.length > 0) {
-      // console.log(this.props.currentCat, '22222', category.length)
       let currentCat = this.props.currentCat;
       category.forEach((item, index) => {
         tabs.push({
           id: item.categoryNo,
           title: item.categoryName
         });
+        
         if( currentCat && currentCat === item.categoryNo) {
           initIndex = index;
+        } else if(item.children && Array.isArray(item.children)) {
+          item.children.forEach((i, iindex) => {
+            if(currentCat && i.categoryNo === currentCat) {
+              initIndex = index;
+            }
+          })
         }
       });
+      
     }
-
-    // console.log('999999', initIndex)
-
     let isWechat = /micromessenger/i.test(window.navigator.userAgent.toLowerCase());
     const menuEl = (<div style={{position: 'fixed', zIndex: '100', top: isWechat ? '44px':'89px', width: '100%'}}>
       <Menu
@@ -350,7 +360,7 @@ class ListProduct extends React.Component {
         height={document.documentElement.clientHeight * 0.6}
       />
     </div>);
-    // console.log(this.state.initData, 'this.state.initData', isShowed)
+    
     return (
       <Layout title={'商品列表'}>
         <Spinner loading={this.props.loading} />
@@ -367,7 +377,8 @@ class ListProduct extends React.Component {
               </Flex>
               { showed ? this.renderSelect(showed): null}
             </div> */}
-            {tabs.length ? <Tabs
+            {tabs.length && this.props.currentCat ? <Tabs
+              ref={i => this.tabsRef = i}
               initialPage={initIndex}
               onTabClick={this.onTabClick}
               onChange={this.tabChange}

@@ -89,7 +89,7 @@ class Index extends React.Component {
     const { swiperList, category, tagList } = this.props;
     let list = swiperList;
     let currentTag = tagList[this.state.tagIndex];
-    console.log(currentTag, 'cur')
+    // console.log(currentTag, 'cur')
     return (
       <div style={{ height: '100%', textAlign: 'center' }}>
         <Layout title={'汇藏'}>

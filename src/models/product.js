@@ -66,6 +66,13 @@ export default {
       }
     },
     *fetchCategory({ payload: {}}, { call, put, select}) {
+      const categorys = Cache.get(categoryKey);
+      if(categorys) {
+        yield put({
+          type: 'updateState',
+          payload: { category: categorys }
+        });
+      }
       const { data } = yield call(productCategory, {});
       if( data && data['success'] && data['result'] ) {
         yield put({
