@@ -193,9 +193,16 @@ export default {
       });
       if(data && data['success']) {
         Toast.success('交易成功！');
-        yield put(routerRedux.push({
-          pathname: '/tradeList',
-        }));
+        // yield put(routerRedux.push({
+        //   pathname: '/tradeList',
+        // }));
+        if(data.result) {
+          window.location.href = (typeof data.result) === 'string'? data.result: data.result.url;
+        } else {
+          yield put(routerRedux.push({
+            pathname: '/tradeList',
+          }));
+        }
       } else {
         Toast.fail(data.errorMsg || '');
       }
