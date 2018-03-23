@@ -89,7 +89,7 @@ class CardCenter extends React.Component {
         <div className={styles.normal}>
           <div className={styles.content}>
             <List className={styles.myList}>
-              <Item extra={userInfo.customerName || userInfo.companyPhone || ''}>姓名</Item>
+              <Item extra={userInfo.customerName || '--'}>姓名</Item>
               <Item extra={cardList.length > 0 ? cardList[0].idCardNo : '----'}>身份证</Item>
               <Item extra={userInfo.companyPhone || ''}>手机号码</Item>
             </List>

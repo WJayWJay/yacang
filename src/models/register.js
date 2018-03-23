@@ -70,7 +70,7 @@ export default {
       return { ...state, list, total };
     },
     changeCodeSend(state, {payload: {codeSend}}) {
-      console.log(codeSend, 'change')
+      // console.log(codeSend, 'change')
       return { ...state, codeSend };
     },
     saveRegisterStatus(state, {payload: {status: registerStatus}}) {

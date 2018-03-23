@@ -155,8 +155,11 @@ class Index extends React.Component {
   toFinishInfo = () => {
     let pathname = '/login';
     if(this.props.isLogin) {
-        pathname: '/uploadId'
           // pathname = '/addDebit';
+        this.props.dispatch(routerRedux.push({
+          pathname: '/uploadId'
+        }));
+        return;
     }
     this.props.dispatch(routerRedux.push({
       pathname
@@ -165,12 +168,12 @@ class Index extends React.Component {
 
   renderSelf() {
     const { isLogin, info } = this.props;
-    const username = info ? info.customerName||info.companyPhone : '';
+    const username = info && info.customerName || '';
     const iconSize = '16px';
     return (
       <Layout title={'我的'}>
         <div className={styles.normal}>
-          {info && info.stat !== 'CERTIFICATION'? <div onClick={this.toFinishInfo}><NoticeBar mode="link" icon={
+          {isLogin && info && info.stat !== 'CERTIFICATION'? <div onClick={this.toFinishInfo}><NoticeBar mode="link" icon={
             <div style={{
               width: iconSize,
               height: iconSize,

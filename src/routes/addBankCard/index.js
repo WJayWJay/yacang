@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { Flex, InputItem, List , WhiteSpace, Icon, DatePicker, Toast} from 'antd-mobile';
+import { Flex, InputItem, List , WhiteSpace, Icon, DatePicker, Toast, Modal} from 'antd-mobile';
 import { createForm } from 'rc-form';
 
 import Layout from '../../components/layout';
+import Protocal from '../../components/protocal';
 import Button from '../../components/button';
 
 import styles from './index.less';
@@ -116,6 +117,12 @@ class AddBankCard extends React.Component {
     })
   }
   
+  openProtocal = () => {
+    Modal.alert('协议提示', <Protocal />, [
+      { text: '确定', onPress: () => console.log('ok') },
+    ])
+  }
+
   render() {
     const { getFieldProps, getFieldError } = this.props.form;
     const creditInfo = this.props.creditInfo || {};
@@ -255,7 +262,7 @@ class AddBankCard extends React.Component {
           
 
           <Flex className={styles.userProto}>
-              <Icon onClick={this.agreeProto} type="check-circle-o" color={this.state.agreeColor} size={'xs'} /><span className={styles.agree} >同意</span><span className={styles.agreeUserProto} >《 用户协议 》</span>
+              <Icon onClick={this.agreeProto} type="check-circle-o" color={this.state.agreeColor} size={'xs'} /><span className={styles.agree} >同意</span><span onClick={this.openProtocal} className={styles.agreeUserProto} >《 用户协议 》</span>
           </Flex>
 
           <Flex style={{marginTop: '51px'}}>

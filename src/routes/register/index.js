@@ -2,17 +2,20 @@ import React from 'react';
 import { connect } from 'dva';
 // import { Link } from 'dva/router';
 import { routerRedux } from 'dva/router';
-import { Flex, List, InputItem, Icon, WhiteSpace, Toast } from 'antd-mobile';
+import { Flex, List, InputItem, Icon, WhiteSpace, Toast, Modal } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
+import Protocal from '../../components/protocal';
 
 import styles from './index.less';
 
+const alert = Modal.alert;
 
 class Index extends React.Component {
   state = {
     hasError: false,
+    agree: false,
     inviteCode: '',
     phone: '',
     code: '',
@@ -35,7 +38,7 @@ class Index extends React.Component {
 
   componentWillReceiveProps(newProps) {
     const { isSend } = this.state;
-    console.log(newProps)
+    // console.log(newProps)
     if(newProps.registerStatus === 0) {
       // this.props.dispatch(routerRedux.push('/login'));
     }
@@ -109,7 +112,7 @@ class Index extends React.Component {
   }
 
   onChange = (value) => {
-    console.log(value)
+    // console.log(value)
     if (value.replace(/\s/g, '').length < 11 || !value.startsWith('1')) {
       this.setState({
         hasError: true,
@@ -147,6 +150,17 @@ class Index extends React.Component {
     this.props.dispatch({
       type: 'register/userRegister',
       payload: {code, phone, inviteCode}
+    })
+  }
+
+  openProtocal = () => {
+    alert('协议提示', <Protocal />, [
+      { text: '确定', onPress: () => console.log('ok') },
+    ])
+  }
+  toAgree = () => {
+    this.setState({
+      agree: !this.state.agree
     })
   }
 
@@ -217,9 +231,9 @@ class Index extends React.Component {
             </Flex>
             
             <Flex justify="center" style={{marginTop: '150px', marginBottom: '38px', fontSize: '14px'}}>
-                <Icon type="check-circle-o" color={'#8C8C9E'} size={'xs'} />
-                <span className={styles.agree} >点击立即注册，即代表同意</span>
-                <span className={styles.agreeUserProto} >《 用户协议 》</span>
+                <Icon onClick={this.toAgree} type="check-circle-o" color={ this.state.agree ? '#1890ff':'#8C8C9E'} size={'xs'} />
+                <span onClick={this.toAgree} className={styles.agree} >点击立即注册，即代表同意</span>
+                <span onClick={this.openProtocal} className={styles.agreeUserProto} >《 用户协议 》</span>
             </Flex>
           </div>
         </div>
@@ -232,7 +246,7 @@ Index.propTypes = {
 };
 
 function mapStateToProps( state ) {
-  console.log(state)
+  // console.log(state)
   const { codeSend: isSend, registerStatus } = state.register
   return {
     isSend,

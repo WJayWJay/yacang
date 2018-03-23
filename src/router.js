@@ -164,6 +164,9 @@ function RouterConfig({ history, app }) {
         <Route path="/shareYc" exact component={dynamic({ app,
           component: () => import('./routes/shareYc/index')
         })} />
+        <Route path="/protocal" exact component={dynamic({ app,
+          component: () => import('./routes/protocal/index')
+        })} />
 
       </Switch>
     </Router>

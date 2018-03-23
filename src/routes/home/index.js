@@ -108,9 +108,9 @@ class Index extends React.Component {
                 {category.map(this.renderTagList)}
               </Flex>
             </div>
-            <Flex className={styles.bottom} align="center" justify="center">
+            {/* <Flex className={styles.bottom} align="center" justify="center">
               <span><Link to='/productList'>咦，滑到底了，点击查看更多商品</Link></span>
-            </Flex>
+            </Flex> */}
           </div>
         </Layout>
       </div>

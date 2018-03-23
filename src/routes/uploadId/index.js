@@ -40,23 +40,16 @@ class AddBankCard extends React.Component {
       switch (errors[0]) {
         case 'idCard':
           err = '您的身份证正面照还未上传呢。。。';
+          Toast.fail(err);
+          return;
           break;
         case 'idCardOpposite':
           err = '您的身份证反面照还未上传呢。。。';
-          break;
-        case 'idCardTwo':
-          err = '您的手持身份证照还未上传呢。。。';
-          break;
-        case 'bankCard':
-          err = '您的银行卡正面照还未上传呢。。。';
-          break;
 
-        default:
-          err = '未知错误!';
+          Toast.fail(err);
+          return;
           break;
       }
-      Toast.fail(err);
-      return;
     }
 
     // dispatch({
