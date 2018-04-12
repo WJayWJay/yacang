@@ -135,3 +135,126 @@ export function initJsApi(config) {
     
   })
 }
+
+
+// 将file转成dataUrl
+export function transformFileToDataUrl (file) {
+  return new Promise((resolve, reject) => {
+    const imgCompassMaxSize = 510 * 1024; // 超过 200k 就压缩
+    let imgFile = {};
+    // 存储文件相关信息
+    imgFile.type = file.type || 'image/jpeg'; // 部分安卓出现获取不到type的情况
+    imgFile.size = file.size;
+    imgFile.name = file.name;
+    imgFile.lastModifiedDate = file.lastModifiedDate;
+
+    // 封装好的函数
+    const reader = new FileReader();
+
+    // file转dataUrl是个异步函数，要将代码写在回调里
+    reader.onload = function (e) {
+      const result = e.target.result;
+
+      if (result.length < imgCompassMaxSize) {
+        // compress(result, processData, false);    // 图片不压缩
+        compress(result, imgFile, false).then((compressDataUrl) => {
+          resolve(compressDataUrl);
+        })    // 图片不压缩
+      } else {
+        // compress(result, processData);            // 图片压缩
+        compress(result, imgFile).then(compressDataUrl => {
+          resolve(compressDataUrl);
+        });            // 图片压缩
+      }
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
+// 使用canvas绘制图片并压缩
+export function compress (dataURL, imgFile, shouldCompress = true) {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+
+    img.src = dataURL;
+
+    img.onload = function () {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      let compressedDataUrl;
+      console.log(shouldCompress,'shouldCompress');
+      if (shouldCompress) {
+        compressedDataUrl = canvas.toDataURL(imgFile.type, 0.2);
+      } else {
+        compressedDataUrl = canvas.toDataURL(imgFile.type, 1);
+      }
+
+      // callback(compressedDataUrl);
+      resolve(compressedDataUrl);
+    }
+  });
+}
+
+
+export function processData (dataUrl, imgFile) {
+  return new Promise((resolve, reject) => {
+    // 这里使用二进制方式处理dataUrl
+    const binaryString = window.atob(dataUrl.split(',')[1]);
+    const arrayBuffer = new ArrayBuffer(binaryString.length);
+    const intArray = new Uint8Array(arrayBuffer);
+    // const imgFile = this.imgFile;
+
+    for (let i = 0, j = binaryString.length; i < j; i++) {
+      intArray[i] = binaryString.charCodeAt(i);
+    }
+
+    const data = [intArray];
+
+    let blob;
+
+    try {
+      blob = new Blob(data, { type: imgFile.type });
+    } catch (error) {
+      window.BlobBuilder = window.BlobBuilder ||
+        window.WebKitBlobBuilder ||
+        window.MozBlobBuilder ||
+        window.MSBlobBuilder;
+      if (error.name === 'TypeError' && window.BlobBuilder) {
+        const builder = new window.BlobBuilder();
+        builder.append(arrayBuffer);
+        blob = builder.getBlob(imgFile.type);
+      } else {
+        // Toast.error("版本过低，不支持上传图片", 2000, undefined, false);
+        // throw new Error('版本过低，不支持上传图片');
+        reject(new Error('版本过低，不支持上传图片'));
+      }
+    }
+
+    // blob 转file
+    const fileOfBlob = new File([blob], imgFile.name);
+    // const formData = new FormData();
+
+    // type
+    // formData.append('type', imgFile.type);
+    // size
+    // formData.append('size', fileOfBlob.size);
+    // name
+    // formData.append('name', imgFile.name);
+    // lastModifiedDate
+    // formData.append('lastModifiedDate', imgFile.lastModifiedDate);
+    // append 文件
+    // formData.append('file', fileOfBlob);
+    
+    // uploadImg(formData);
+    // return fileOfBlob;
+
+    resolve(fileOfBlob);
+  });
+}

@@ -73,7 +73,7 @@ class Index extends React.Component {
       'share': '/shareYc',
       'manager': '/manager',
       'feedback': '',
-      'notice': '',
+      'notice': '/follow',
     }
     if(item && item.id && map[item.id]) {
       let pathname = map[item.id]

@@ -131,7 +131,12 @@ class Index extends React.Component {
   }
   
   submit = () => {
-    const { code, phone, inviteCode } = this.state;
+    const { code, phone, inviteCode, agree } = this.state;
+
+    if(!agree) {
+      Toast.fail('请同意相关用户协议！');
+      return;
+    }
     if(!code) {
       this.codeInput && this.codeInput.focus();
       Toast.fail('验证码不能为空');

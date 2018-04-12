@@ -169,6 +169,8 @@ export default {
     *cardImageUpload({ payload: {formData, type} }, { call, put, select}) {
       const imageStatus = yield select(state => state.card.imageStatus);
       const { data } = yield call(imageUpload, formData);
+      console.log(data)
+      if(!data) return;
       // Toast.fail('data'+ JSON.stringify(data))
       if(data && data['success']) {
         Toast.success('图片上传成功!');
@@ -186,7 +188,7 @@ export default {
           }
         });
       } else {
-        Toast.fail(data.errorMsg || '');
+        Toast.fail(data && data.errorMsg || '上传图片错误！');
       }
     },
 

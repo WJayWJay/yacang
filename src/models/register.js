@@ -1,5 +1,6 @@
 import { code, register } from '../services/user';
 import { routerRedux } from 'dva/router';
+import Cache from '../utils/cache';
 import { Toast } from 'antd-mobile';
 
 const userKey = 'user@info';
@@ -43,6 +44,13 @@ export default {
           pathname: '/home',
         }))
       } else {
+        if(data && data.errorCode === 'DHT_0003') {
+          Toast.fail('该手机号码已经注册!');
+          yield put(routerRedux.push({
+            pathname: '/login',
+          }))
+          return;
+        }
         Toast.fail(data && data.errorMsg || '注册失败');
       }
     },

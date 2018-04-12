@@ -6,6 +6,8 @@ import { routerRedux } from 'dva/router';
 import { Flex, List , Toast} from 'antd-mobile';
 import { createForm } from 'rc-form';
 
+import { transformFileToDataUrl, compress, processData } from '../../functions';
+
 import Layout from '../../components/layout';
 import Button from '../../components/button';
 
@@ -25,6 +27,10 @@ class AddBankCard extends React.Component {
     agreeColor: '#8C8C9E',
   };
   inputFiles = {};
+
+  componentDidMount() {
+    
+  }
 
   submit = () => {
     const { dispatch, imageStatus } = this.props;
@@ -72,14 +78,20 @@ class AddBankCard extends React.Component {
   }
 
   checkSize = (rule, value, callback) => {
-    const size = 1024 * 512;
+    const size = 1024 * 1024 * 5;
+    console.log(value, 'jjj')
     if (value && value.target) {
       const files = value.target.files;
       if (files[0]) {
+        var err = '';
         if(files[0].size > size) {
-          Toast.fail('图片文件过大，请上传不大于512kb的图片！');
+          err = '图片文件过大，请上传不大于512kb的图片！';
+          Toast.fail(err);
+        } else if(files[0].type.indexOf('image') === -1 ) {
+          err = '不支持的类型';
+          Toast.fail(err);
         }
-        callback(files[0].size > size ? 'file size must be less than 10M' : undefined);
+        callback( err || undefined);
       } else {
         callback();
       }
@@ -157,36 +169,68 @@ function mapStateToProps(state) {
   }
 }
 
+
 const AddBankCardForm = createForm({
   onValuesChange: (props, value) => {
     console.log(value, 'change');
     let type = '';
     const fileData = new FormData();
+    let imgFile = null;
+    let imageCategory = '';
     if(value['attachment0']) {
       type = imgTypes[0];
-      fileData.append('imageFile', value['attachment0'].target.files[0]);
-      fileData.append('imageCategory', '0003');
+      imgFile = value['attachment0'].target.files[0];
+      imageCategory = '0003';
+      
+      // fileData.append('imageFile', value['attachment0'].target.files[0]);
+      // fileData.append('imageCategory', '0003');
     } else if(value['attachment1']) {
       type = imgTypes[1];
-      fileData.append('imageFile', value['attachment1'].target.files[0]);
-      fileData.append('imageCategory', '0004');
+      // fileData.append('imageFile', value['attachment1'].target.files[0]);
+      // fileData.append('imageCategory', '0004');
+
+      imgFile = value['attachment1'].target.files[0];
+      imageCategory = '0004';
     } else if(value['attachment2']) {
       type = imgTypes[2];
-      fileData.append('imageFile', value['attachment2'].target.files[0]);
-      fileData.append('imageCategory', '0005');
+      // fileData.append('imageFile', value['attachment2'].target.files[0]);
+      // fileData.append('imageCategory', '0005');
+
+      imgFile = value['attachment2'].target.files[0];
+      imageCategory = '0005';
     } else if(value['attachment3']) {
       type = imgTypes[3];
-      fileData.append('imageFile', value['attachment3'].target.files[0]);
-      fileData.append('imageCategory', '0006');
+      // fileData.append('imageFile', value['attachment3'].target.files[0]);
+      // fileData.append('imageCategory', '0006');
+
+      imgFile = value['attachment3'].target.files[0];
+      imageCategory = '0006';
     } else {
       Toast.fail('应用出现了点问题，请联系管理员！');
       return;
     }
-
-    props.dispatch({
-      type: 'card/cardImageUpload',
-      payload: {formData: fileData, type: type}
-    })
+    
+    fileData.append('imageCategory', imageCategory);
+    if(!imgFile) return;
+    transformFileToDataUrl(imgFile)
+      .then(compressDataUrl => {
+        return processData(compressDataUrl, imgFile).then(fileBlob => {
+          // console.log(fileBlob, 'fileBlob222222')
+          return fileBlob;
+        })
+      }).then(fileBlob => {
+        fileData.append('imageFile', fileBlob);
+        // fileData.append('imageCategory', '0003');
+        props.dispatch({
+          type: 'card/cardImageUpload',
+          payload: { formData: fileData, type: type }
+        });
+      })
+    return;
+    // props.dispatch({
+    //   type: 'card/cardImageUpload',
+    //   payload: {formData: fileData, type: type}
+    // })
   }
 })(AddBankCard);
 
