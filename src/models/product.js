@@ -47,7 +47,7 @@ export default {
       if(!payload.categoryNo || (isSameCat && mores === false)) return;
       page = isSameCat ? page || 1 : 1;
       
-      const { data } = yield call(productList, {page: page, categoryNo: payload.categoryNo});
+      const { data } = yield call(productList, {pageNo: page, categoryNo: payload.categoryNo});
       let hasMore = true;
 
       if(payload && payload.categoryNo) {
