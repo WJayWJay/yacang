@@ -151,8 +151,9 @@ class ListProduct extends React.Component {
     }
   }
   fetchData = (cid) => {
-    const { hasMore } = this.props;
-    if(!cid || (hasMore === false)) return;
+    const { hasMore, currentCat } = this.props;
+    const isSameCat = cid === currentCat;
+    if(!cid || (isSameCat && hasMore === false)) return;
     this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: cid } });
   }
   toDetail = (obj) => {
@@ -254,6 +255,7 @@ class ListProduct extends React.Component {
   onTabClick = (model, index) => {
     const { category, currentCat } = this.props;
     let childrenTab = [];
+    return;
     if(category && category.length) {
       category.forEach(item => {
         if(model.id === item.categoryNo) {

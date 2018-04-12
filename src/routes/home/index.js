@@ -45,7 +45,7 @@ class Index extends React.Component {
       len && this.setState({
         tagIndex: (tagIndex+1) >= len ? 0 : tagIndex + 1
       });
-    }, 4000);
+    }, 6000);
   }
   componentWillUnmount() {
     this._tagChangeInterval && clearInterval(this._tagChangeInterval);
@@ -97,7 +97,7 @@ class Index extends React.Component {
             <Swiper items={list} />
             {currentTag?
               <NoticeBar 
-              onClick={() => { window.location.href = currentTag.url; }}
+              onClick={() => { currentTag.url && (window.location.href = currentTag.url); }}
               marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }} style={{ fontSize: '14px' }} mode="link" action={
               <div className={styles.notify} >去看看</div>
             }>
