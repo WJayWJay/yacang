@@ -9,11 +9,11 @@ export default {
   namespace: 'product',
 
   state: {
-    list: {},
+    list: [],
     total: 0,
-    page: {},
+    page: 1,
     category: [],
-    hasMore: {},
+    hasMore: true,
     currentCat: '',
   },
 
@@ -38,30 +38,39 @@ export default {
     *fetch({ payload: payload }, { call, put, select}) {  // eslint-disable-line
       // yield put({ type: 'save' });
       // console.log(payload)
-      let pages = yield select(s => s.product.page);
+      let page = yield select(s => s.product.page);
       let mores = yield select(s => s.product.hasMore);
-      if(!payload.categoryNo || mores[payload.categoryNo] === false) return;
-      pages = pages || {};
-      let page = pages[payload.categoryNo] || 1;
-      const { data } = yield call(productList, {page: page, categoryNo:payload.categoryNo});
+      let list = yield select(s => s.product.list);
+      let currentCat = yield select(s => s.product.currentCat);
+
+      const isSameCat = currentCat === payload.categoryNo;
+      if(!payload.categoryNo || (isSameCat && mores === false)) return;
+      page = isSameCat ? page || 1 : 1;
+      
+      const { data } = yield call(productList, {page: page, categoryNo: payload.categoryNo});
       let hasMore = true;
+
       if(payload && payload.categoryNo) {
         yield put({type: 'updateState', payload: {currentCat: payload.categoryNo}});
       }
       if( data && data['success'] && data['result'] ) {
         if(!Array.isArray(data.result.results)) {
           hasMore = false;
-          return;
+          if(isSameCat) {
+            return;
+          }
         }
-        if(Array.isArray(data.result.results) && data.result.results.length) {
+        if(Array.isArray(data.result.results)) {
           if(data.result.results.length < 10) {
             hasMore = false;
           }
         }
-        yield put({type: 'updateListState', payload: { [payload.categoryNo]: data.result.results}});
-        yield put({type: 'updateHasMoreState', payload: { [payload.categoryNo]: hasMore}});
-        yield put({type: 'updatePageState', payload: { [payload.categoryNo]: (page | 0) + 1}});
-        // yield put({type: 'save', payload: { data: data.result.results||[], total: data.result.totalSize}});
+        // yield put({type: 'updateListState', payload: { [payload.categoryNo]: data.result.results}});
+        // yield put({type: 'updateHasMoreState', payload: { [payload.categoryNo]: hasMore}});
+        // yield put({type: 'updatePageState', payload: { [payload.categoryNo]: (page | 0) + 1}});
+        list = isSameCat ? list.concat(data.result.results) : data.result.results;
+        yield put({type: 'updateHasMoreState', payload: { hasMore }});
+        yield put({type: 'save', payload: { list: list || [], total: data.result.totalSize, page: page + 1}});
         
       }
     },
@@ -85,14 +94,14 @@ export default {
   },
 
   reducers: {
-    save(state, { payload: {data: list, total, page} }) {
-      return { ...state, total, page };
+    save(state, { payload }) {
+      return { ...state, ...payload };
     },
     updateListState(state, {payload}) {
       return {...state, ...{list: {...state.list, ...payload}}}
     },
     updateHasMoreState(state, {payload}) {
-      return {...state, ...{hasMore: {...state.hasMore, ...payload}}}
+      return {...state, ...payload}
     },
     updatePageState(state, {payload}) {
       return {...state, ...{page: {...state.page, ...payload}}}

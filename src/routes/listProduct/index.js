@@ -152,7 +152,7 @@ class ListProduct extends React.Component {
   }
   fetchData = (cid) => {
     const { hasMore } = this.props;
-    if(!cid || (hasMore[cid] === false)) return;
+    if(!cid || (hasMore === false)) return;
     this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: cid } });
   }
   toDetail = (obj) => {
@@ -196,7 +196,8 @@ class ListProduct extends React.Component {
   };
 
   renderContent = tab => {
-    const { hasMore, tabHeigh } = this.state;
+    const { tabHeigh } = this.state;
+    const { hasMore } = this.props;
     const row = (rowData, sectionID, rowID) => {
       return this.row(rowData, sectionID, rowID);
     }
@@ -211,7 +212,7 @@ class ListProduct extends React.Component {
         }}
       />
     );
-
+    
     return (
       <div className={styles.tab} style={{ height: tabHeigh + 'px' }}>
         <ListView
@@ -328,14 +329,15 @@ class ListProduct extends React.Component {
     ];
     
     let initIndex = 0;
-    
+    let title = '商品列表';
+    let myInitIndex = 0;
     if(category.length > 0) {
       let currentCat = this.props.currentCat;
       category.forEach((item, index) => {
-        tabs.push({
-          id: item.categoryNo,
-          title: item.categoryName
-        });
+        // tabs.push({
+        //   id: item.categoryNo,
+        //   title: item.categoryName
+        // });
         
         if( currentCat && currentCat === item.categoryNo) {
           initIndex = index;
@@ -347,26 +349,36 @@ class ListProduct extends React.Component {
           })
         }
       });
-      
+      console.log(category, initIndex)
+      tabs = category[initIndex].children.map((item, i) => {
+        if(item.categoryNo === currentCat) {
+          myInitIndex = i;
+        }
+        return {
+          id: item.categoryNo,
+          title: item.categoryName
+        }
+      });
+      title = category[initIndex].categoryName;
     }
-    let isWechat = /micromessenger/i.test(window.navigator.userAgent.toLowerCase());
-    const menuEl = (<div style={{position: 'fixed', zIndex: '100', top: isWechat ? '44px':'89px', width: '100%'}}>
-      <Menu
-        className="single-foo-menu"
-        data={this.state.initData}
-        value={[this.state.selectedValue]}
-        level={1}
-        onChange={this.onSelectChange}
-        height={document.documentElement.clientHeight * 0.6}
-      />
-    </div>);
+    // let isWechat = /micromessenger/i.test(window.navigator.userAgent.toLowerCase());
+    // const menuEl = (<div style={{position: 'fixed', zIndex: '100', top: isWechat ? '44px':'89px', width: '100%'}}>
+    //   <Menu
+    //     className="single-foo-menu"
+    //     data={this.state.initData}
+    //     value={[this.state.selectedValue]}
+    //     level={1}
+    //     onChange={this.onSelectChange}
+    //     height={document.documentElement.clientHeight * 0.6}
+    //   />
+    // </div>);
     
     return (
-      <Layout title={'商品列表'}>
+      <Layout title={title || '商品列表'}>
         <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
-            {isShowed && this.state.initData ? menuEl: null}
+            {/* {isShowed && this.state.initData ? menuEl: null} */}
             {/* <div className={styles.selectContainer}>
               <Flex className={styles.flexListSelect}>
                 {selectLists.map((item) => (
@@ -379,7 +391,7 @@ class ListProduct extends React.Component {
             </div> */}
             {tabs.length && this.props.currentCat ? <Tabs
               ref={i => this.tabsRef = i}
-              initialPage={initIndex}
+              initialPage={myInitIndex}
               onTabClick={this.onTabClick}
               onChange={this.tabChange}
               tabs={tabs}>
@@ -405,12 +417,13 @@ function mapStateToProps(state) {
   // console.log(state)
   const { list,hasMore,category,currentCat } = state.product;
   // console.log(list, currentCat, hasMore)
-  let lists = list && (({}).toString.call(list) === '[object Object]') && list[currentCat] || [];
+  let lists = list || [];
   return {
-    list: lists,category, 
+    list: lists,
+    category, 
     currentCat, 
     loading: state.loading.global || false, 
-    hasMore: hasMore || {}
+    hasMore: hasMore
   }
 }
 
