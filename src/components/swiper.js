@@ -47,7 +47,7 @@ const Swiper = (props) => {
   return (
     <div>
       {/* <BannerAnim type={'across'} className={styles.bannerUser} arrow={false}> */}
-      <BannerAnim type={'across'} className={styles.bannerUser} style={height? {height: height}: {}} arrow={false } {...props}>
+      <BannerAnim autoPlay={true} type={'across'} className={styles.bannerUser} style={height? {height: height}: {}} arrow={false } {...props}>
           {elements}
       </BannerAnim>
     </div>

@@ -253,28 +253,31 @@ class ListProduct extends React.Component {
 
   onTabClick = (model, index) => {
     const { category, currentCat } = this.props;
-    let childrenTab = [];
-    if(category && category.length) {
-      category.forEach(item => {
-        if(model.id === item.categoryNo) {
-          childrenTab = item.children || [];
-          return;
-        }
-      })
-    }
-    if(childrenTab.length) {
-      childrenTab = childrenTab.map(item => {
-        return {
-          label: item.categoryName,
-          value: item.categoryNo
-        }
-      })
-      this.setState({initData: childrenTab, selectedValue: currentCat});
-    }
+
+    console.log(model, 'mmmm')
+    this.fetchData(model.id);
+    // let childrenTab = [];
+    // if(category && category.length) {
+    //   category.forEach(item => {
+    //     if(model.id === item.categoryNo) {
+    //       childrenTab = item.children || [];
+    //       return;
+    //     }
+    //   })
+    // }
+    // if(childrenTab.length) {
+    //   childrenTab = childrenTab.map(item => {
+    //     return {
+    //       label: item.categoryName,
+    //       value: item.categoryNo
+    //     }
+    //   })
+    //   this.setState({initData: childrenTab, selectedValue: currentCat});
+    // }
     
-    if(this.tabsRef && index === this.tabsRef.props.initialPage) {
-      this.showOrHide();
-    }
+    // if(this.tabsRef && index === this.tabsRef.props.initialPage) {
+    //   this.showOrHide();
+    // }
   }
 
   showOrHide = () => {
@@ -391,6 +394,7 @@ class ListProduct extends React.Component {
             </div> */}
             {tabs.length && this.props.currentCat ? <Tabs
               ref={i => this.tabsRef = i}
+              swipeable={false}
               initialPage={myInitIndex}
               onTabClick={this.onTabClick}
               onChange={this.tabChange}
