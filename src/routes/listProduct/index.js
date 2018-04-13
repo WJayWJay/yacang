@@ -151,8 +151,9 @@ class ListProduct extends React.Component {
     }
   }
   fetchData = (cid) => {
-    const { hasMore } = this.props;
-    if(!cid || (hasMore === false)) return;
+    const { hasMore, currentCat } = this.props;
+    const isSameCat = cid === currentCat;
+    if(!cid || (isSameCat && hasMore === false)) return;
     this.props.dispatch({ type: 'product/fetch', payload: {page: this.state.page, categoryNo: cid } });
   }
   toDetail = (obj) => {
@@ -178,15 +179,18 @@ class ListProduct extends React.Component {
           <Flex direction="column" style={{flex:1, lineHeight: 1, width: '100%' }}>
             {/* <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.des}</div>
             <div><span style={{ fontSize: '30px', color: '#FF6E27' }}>{rowID}</span>¥</div> */}
-            <Flex style={{ flex: 1 }}>
+            <Flex style={{ flex: 1, width: '100%' }} align={'flex-start'}>
               {obj.productName}
             </Flex>
             <Flex style={{ flex: 1, width: '100%' }}>
-            <img style={{ height: '22px', width: '22px', marginRight: '4px' }} src={obj.imageUrl || testImg} alt="" /> {'大大的大'}
+              <Flex justify='start' style={{flex: 1}}>
+              {obj.stat === 'S0N' ? <span style={{color: 'red'}}>非卖品</span>: obj.salePrice || ''}
+              </Flex>
+              <Flex justify='end' style={{flex: 2}}>{obj.address || ''}</Flex>
             </Flex>
             <Flex justify='end' style={{ flex: 1, width: '100%' }}>
-              <Flex justify='start' style={{flex: 1}}>¥{obj.salePrice}</Flex>
-              <Flex justify='end' style={{flex: 1}}>厦门</Flex>
+              <Flex justify='start' style={{flex: 2}}>发布时间:{obj.pullOnDate || ''}</Flex>
+              <Flex justify='end' style={{flex: 1}}>人气数:{obj.viewTimes || 0}</Flex>
             </Flex>
           </Flex>
         </div>

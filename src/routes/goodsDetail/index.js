@@ -38,11 +38,11 @@ class GoodsDetail extends React.Component {
               </Flex> 
               <Flex className={[styles.maxWidth, styles.price]}> 
                 <Flex.Item justify={'start'}> 
-                  <Flex.Item className={styles.currentPrice}> ¥ {detail.marketPrice} </Flex.Item>
+                  <Flex.Item className={styles.currentPrice}> {detail.stat === 'S0N' ? '非卖品':'¥ ' + detail.marketPrice }</Flex.Item>
                 </Flex.Item>
                 <Flex.Item justify={'end'}>
                   <Flex justify={'end'} style={{'textAlign': 'right'}}>
-                    <Flex.Item className={styles.originalPrice}><s> 原价：¥ {detail.referencePrice} </s></Flex.Item>
+                    {detail.stat === 'S0N' ? null:<Flex.Item className={styles.originalPrice}><s> 原价：¥ {detail.referencePrice} </s></Flex.Item>}
                   </Flex>
                 </Flex.Item>
               </Flex>
@@ -70,7 +70,28 @@ class GoodsDetail extends React.Component {
                 {detail.descriptions}
               </div>
               <div className={styles.tabs}>
-                { detail.productSize }
+                <table border={'1'} cellspacing="0" cellpadding="0" className={styles.variables}>
+                  {detail.unearthedAge ? <tr>
+                    <td>藏品年代</td>
+                    <td>{detail.unearthedAge || ''}</td>
+                  </tr>: null}
+                  {detail.identifyFlag ? <tr>
+                    <td>品名</td>
+                    <td>{detail.identifyFlag || ''}</td>
+                  </tr>: null}
+                  {detail.identifyCategory ? <tr>
+                    <td>藏品类别</td>
+                    <td>{detail.identifyCategory || ''}</td>
+                  </tr>: null}
+                  {detail.productSize ? <tr>
+                    <td>工艺</td>
+                    <td>{detail.productSize || ''}</td>
+                  </tr>: null}
+                  {detail.weight ? <tr>
+                    <td>尺寸</td>
+                    <td>{detail.weight || ''}</td>
+                  </tr>: null}
+                </table>
               </div>
             </Tabs>
           </div>
