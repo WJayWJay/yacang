@@ -97,7 +97,7 @@ class GoodsDetail extends React.Component {
           </div>
 
           <WhiteSpace style={{height: '50px'}} />
-          <div className={styles.bottom} >
+          {detail.stat === 'S0N' ?null:<div className={styles.bottom} >
             <Flex>
               <Item style={{flex: 1}} >
                 <Button className={styles.noneBorder} style={{backgroundColor: '#FF9E51'}}>加入购物车</Button>
@@ -106,7 +106,7 @@ class GoodsDetail extends React.Component {
                 <Button className={styles.noneBorder} style={{backgroundColor: '#F32828'}}>立即购买</Button>
               </Item>
             </Flex>
-          </div>
+          </div>}
         </div>
       </Layout>
     );

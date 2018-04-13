@@ -250,16 +250,16 @@ class ListProduct extends React.Component {
     console.log('tttttt', tab)
     
     
-    this.setState({isShowed: false, currentTab: index});
-    this.fetchData(tab.id);
+    // this.setState({isShowed: false, currentTab: index});
+    // this.fetchData(tab.id);
   }
 
 
   onTabClick = (model, index) => {
     const { category, currentCat } = this.props;
 
-    console.log(model, 'mmmm')
-    this.fetchData(model.id);
+    // console.log(model, 'mmmm')
+    this.fetchData(model && model.id);
     // let childrenTab = [];
     // if(category && category.length) {
     //   category.forEach(item => {

@@ -23,7 +23,7 @@ const listInfo= [
   {id: 'manager', title: '成员管理', icon: require('../../assets/myself/wd-cy.png') },
   {id: 'share', title: '推荐给好友', icon: require('../../assets/myself/wd-tj.png') },
   {id: 'about', title: '关于汇藏', icon: require('../../assets/myself/wd-gy.png') },
-  {id: 'feedback', title: '帮助反馈', icon: require('../../assets/myself/wd-bz.png') },
+  // {id: 'feedback', title: '帮助反馈', icon: require('../../assets/myself/wd-bz.png') },
   {id: 'notice', title: '关注公众号', icon: require('../../assets/myself/wd-gz.png') },
 ]
 
@@ -77,6 +77,10 @@ class Index extends React.Component {
     }
     if(item && item.id && map[item.id]) {
       let pathname = map[item.id]
+      if(item.id === 'notice') {
+        window.location.href = 'https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUzMTYyNzM5Mg==&scene=124#wechat_redirect';
+        return ;
+      }
       if(!this.props.isLogin) {
         pathname = '/login'
         if(item.id === 'about') {
@@ -168,7 +172,7 @@ class Index extends React.Component {
 
   renderSelf() {
     const { isLogin, info } = this.props;
-    const username = info && info.customerName || '';
+    const username = info && info.customerName || info.companyPhone || '';
     const iconSize = '16px';
     return (
       <Layout title={'我的'}>

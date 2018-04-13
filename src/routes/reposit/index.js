@@ -226,7 +226,7 @@ class Index extends React.Component {
           style={{border: '1px solid #979797', borderRadius: '6px', height: '50px', width: '100%', textIndent: '10px'}}
           type="password"
           maxLength={6}
-          placeholder="请输入交易密码"
+          placeholder="请输入支付密码"
           error={this.state.hasError}
           onErrorClick={this.onErrorClick}
           onChange={this.onChange}
@@ -266,7 +266,7 @@ class Index extends React.Component {
           style={{border: '1px solid #979797', borderRadius: '6px', height: '50px', width: '100%', textIndent: '10px'}}
           type="password"
           maxLength={6}
-          placeholder="请输入交易密码"
+          placeholder="请输入支付密码"
           error={this.state.hasError}
           onErrorClick={this.onErrorClick}
           onChange={this.onChangeLink}
@@ -304,14 +304,14 @@ class Index extends React.Component {
     const { tradeInfo, dispatch } = this.props;
 
     if(!tradeInfo.payMoney || isNaN(parseInt(tradeInfo.payMoney, 10))) {
-      Toast.fail('消费金额填写错误！');
+      Toast.fail('请输入消费金额！');
       if(this.tabPayMoney) {
         this.tabPayMoney.focus();
       }
       return;
     }
     if(!tradeInfo.smsCode || tradeInfo.smsCode.length < 4) {
-      Toast.fail('短信验证码填写错误！');
+      Toast.fail('请输入您收到的短信验证码');
       return;
     }
     if(!tradeInfo.settleType) {
@@ -358,11 +358,12 @@ class Index extends React.Component {
     let search = history.location.search;
     search = queryString.parse(search);
     let initialPage = search.initialPage | 0;
-    
+    // console.log(initialPage)
     initialPage = initialPage < 2? initialPage: 0;
     
     return (<Layout title={'收银台'}>
       <Tabs tabs={tabs}
+        swipeable={false}
         initialPage={initialPage}
         onChange={(tab, index) => { console.log('onChange', index, tab); }}
         onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}

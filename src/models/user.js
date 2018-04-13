@@ -195,7 +195,7 @@ export default {
           window.location.href = locationQuery.uri;
         } else {
           yield put(routerRedux.push({
-            pathname: '/myself'
+            pathname: '/home'
           }));
         }
       } else {
