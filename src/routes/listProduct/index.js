@@ -180,7 +180,7 @@ class ListProduct extends React.Component {
             {/* <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.des}</div>
             <div><span style={{ fontSize: '30px', color: '#FF6E27' }}>{rowID}</span>¥</div> */}
             <Flex style={{ flex: 1, width: '100%' }} align={'flex-start'}>
-              {obj.productName}
+              <h4 style={{color: '#57493F'}}>{obj.productName}</h4>
             </Flex>
             <Flex style={{ flex: 1, width: '100%' }}>
               <Flex justify='start' style={{flex: 1}}>

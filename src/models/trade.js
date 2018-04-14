@@ -95,6 +95,7 @@ export default {
     },
     *getSellteType({ payload }, { call, put, select}) {
       const isLogin = yield select(s => s.user.isLogin);
+      const selectSettleType = yield select(s => s.trade.tradeInfo.settleType);
       if(!isLogin) return;
       const { data } = yield call(sellteTypeService, payload);
       if(data && data['success']) {
@@ -104,6 +105,13 @@ export default {
             sellteType: data.result,
           }
         });
+        if (data.result && !selectSettleType) {
+          var item = data.result[0];
+          yield put({
+            type: 'updateTradeInfo',
+            payload: { settleType: item.settleType }
+          });
+        }
       } else {
         Toast.fail(data.errorMsg || '');
       }
