@@ -61,6 +61,7 @@ class Index extends React.Component {
                       }
                     }],
                   })}
+                  maxLength={6}
                   type={'password'}
                   error={!!getFieldError('newPassword')}
                   style={{fontSize: '16px',opacity: 0.5, color: '#16153A'}}
@@ -80,6 +81,7 @@ class Index extends React.Component {
                       }
                     }],
                   })}
+                  maxLength={6}
                   type={'password'}
                   error={!!getFieldError('configPassword')}
                   style={{fontSize: '16px',opacity: 0.5, color: '#16153A'}}

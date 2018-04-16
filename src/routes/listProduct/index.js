@@ -82,7 +82,8 @@ class ListProduct extends React.Component {
       rowHasChanged: (row1, row2) => row1.productNo !== row2.productNo,
     });
     const winHeight = window.innerHeight;
-    let tabHeight = winHeight - 45 -43.5 - 10;
+    // let tabHeight = winHeight - 45 -43.5 - 10;
+    let tabHeight = winHeight  - 40;
 
     this.state = {
       dataSource,
@@ -184,13 +185,13 @@ class ListProduct extends React.Component {
             </Flex>
             <Flex style={{ flex: 1, width: '100%' }}>
               <Flex justify='start' style={{flex: 1}}>
-              {obj.stat === 'S0N' ? <span style={{color: 'red'}}>非卖品</span>: obj.salePrice || ''}
+                <span style={{color: 'red'}}>{obj.stat === 'S0N' ? '非卖品': obj.salePrice || ''}</span>
               </Flex>
-              <Flex justify='end' style={{flex: 2}}>{obj.address || ''}</Flex>
+              <Flex justify='end' style={{flex: 2, color: '#808080'}}>{obj.address || ''}  <Icon type={'right'} /></Flex>
             </Flex>
             <Flex justify='end' style={{ flex: 1, width: '100%' }}>
-              <Flex justify='start' style={{flex: 2}}>发布时间:{obj.pullOnDate || ''}</Flex>
-              <Flex justify='end' style={{flex: 1}}>人气数:{obj.viewTimes || 0}</Flex>
+              <Flex justify='start' style={{flex: 2, 'color': '#808080'}}>发布时间:{obj.pullOnDate || ''}</Flex>
+              <Flex justify='end' style={{flex: 1, 'color': '#808080'}}>人气数:{obj.viewTimes || 0}</Flex>
             </Flex>
           </Flex>
         </div>
@@ -247,7 +248,7 @@ class ListProduct extends React.Component {
 
   tabChange = (tab, index) => {
     // dispatch({ type: 'product/fetch', payload: {page: currentPage, categoryNo: tab.id } });
-    console.log('tttttt', tab)
+    // console.log('tttttt', tab)
     
     
     // this.setState({isShowed: false, currentTab: index});
@@ -256,7 +257,7 @@ class ListProduct extends React.Component {
 
 
   onTabClick = (model, index) => {
-    const { category, currentCat } = this.props;
+    // const { category, currentCat } = this.props;
 
     // console.log(model, 'mmmm')
     this.fetchData(model && model.id);
@@ -356,7 +357,7 @@ class ListProduct extends React.Component {
           })
         }
       });
-      console.log(category, initIndex)
+      // console.log(category, initIndex)
       tabs = category[initIndex].children.map((item, i) => {
         if(item.categoryNo === currentCat) {
           myInitIndex = i;

@@ -26,6 +26,7 @@ class GoodsDetail extends React.Component {
     if(!detail.productNo) {
       return <h2></h2>;
     }
+    const isNoSale = detail.stat === 'S0N';
     const imgUrls = detail.images && detail.images.map(item => ({url: item.imageUrl}));
     return (
       <Layout title={'商品详情'}>
@@ -42,13 +43,13 @@ class GoodsDetail extends React.Component {
                 </Flex.Item>
                 <Flex.Item justify={'end'}>
                   <Flex justify={'end'} style={{'textAlign': 'right'}}>
-                    {detail.stat === 'S0N' ? null:<Flex.Item className={styles.originalPrice}><s> 原价：¥ {detail.referencePrice} </s></Flex.Item>}
+                    {isNoSale ? null:<Flex.Item className={styles.originalPrice}><s> 原价：¥ {detail.referencePrice} </s></Flex.Item>}
                   </Flex>
                 </Flex.Item>
               </Flex>
               <Flex justify={'center'} className={[styles.maxWidth, styles.additional]}> 
-                <div className={styles.flexItem}> 快递：{detail.expressPrice} </div>
-                <div className={styles.flexItem}> 库存：{detail.storeCount} </div>
+                {!isNoSale && <div className={styles.flexItem}>快递：{detail.expressPrice} </div>}
+                <div className={styles.flexItem}> {!isNoSale && '库存：' + detail.storeCount} </div>
                 <div className={styles.flexItem}>
                   <Flex justify={'end'} style={{'textAlign': 'right'}}>
                     <Flex.Item className={styles.originalPrice}> {detail.address} </Flex.Item>
@@ -75,9 +76,9 @@ class GoodsDetail extends React.Component {
                     <td>藏品年代</td>
                     <td>{detail.unearthedAge || ''}</td>
                   </tr>: null}
-                  {detail.identifyFlag ? <tr>
+                  {detail.productName ? <tr>
                     <td>品名</td>
-                    <td>{detail.identifyFlag || ''}</td>
+                    <td>{detail.productName || ''}</td>
                   </tr>: null}
                   {detail.identifyCategory ? <tr>
                     <td>藏品类别</td>

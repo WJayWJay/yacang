@@ -1,5 +1,6 @@
 import React from 'react';
 import BannerAnim, { Element } from 'rc-banner-anim';
+import { Carousel } from 'antd-mobile';
 // import TweenOne from 'rc-tween-one';
 import QueueAnim from 'rc-queue-anim';
 import 'rc-banner-anim/assets/index.css';
@@ -44,14 +45,28 @@ const Swiper = (props) => {
       </QueueAnim>
   </Element>));
   
-  return (
-    <div>
-      {/* <BannerAnim type={'across'} className={styles.bannerUser} arrow={false}> */}
-      <BannerAnim autoPlay={true} type={'across'} className={styles.bannerUser} style={height? {height: height}: {}} arrow={false } {...props}>
-          {elements}
-      </BannerAnim>
-    </div>
-  );
+  
+  return <Carousel 
+    swiping={true}
+    dragging={true}
+    infinite={true}
+    wrapAround={true}
+    autoplay={true} 
+  >
+    {items.map(item => (<div className={styles.contain}>
+      <h3>{item.title || ''}</h3>
+      <img src={item.url} alt={item.title} />
+    </div>))}
+  </Carousel>;
+
+  // return (
+  //   <div>
+  //     {/* <BannerAnim type={'across'} className={styles.bannerUser} arrow={false}> */}
+  //     <BannerAnim autoPlay={true} type={'across'} className={styles.bannerUser} style={height? {height: height}: {}} arrow={false } {...props}>
+  //         {elements}
+  //     </BannerAnim>
+  //   </div>
+  // );
 };
 
 Swiper.propTypes = {

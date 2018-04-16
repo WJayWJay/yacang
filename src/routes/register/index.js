@@ -15,7 +15,7 @@ const alert = Modal.alert;
 class Index extends React.Component {
   state = {
     hasError: false,
-    agree: false,
+    agree: true,
     inviteCode: '',
     phone: '',
     code: '',
@@ -137,9 +137,9 @@ class Index extends React.Component {
       Toast.fail('请同意相关用户协议！');
       return;
     }
-    if(!code) {
-      this.codeInput && this.codeInput.focus();
-      Toast.fail('验证码不能为空');
+    if(!inviteCode) {
+      this.inviteCode && this.inviteCode.focus();
+      Toast.fail('邀请码不能为空');
       return;
     }
     if(!phone) {
@@ -147,9 +147,9 @@ class Index extends React.Component {
       Toast.fail('手机号不能为空');
       return;
     }
-    if(!inviteCode) {
-      this.inviteCode && this.inviteCode.focus();
-      Toast.fail('邀请码不能为空');
+    if(!code) {
+      this.codeInput && this.codeInput.focus();
+      Toast.fail('验证码不能为空');
       return;
     }
     this.props.dispatch({

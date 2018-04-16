@@ -109,15 +109,15 @@ class Index extends React.Component {
                   clear
                   {...getFieldProps('companyPhone', {
                     initialValue: info.companyPhone || '',
-                    rules: [{
-                      validator: (rule, value, cb) => {
-                        if(!isPhone(value)) {
-                          cb(new Error('手机号格式错误！'));
-                        } else {
-                          cb();
-                        }
-                      }
-                    }],
+                    // rules: [{
+                    //   validator: (rule, value, cb) => {
+                    //     if(!isPhone(value)) {
+                    //       cb(new Error('手机号格式错误！'));
+                    //     } else {
+                    //       cb();
+                    //     }
+                    //   }
+                    // }],
                   })}
                   disabled={true}
                   error={!!getFieldError('companyPhone')}
