@@ -169,11 +169,17 @@ class Index extends React.Component {
       pathname
     }));
   }
-
+  
   renderSelf() {
     const { isLogin, info } = this.props;
-    const username = info && info.customerName || info.companyPhone || '';
     const iconSize = '16px';
+    const stats = {
+      CERTIFICATION: '已实名',
+      FREEZE: '已冻结',
+      REGISTER: '未实名'
+    };
+    let username = info && info.customerName || info.companyPhone || '';
+    let st = isLogin && stats[info.stat] || '';
     return (
       <Layout title={'我的'}>
         <div className={styles.normal}>
@@ -192,7 +198,7 @@ class Index extends React.Component {
                 <img src={headImageIcon} style={{width: '64px', height: '64px'}} alt="头像" />
               </Flex>
               <Flex className={styles.loginInfo}>
-              {isLogin ? username:'未登录，请先登录'}
+              {isLogin ? username + (st && '('+st+')'):'未登录，请先登录'}
               </Flex>
             </Flex>
             <Flex className={styles.headAddition}>

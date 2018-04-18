@@ -82,7 +82,7 @@ class CardCenter extends React.Component {
     const stats = {
       CERTIFICATION: '已实名',
       FREEZE: '已冻结',
-      REGISTER: '已注册(未实名)'
+      REGISTER: <span style={{color: 'red'}}>已注册(未实名)</span>
     };
     return (
       <Layout title={'个人信息'}>

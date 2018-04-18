@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { Flex, List, InputItem, WhiteSpace, Toast } from 'antd-mobile';
+import { Flex, WhiteSpace } from 'antd-mobile';
+
+import * as qr from 'qr-image';
 
 import Layout from '../../components/layout';
-import Button from '../../components/button';
 
 import styles from './index.less';
 
-import logo from '../../assets/login-logo.png';
 import headIcon from '../../assets/tx.png';
 import ewmIcon from '../../assets/share/ewm.png';
 
@@ -26,7 +25,12 @@ class Index extends React.Component {
   render() {
     const { info } = this.props;
     const userInfo = Object.assign({}, info);
-
+    let svg = '';
+    if(userInfo.invitationCode) {
+      const loc = window.location;
+      let url = loc.protocol + '//' + loc.host + loc.pathname + '#/register?invite=' + userInfo.invitationCode;
+      svg = qr.imageSync(url, {type: 'svg'});
+    }
     return (
       <Layout title={'立即邀请'}>
       <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0,background: '#57493F', marginTop:'45px' }} >
@@ -38,15 +42,16 @@ class Index extends React.Component {
               </Flex>
               <Flex direction='column'>
                 <Flex style={{flex: 1, width: '100%'}}>
-                姓名：{ userInfo.customerName || userInfo.companyPhone || '' }
+                { userInfo.customerName || userInfo.companyPhone || '' }
                 </Flex>
-                <Flex style={{flex: 1, width: '100%'}}>
+                {/* <Flex style={{flex: 1, width: '100%'}}>
                 I   D：{ userInfo.customerNo || '' }
-                </Flex>
+                </Flex> */}
+                {/* {svg} */}
               </Flex>
             </Flex>
             <Flex justify="center">
-              <img src={ewmIcon} alt="logo" style={{width: '80%', height: '80%'}} />
+              {svg ? <div className={styles.svgCon} dangerouslySetInnerHTML={{__html: svg}}></div>:<img src={ewmIcon} alt="logo" style={{width: '80%', height: '80%'}} />}
             </Flex>
             <WhiteSpace style={{height: '20px'}} />
             <Flex justify="center" className={styles.last}>

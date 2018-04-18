@@ -169,7 +169,6 @@ export default {
     *cardImageUpload({ payload: {formData, type} }, { call, put, select}) {
       const imageStatus = yield select(state => state.card.imageStatus);
       const { data } = yield call(imageUpload, formData);
-      console.log(data)
       if(!data) return;
       // Toast.fail('data'+ JSON.stringify(data))
       if(data && data['success']) {

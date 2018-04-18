@@ -53,7 +53,7 @@ const Swiper = (props) => {
     wrapAround={true}
     autoplay={true} 
   >
-    {items.map(item => (<div className={styles.contain}>
+    {items.map((item) => (<div key={item.url} className={styles.contain}>
       <h3>{item.title || ''}</h3>
       <img src={item.url} alt={item.title} />
     </div>))}

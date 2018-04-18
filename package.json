@@ -12,6 +12,7 @@
     "dva": "^2.1.0",
     "dva-loading": "^1.0.4",
     "path-to-regexp": "^2.1.0",
+    "qr-image": "^3.2.0",
     "rc-banner-anim": "^1.0.0",
     "rc-form": "^2.1.7",
     "rc-queue-anim": "^1.4.1",

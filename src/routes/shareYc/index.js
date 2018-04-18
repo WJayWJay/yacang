@@ -105,7 +105,7 @@ class Index extends React.Component {
             <WhiteSpace style={{ height: '119px'}} />
           </div>
           <Flex className={styles.share}>
-            <Button onClick={this.showShareActionSheetMulpitleLine} className={styles.shareButton}>向朋友推荐汇藏</Button>
+            {/* <Button onClick={this.showShareActionSheetMulpitleLine} className={styles.shareButton}>向朋友推荐汇藏</Button> */}
           </Flex>
         </div>
       </div>

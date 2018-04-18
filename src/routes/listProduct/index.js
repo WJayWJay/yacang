@@ -83,7 +83,7 @@ class ListProduct extends React.Component {
     });
     const winHeight = window.innerHeight;
     // let tabHeight = winHeight - 45 -43.5 - 10;
-    let tabHeight = winHeight  - 40;
+    let tabHeight = winHeight  - 50;
 
     this.state = {
       dataSource,
@@ -187,9 +187,9 @@ class ListProduct extends React.Component {
               <Flex justify='start' style={{flex: 1}}>
                 <span style={{color: 'red'}}>{obj.stat === 'S0N' ? '非卖品': obj.salePrice || ''}</span>
               </Flex>
-              <Flex justify='end' style={{flex: 2, color: '#808080'}}>{obj.address || ''}  <Icon type={'right'} /></Flex>
+              <Flex justify='end' style={{flex: 2, color: '#808080',  'fontSize': '13px'}}>{obj.address || ''}  <Icon type={'right'} /></Flex>
             </Flex>
-            <Flex justify='end' style={{ flex: 1, width: '100%' }}>
+            <Flex justify='end' style={{ flex: 1, width: '100%', 'fontSize': '12px' }}>
               <Flex justify='start' style={{flex: 2, 'color': '#808080'}}>发布时间:{obj.pullOnDate || ''}</Flex>
               <Flex justify='end' style={{flex: 1, 'color': '#808080'}}>人气数:{obj.viewTimes || 0}</Flex>
             </Flex>
