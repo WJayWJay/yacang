@@ -19,6 +19,7 @@ class AddDebitCard extends React.Component {
     sendDisabled: false,
     agreeColor: '#8C8C9E',
     isStart: false,
+    agree: true
   };
   intervId = 0;
 
@@ -101,6 +102,10 @@ class AddDebitCard extends React.Component {
     //   type: 'card/bindDebit',
     //   payload: {info: 'submit'}
     // });
+    if(!this.state.agree) {
+      Toast.info('请同意用户协议！', 3, () => {}, false);
+      return;
+    }
     let errors = null;
     this.props.form.validateFields((error, values) => {
       console.log(error, values)
@@ -134,9 +139,8 @@ class AddDebitCard extends React.Component {
   }
 
   agreeProto = () => {
-    let gray = '#8C8C9E', blue = '#1890ff';
     this.setState({
-      agreeColor: this.state.agreeColor === blue ? gray: blue
+      agree: !this.state.agree
     })
   }
   openProtocal = () => {
@@ -266,7 +270,7 @@ class AddDebitCard extends React.Component {
 
 
           <Flex className={styles.userProto}>
-              <Icon onClick={this.agreeProto} type="check-circle-o" color={this.state.agreeColor} size={'xs'} /><span className={styles.agree} >同意</span><span onClick={this.openProtocal} className={styles.agreeUserProto} >《 用户协议 》</span>
+              <Icon onClick={this.agreeProto} type="check-circle-o" color={ this.state.agree ? '#1890ff': '#8C8C9E'} size={'xs'} /><span className={styles.agree} >同意</span><span onClick={this.openProtocal} className={styles.agreeUserProto} >《 用户协议 》</span>
           </Flex>
 
           <Flex style={{marginTop: '51px'}}>

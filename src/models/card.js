@@ -160,7 +160,7 @@ export default {
           pathname: '/result'
         }));
       } else {
-        Toast.fail(data.errorMsg || '');
+        Toast.fail(data.errorMsg || '绑定失败');
       }
     },
     *cacheCreditInfo({ payload: info }, { call, put, select}) {
