@@ -5,6 +5,7 @@ import { Flex, WhiteSpace } from 'antd-mobile';
 import * as qr from 'qr-image';
 
 import Layout from '../../components/layout';
+import { isWeixin } from '../../functions';
 
 import styles from './index.less';
 
@@ -31,9 +32,10 @@ class Index extends React.Component {
       let url = loc.protocol + '//' + loc.host + loc.pathname + '#/register?invite=' + userInfo.invitationCode;
       svg = qr.imageSync(url, {type: 'svg'});
     }
+    const margin = isWeixin() ? '0px': '45px';
     return (
       <Layout title={'立即邀请'}>
-      <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0,background: '#57493F', marginTop:'45px' }} >
+      <div style={{ position: 'fixed', height: '100%', width: '100%', top: 0,background: '#57493F', marginTop: margin, overflow: 'scroll' }} >
         <div className={styles.normal}>
           <div className={styles.content}>
             <Flex className={styles.coloumn1} >

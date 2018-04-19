@@ -25,7 +25,7 @@ const request = async function request(url, options) {
   return await fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)
-    .then(data => ({ data }))
+    .then(data => ({data}))
     .catch(err => ({ err }));
 }
 export default request;

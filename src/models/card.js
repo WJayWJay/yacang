@@ -5,6 +5,8 @@ import { bindCreditCard, listCard,
    quickDualService, applyDebitSmsService
 } from '../services/card';
 import md5 from 'js-md5';
+import fetch from 'dva/fetch';
+
 // import pathToRegexp from 'path-to-regexp';
 import { Toast } from 'antd-mobile';
 import { routerRedux } from 'dva/router';
@@ -45,7 +47,10 @@ export default {
     },
     passwords: {},
     channelResultNo: '',
-    sellteType: []
+    sellteType: [],
+    uploadTypes:{
+
+    }
   },
 
   subscriptions: {
@@ -167,9 +172,30 @@ export default {
       Cache.set(debitInfoKey, debitInfo);
     },
     *cardImageUpload({ payload: {formData, type} }, { call, put, select}) {
+
+      // -1 0 1
+      yield put({
+        type: 'updateUploadTypes',
+        payload: {
+          [type]: 1
+        }
+      });
+      console.log(type)
       const imageStatus = yield select(state => state.card.imageStatus);
       const { data } = yield call(imageUpload, formData);
-      if(!data) return;
+
+      // fetch()
+
+
+      if(!data) {
+        yield put({
+          type: 'updateUploadTypes',
+          payload: {
+            [type]: 0
+          }
+        });
+        return;
+      }
       // Toast.fail('data'+ JSON.stringify(data))
       if(data && data['success']) {
         Toast.success('图片上传成功!');
@@ -189,6 +215,12 @@ export default {
       } else {
         Toast.fail(data && data.errorMsg || '上传图片错误！');
       }
+      yield put({
+        type: 'updateUploadTypes',
+        payload: {
+          [type]: 0
+        }
+      });
     },
 
     *revisePassword({ payload: {} }, { call, put, select}) {
@@ -280,6 +312,9 @@ export default {
     },
     savedDebitFields(state, { payload }) {
       return { ...state, ...{debitInfo: {...state.debitInfo, ...payload} } };
+    },
+    updateUploadTypes(state, { payload }) {
+      return { ...state, ...{uploadTypes: {...state.uploadTypes, ...payload} } };
     },
 
   },

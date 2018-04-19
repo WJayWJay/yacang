@@ -18,6 +18,7 @@ class AddDebitCard extends React.Component {
     itime: 60,
     sendDisabled: false,
     agreeColor: '#8C8C9E',
+    isStart: false,
   };
   intervId = 0;
 
@@ -43,10 +44,13 @@ class AddDebitCard extends React.Component {
       this.intervId && clearInterval(this.intervId);
       this.setState({
         sendDisabled: false
-      })
+      });
+      this.setState({isStart: false});
     }
   }
   startInterv() {
+    if(this.state.isStart) return;
+    this.setState({isStart: true});
     this.intervId = setInterval(() => {
       let time = this.state.itime;
       if(time < 1) {
@@ -54,6 +58,7 @@ class AddDebitCard extends React.Component {
         this.setState({
           smsInfo: '获取验证码',
           sendDisabled: false,
+          isStart: false,
           itime: 60
         });
         this.props.dispatch({
@@ -292,7 +297,7 @@ function mapStateToProps(state) {
 
 const AddDebitCardForm = createForm({
   onValuesChange(props, value) {
-    console.log('onvalueChange...', value);
+    // console.log('onvalueChange...', value);
     if(value && (value.bankCard || value.phoneNumber)) {
       let val = value.bankCard || value.phoneNumber;
       val = val.replace(/\s/g, '');

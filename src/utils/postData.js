@@ -4,6 +4,7 @@ import queryString from 'query-string';
 import request from './request';
 import Cache from './cache';
 
+import fetch from 'dva/fetch';
 
 const tokenKey = 'user@tokeyId';
 /**
@@ -35,5 +36,29 @@ const post = function post(url, data = {}, header = {}) {
   options = Object.assign({}, options);
   
   return request(url, options);
+  // return req(url, options);
 }
+
+function checkStatus(response) {
+  console.log('res', response)
+  response.body.getReader().read().then(e => {
+    console.log(e, '00000')
+  })
+  if (response.status >= 200 && response.status < 300) {
+    return response;
+  }
+
+  const error = new Error(response.statusText);
+  error.response = response;
+  throw error;
+}
+
+function req(url, options) {
+  return fetch(url, options)
+    .then(checkStatus)
+    // .then(parseJSON)
+    .then(data => ({data}))
+    .catch(err => ({ err }));
+}
+
 export default post;

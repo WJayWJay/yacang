@@ -147,7 +147,7 @@ class Index extends React.Component {
       {/* // <div className={styles.contentContainer} > */}
         <TabBar
           unselectedTintColor="#949494"
-          tintColor="#33A3F4"
+          tintColor="#756145"
           barTintColor="white"
           hidden={this.state.hidden}
         >

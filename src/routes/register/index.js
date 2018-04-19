@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 // import { Link } from 'dva/router';
-import { routerRedux } from 'dva/router';
+// import { routerRedux } from 'dva/router';
 import { Flex, List, InputItem, Icon, WhiteSpace, Toast, Modal } from 'antd-mobile';
+import queryString from 'query-string';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
@@ -29,6 +30,19 @@ class Index extends React.Component {
       let phone = localStorage.getItem('key@phone');
       phone && phone.length > 9 && this.setState({phone: phone});
     } catch(e) {}
+    
+    let invite = ''
+    const location = this.props.location;
+    const search = location && location.search;
+    if(search) {
+      let searchParams = queryString.parse(search);
+      invite = searchParams && searchParams.invite;
+      if(invite) {
+        this.setState({
+          inviteCode: invite
+        })
+      }
+    }
   }
   componentWillUnmount() {
     if(this.intervId) {
@@ -137,11 +151,11 @@ class Index extends React.Component {
       Toast.fail('请同意相关用户协议！');
       return;
     }
-    if(!inviteCode) {
-      this.inviteCode && this.inviteCode.focus();
-      Toast.fail('邀请码不能为空');
-      return;
-    }
+    // if(!inviteCode) {
+    //   this.inviteCode && this.inviteCode.focus();
+    //   Toast.fail('邀请码不能为空');
+    //   return;
+    // }
     if(!phone) {
       this.phoneInput && this.phoneInput.focus();
       Toast.fail('手机号不能为空');
@@ -180,6 +194,7 @@ class Index extends React.Component {
               <List className={styles.myList}>
                 <InputItem
                   clear
+                  value={this.state.inviteCode}
                   style={{fontSize: '16px',opacity: 0.4}}  
                   labelNumber={2}
                   placeholder="请输入邀请码"

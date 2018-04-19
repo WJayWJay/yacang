@@ -261,7 +261,7 @@ class Index extends React.Component {
       <div className={styles.contentContainer} style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0, overflow: "auto" } : { height: 400 }}>
         <TabBar
           unselectedTintColor="#949494"
-          tintColor="#33A3F4"
+          tintColor="#756145"
           barTintColor="white"
           hidden={this.state.hidden}
         >

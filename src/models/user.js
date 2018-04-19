@@ -42,9 +42,9 @@ export default {
           payload: { isLogin, tokenId }
         });
       }
-      // const whiteListsForQuery = ['login', 'home']
+      const whiteListsForQuery = ['/login', '/home', '/register']
       return history.listen((location) => {
-        if(location && location.pathname.indexOf('login') > -1 || location.pathname.indexOf('register') > -1 && location.pathname.indexOf('home') > -1) {
+        if(location && whiteListsForQuery.indexOf(location.pathname) > -1) {
           return;
         }
         dispatch({
@@ -173,10 +173,10 @@ export default {
           type: 'logout',
           payload: {}
         })
-        yield put(routerRedux.push({
-          pathname: '/login',
-          search: '?uri=' + window.location.href
-        }))
+        // yield put(routerRedux.push({
+        //   pathname: '/login',
+        //   search: '?uri=' + encodeURI(window.location.href)
+        // }))
       }
     },
     *fetch({ payload: { page } }, { call, put, select }) {  // eslint-disable-line
