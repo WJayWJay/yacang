@@ -52,6 +52,7 @@ class Index extends React.Component {
 
     selectPayType: 3,
     initialPage: 0,
+    loadAlert: true
   }
 
   componentDidMount() {
@@ -61,10 +62,11 @@ class Index extends React.Component {
     });
     this.props.dispatch({
       type: 'card/fetchCard',
-      payload: {type: 'reposit'}
+      payload: { type: 'reposit' }
     });
-    
+
   }
+
   intervId = 0;
 
   componentWillUnmount() {
@@ -72,13 +74,13 @@ class Index extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.tradeSmsSend === 0) {
+    if (nextProps.tradeSmsSend === 0) {
       this.startInterv();
-      setTimeout(()=> {
+      setTimeout(() => {
         this.setState({
           inputTradePwd: false
         })
-      },500);
+      }, 500);
     } else {
       this.intervId && clearInterval(this.intervId);
       this.setState({
@@ -89,7 +91,7 @@ class Index extends React.Component {
   startInterv() {
     this.intervId = setInterval(() => {
       let time = this.state.itime;
-      if(time < 1) {
+      if (time < 1) {
         this.intervId && clearInterval(this.intervId);
         this.setState({
           smsInfo: '获取验证码',
@@ -98,12 +100,12 @@ class Index extends React.Component {
         });
         this.props.dispatch({
           type: 'trade/updateState',
-          payload: {tradeSmsSend: -1}
+          payload: { tradeSmsSend: -1 }
         });
         return;
       }
       this.setState({
-        smsInfo: '获取验证码（'+time+'）'
+        smsInfo: '获取验证码（' + time + '）'
       }, () => {
         this.setState({
           itime: --time
@@ -115,10 +117,10 @@ class Index extends React.Component {
   getCode = (e) => {
     e.preventDefault();
     const { getFieldError } = this.props.form;
-    
+
     let err = this.checkError();
-    if(!err) {
-      return ;
+    if (!err) {
+      return;
     }
 
     this.props.dispatch({
@@ -137,22 +139,22 @@ class Index extends React.Component {
     });
     this.props.dispatch({
       type: 'trade/sendSmsCode',
-      payload: {type: 'applyDualMsg', password: value}
+      payload: { type: 'applyDualMsg', password: value }
     });
-    
+
   }
 
   toSubmitTrade = (value) => {
     this.props.dispatch({
       type: 'trade/applyDualMsg',
-      payload: {password: value}
+      payload: { password: value }
     });
   }
 
   onChange = (value) => {
     // console.log('value', value)
-    if(/^\d+$/.test(value)) {
-      if(value.length === 6) {
+    if (/^\d+$/.test(value)) {
+      if (value.length === 6) {
         // console.log(value, 'passsss')
         // this.toSubmitTrade(value);
         this.toGetCode(md5(value));
@@ -168,7 +170,7 @@ class Index extends React.Component {
       this.setState({
         password: value
       });
-      if(value.length === 6) {
+      if (value.length === 6) {
         Toast.fail('密码格式不正确!', 1);
       }
     }
@@ -177,13 +179,13 @@ class Index extends React.Component {
   toSubmitLink = (value) => {
     this.props.dispatch({
       type: 'trade/cashierDesk',
-      payload: {password: value}
+      payload: { password: value }
     });
   }
   onChangeLink = (value) => {
     // console.log('value', value)
-    if(/^\d+$/.test(value)) {
-      if(value.length === 6) {
+    if (/^\d+$/.test(value)) {
+      if (value.length === 6) {
         // console.log(value, 'passsss')
         // this.toSubmitTrade(value);
         this.toSubmitLink(md5(value));
@@ -195,7 +197,7 @@ class Index extends React.Component {
       this.setState({
         password: value
       });
-      if(value.length === 6) {
+      if (value.length === 6) {
         Toast.fail('密码格式不正确!', 1);
       }
     }
@@ -217,13 +219,13 @@ class Index extends React.Component {
       <div>
         <div className={styles.mAdditional} >到账金额</div>
         <WhiteSpace />
-        <div className={styles.moneyAlert}>{'¥'+ payMoney}</div>
-        <WhiteSpace style={{height: '20px'}} />
+        <div className={styles.moneyAlert}>{'¥' + payMoney}</div>
+        <WhiteSpace style={{ height: '20px' }} />
         <div className={styles.moneyAddition}>额外扣除 <span>¥{this.props.arrivalAmount || 0}</span> 手续费</div>
-        <WhiteSpace style={{height: '20px'}} />        
+        <WhiteSpace style={{ height: '20px' }} />
         <InputItem
           className={styles.myPwdInput}
-          style={{border: '1px solid #979797', borderRadius: '6px', height: '50px', width: '100%', textIndent: '10px'}}
+          style={{ border: '1px solid #979797', borderRadius: '6px', height: '50px', width: '100%', textIndent: '10px' }}
           type="password"
           maxLength={6}
           placeholder="请输入支付密码"
@@ -232,11 +234,11 @@ class Index extends React.Component {
           onChange={this.onChange}
           value={this.state.password}
         />
-        <WhiteSpace style={{height: '24px'}} />
-        <div onClick={() => this.toLink('/forget')} style={{fontSize: '16px', color: '#646464', textAlign: 'center'}}>
-        忘记密码？
+        <WhiteSpace style={{ height: '24px' }} />
+        <div onClick={() => this.toLink('/forget')} style={{ fontSize: '16px', color: '#646464', textAlign: 'center' }}>
+          忘记密码？
         </div>
-        <WhiteSpace style={{height: '20px'}} />
+        <WhiteSpace style={{ height: '20px' }} />
       </div>
     </Modal>);
   }
@@ -257,13 +259,13 @@ class Index extends React.Component {
       <div>
         <div className={styles.mAdditional} >到账金额</div>
         <WhiteSpace />
-        <div className={styles.moneyAlert}>{'¥'+ payMoney}</div>
-        <WhiteSpace style={{height: '20px'}} />
+        <div className={styles.moneyAlert}>{'¥' + payMoney}</div>
+        <WhiteSpace style={{ height: '20px' }} />
         <div className={styles.moneyAddition}>额外扣除 <span>¥{this.props.arrivalAmount || 0}</span> 手续费</div>
-        <WhiteSpace style={{height: '20px'}} />        
+        <WhiteSpace style={{ height: '20px' }} />
         <InputItem
           className={styles.myPwdInput}
-          style={{border: '1px solid #979797', borderRadius: '6px', height: '50px', width: '100%', textIndent: '10px'}}
+          style={{ border: '1px solid #979797', borderRadius: '6px', height: '50px', width: '100%', textIndent: '10px' }}
           type="password"
           maxLength={6}
           placeholder="请输入支付密码"
@@ -272,27 +274,51 @@ class Index extends React.Component {
           onChange={this.onChangeLink}
           value={this.state.password}
         />
-        <WhiteSpace style={{height: '24px'}} />
-        <div onClick={() => this.toLink('/forget')} style={{fontSize: '16px', color: '#646464', textAlign: 'center'}}>
-        忘记密码？
+        <WhiteSpace style={{ height: '24px' }} />
+        <div onClick={() => this.toLink('/forget')} style={{ fontSize: '16px', color: '#646464', textAlign: 'center' }}>
+          忘记密码？
         </div>
-        <WhiteSpace style={{height: '20px'}} />
+        <WhiteSpace style={{ height: '20px' }} />
       </div>
     </Modal>);
+  }
+
+  loadAlert = () => {
+    return (<Modal
+      visible={this.state.loadAlert}
+      transparent
+      maskClosable={false}
+      onClose={this.onClose('modal1')}
+      title="实名提示"
+      footer={[
+        { text: '取消', onPress: () => { this.toAlertLink('/home') } },
+        { text: '确定', onPress: () => { this.toAlertLink('/uploadId') } }
+      ]}
+      wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+    >
+      <div style={{ overflow: 'scroll' }}>
+        您还未实名，需要进行实名认证后才能使用, 去实名?
+      </div>
+    </Modal>)
+  }
+  toAlertLink = (pathname) => {
+    pathname && this.props.dispatch(routerRedux.push({
+      pathname: pathname
+    }))
   }
 
   checkError = () => {
     const { tradeInfo } = this.props;
 
-    if(!tradeInfo.payMoney || isNaN(parseInt(tradeInfo.payMoney, 10))) {
+    if (!tradeInfo.payMoney || isNaN(parseInt(tradeInfo.payMoney, 10))) {
       Toast.fail('消费金额填写错误！');
       return;
     }
-    if(!tradeInfo.settleType) {
+    if (!tradeInfo.settleType) {
       Toast.fail('请选择到账方式！');
       return;
     }
-    if(!tradeInfo.bankCardID || tradeInfo.bankCardID.length < 10 || tradeInfo.phoneNumber < 6) {
+    if (!tradeInfo.bankCardID || tradeInfo.bankCardID.length < 10 || tradeInfo.phoneNumber < 6) {
       Toast.fail('请选择消费信用卡！');
       return;
     }
@@ -303,28 +329,28 @@ class Index extends React.Component {
   submit = (e) => {
     const { tradeInfo, dispatch } = this.props;
 
-    if(!tradeInfo.payMoney || isNaN(parseInt(tradeInfo.payMoney, 10))) {
+    if (!tradeInfo.payMoney || isNaN(parseInt(tradeInfo.payMoney, 10))) {
       Toast.fail('请输入消费金额！');
-      if(this.tabPayMoney) {
+      if (this.tabPayMoney) {
         this.tabPayMoney.focus();
       }
       return;
     }
-    if(!tradeInfo.smsCode || tradeInfo.smsCode.length < 4) {
+    if (!tradeInfo.smsCode || tradeInfo.smsCode.length < 4) {
       Toast.fail('请输入您收到的短信验证码');
       return;
     }
-    if(!tradeInfo.settleType) {
+    if (!tradeInfo.settleType) {
       Toast.fail('请选择到账方式！');
       return;
     }
-    if(!tradeInfo.bankCardID || tradeInfo.bankCardID.length < 10 || tradeInfo.phoneNumber < 6) {
+    if (!tradeInfo.bankCardID || tradeInfo.bankCardID.length < 10 || tradeInfo.phoneNumber < 6) {
       Toast.fail('请选择消费信用卡！');
       return;
     }
     dispatch({
-        type: 'trade/quickDual',
-        payload: {}
+      type: 'trade/quickDual',
+      payload: {}
     });
 
     // this.props.dispatch({
@@ -337,54 +363,57 @@ class Index extends React.Component {
 
   onTabClick = (tab, index) => {
     if (index === 1) {
-      Modal.alert('温馨提示', '该功能维护中', [{text: '确定',onPress: ()=> {
-        this.dTabs && this.dTabs.props.goToTab(0);
-      }}])
+      Modal.alert('温馨提示', '该功能维护中', [{
+        text: '确定', onPress: () => {
+          this.dTabs && this.dTabs.props.goToTab(0);
+        }
+      }])
     }
   }
 
   renderSelf = () => {
-    const {isLogin, info, history } = this.props;
-    if( !isLogin ) {
+    const { isLogin, info, history } = this.props;
+    if (!isLogin) {
       return (
         <Layout title={'收银台'}>
-          <Flex style={{padding: '10px', position: 'fixed', height: '85%', width: '100%'}} justify ={'center'}>您还未登录！<Link to='/login'>去登录？</Link></Flex>
+          <Flex style={{ padding: '10px', position: 'fixed', height: '85%', width: '100%' }} justify={'center'}>您还未登录！<Link to='/login'>去登录？</Link></Flex>
         </Layout>
       );
     }
-    if(info.stat !== 'CERTIFICATION') { 
+    if (info.stat !== 'CERTIFICATION') {
       return (
         <Layout title={'收银台'}>
-          <Flex style={{padding: '10px', position: 'fixed', height: '85%', width: '100%'}} justify ={'center'}>您还未实名，需实名才能使用！<Link to='/uploadId'>去实名？</Link></Flex>
+          <Flex style={{ padding: '10px', position: 'fixed', height: '85%', width: '100%' }} justify={'center'}>您还未实名，需实名才能使用！<Link to='/uploadId'>去实名？</Link></Flex>
+          {this.loadAlert()}
         </Layout>
       );
     }
     const tabs = [
       { title: <Badge text={''}>跳转支付</Badge> },
-      { title: <Badge text={''}><span style={{'color': 'gray'}}>无卡快捷(维护中)</span></Badge> },
+      { title: <Badge text={''}><span style={{ 'color': 'gray' }}>无卡快捷(维护中)</span></Badge> },
     ];
     let search = history.location.search;
     search = queryString.parse(search);
     let initialPage = search.initialPage | 0;
     // console.log(initialPage)
-    initialPage = initialPage < 2? initialPage: 0;
+    initialPage = initialPage < 2 ? initialPage : 0;
     initialPage = 0;
     return (<Layout title={'收银台'}>
       <Tabs tabs={tabs}
         swipeable={false}
         initialPage={initialPage}
-        renderTabBar={props => <Tabs.DefaultTabBar ref={i=>this.dTabs = i} {...props} page={2} />}
+        renderTabBar={props => <Tabs.DefaultTabBar ref={i => this.dTabs = i} {...props} page={2} />}
         onChange={(tab, index) => { console.log('onChange', index, tab); }}
         onTabClick={(tab, index) => { this.onTabClick(tab, index) }}
       >
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
-        {this.renderLinkTab()}
-      </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
+          {this.renderLinkTab()}
+        </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
-        {this.renderTab()}
-      </div>
-    </Tabs>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
+          {this.renderTab()}
+        </div>
+      </Tabs>
     </Layout>);
   }
 
@@ -394,7 +423,7 @@ class Index extends React.Component {
     let payMoney = tradeInfo.payMoney | 0;
     payMoney = payMoney / 100;
     return (
-      <div style={{ width: '100%'}} title={'提现'}>
+      <div style={{ width: '100%' }} title={'提现'}>
         <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
@@ -417,7 +446,7 @@ class Index extends React.Component {
                   rules: [{
                     required: true,
                     validator: (rule, value, cb) => {
-                      if(value - 10 < 0) {
+                      if (value - 10 < 0) {
                         cb(new Error('提现金额10元以上！'))
                       } else {
                         cb();
@@ -440,10 +469,10 @@ class Index extends React.Component {
             <List renderHeader={() => '请选择支付方式'} className="my-list">
               {this.renderPayType()}
             </List>
-            
+
             <Flex className={styles.inviteContainer}>
               <Button onClick={this.tosubmit} className={styles.invite}>
-              立即消费
+                立即消费
               </Button>
             </Flex>
           </div>
@@ -454,30 +483,30 @@ class Index extends React.Component {
 
   tosubmit = () => {
     const { tradeInfo, dispatch, paySelectType: selectPayType } = this.props;
-    if(!selectPayType) {
+    if (!selectPayType) {
       Toast.fail('请选择支付方式！');
       return;
-    } else if(selectPayType === 1) {
+    } else if (selectPayType === 1) {
       Toast.fail('支付宝支付方式暂未开通！');
       return;
-    } else if(selectPayType === 2) {
+    } else if (selectPayType === 2) {
       Toast.fail('微信支付方式暂未开通！');
       return;
     }
-    if(!tradeInfo.payMoney || isNaN(parseFloat(tradeInfo.payMoney, 10))) {
+    if (!tradeInfo.payMoney || isNaN(parseFloat(tradeInfo.payMoney, 10))) {
       Toast.fail('请输入消费金额！');
-      if(this.tabLinkPayMoney) {
+      if (this.tabLinkPayMoney) {
         this.tabLinkPayMoney.focus();
       }
       return;
     }
 
-    if(!tradeInfo.settleType) {
+    if (!tradeInfo.settleType) {
       Toast.fail('请选择到账方式！');
       return;
     }
-    
-    if(!tradeInfo.bankCardID) {
+
+    if (!tradeInfo.bankCardID) {
       Toast.fail('请选择消费信用卡！');
       return;
     }
@@ -488,7 +517,7 @@ class Index extends React.Component {
 
     dispatch({
       type: 'trade/queryPreArrivalAmount', // arrivalAmount
-      payload: {type: 1}
+      payload: { type: 1 }
     })
 
     this.showModal('inputTradeLink');
@@ -496,34 +525,34 @@ class Index extends React.Component {
 
 
   selectPayType = (item) => {
-    if( !item || !item.type) return;
+    if (!item || !item.type) return;
     this.props.dispatch({
       type: 'trade/updateState',
-      payload: {paySelectType: item.type}
+      payload: { paySelectType: item.type }
     });
   }
 
   renderPayType = () => {
     let items = [
-      {title: '支付宝', type: 1, src: require('../../assets/reposit/syt_zfb.png')},
-      {title: '微信支付', type: 2, src: require('../../assets/reposit/syt_wx.png')},
-      {title: '其他支付', type: 3, src: require('../../assets/reposit/syt_qtzf.png')},
+      { title: '支付宝', type: 1, src: require('../../assets/reposit/syt_zfb.png') },
+      { title: '微信支付', type: 2, src: require('../../assets/reposit/syt_wx.png') },
+      { title: '其他支付', type: 3, src: require('../../assets/reposit/syt_qtzf.png') },
     ];
     let selectPayType = this.props.paySelectType;
-    return (items.map(item =><Item
+    return (items.map(item => <Item
       className={styles.listItem}
       key={item.title}
-      extra={<Icon color={selectPayType === item.type ? '#00B402': '#565656'} type={selectPayType === item.type ? 'check-circle':'check-circle-o'} />}
+      extra={<Icon color={selectPayType === item.type ? '#00B402' : '#565656'} type={selectPayType === item.type ? 'check-circle' : 'check-circle-o'} />}
       // thumb={<img className={styles.listItemIcon} src={item.src} alt="zhaoshang" />}
-      multipleLine 
-      onClick={() =>this.selectPayType(item)}>
-        <img style={{ width: '114px', height: '40px'}} src={item.src} alt={item.title} />
+      multipleLine
+      onClick={() => this.selectPayType(item)}>
+      <img style={{ width: '114px', height: '40px' }} src={item.src} alt={item.title} />
     </Item>))
   }
 
   toLink = (link, params) => {
-    if(link) {
-      let search = params ? '?'+queryString.stringify(params): '';
+    if (link) {
+      let search = params ? '?' + queryString.stringify(params) : '';
       this.props.dispatch(routerRedux.push({
         pathname: link,
         search: search
@@ -534,38 +563,38 @@ class Index extends React.Component {
   renderSettle = (type) => {
     const { tradeInfo } = this.props;
     let settleType = tradeInfo.settleType || '';
-    if(!settleType) {
+    if (!settleType) {
       return (
         <Item
           className={styles.listItem}
           extra={''}
           arrow='horizontal'
           multipleLine
-          onClick={this.toLink.bind(this, '/selectSellte', {type: type})}>
-            选择到账方式
+          onClick={this.toLink.bind(this, '/selectSellte', { type: type })}>
+          选择到账方式
         </Item>
       );
     }
-    
+
     return this.props.sellteType.filter(item => item.settleType === settleType)
-    .map(ritem => {
-      return (
-        <Item
-          key={ritem.settleType}
-          className={styles.listItem}
-          arrow='horizontal'
-          multipleLine
-          onClick={this.toLink.bind(this, '/selectSellte', {type: type})}>
-            {ritem.settleTypeDsc || ''} <span style={{fontSize: '12px'}}> 提现手续费  {ritem.settlePercent || ''}</span>
+      .map(ritem => {
+        return (
+          <Item
+            key={ritem.settleType}
+            className={styles.listItem}
+            arrow='horizontal'
+            multipleLine
+            onClick={this.toLink.bind(this, '/selectSellte', { type: type })}>
+            {ritem.settleTypeDsc || ''} <span style={{ fontSize: '12px' }}> 提现手续费  {ritem.settlePercent || ''}</span>
             {/* <Brief>提现手续费  {ritem.settlePercent || ''}</Brief> */}
-        </Item>
-      );
-    });
+          </Item>
+        );
+      });
   }
 
   selectBandCard = (params) => {
     const { dispatch } = this.props;
-    let search = params ? '?'+queryString.stringify(params): '';
+    let search = params ? '?' + queryString.stringify(params) : '';
     dispatch(routerRedux.push({
       pathname: '/selectBank',
       search: search
@@ -575,53 +604,53 @@ class Index extends React.Component {
   renderFromBank = (type) => {
     const { tradeInfo, creditInfo } = this.props;
     let bankCardID = tradeInfo.bankCardID || '';
-    if(!bankCardID) {
+    if (!bankCardID) {
       return (
         <Item
           className={styles.listItem}
           arrow='horizontal'
-          multipleLine 
-          onClick={() => this.selectBandCard({type})}
+          multipleLine
+          onClick={() => this.selectBandCard({ type })}
         >
           请选择消费信用卡
         </Item>
       )
     }
-    return (              
-    <Item
-      className={styles.listItem}
-      thumb={<img className={styles.listItemIcon} src={Constant.banks[creditInfo.bankCode]} alt="zhaoshang" />}
-      arrow='horizontal'
-      multipleLine onClick={()=>this.selectBandCard({type})}>
-        {creditInfo && creditInfo.bankName || ''} <span style={{fontSize: '12px'}}>尾号{creditInfo && creditInfo.bankCard && creditInfo.bankCard.slice( creditInfo.bankCard.length - 4 ) || ''} 信用卡</span>
+    return (
+      <Item
+        className={styles.listItem}
+        thumb={<img className={styles.listItemIcon} src={Constant.banks[creditInfo.bankCode]} alt="zhaoshang" />}
+        arrow='horizontal'
+        multipleLine onClick={() => this.selectBandCard({ type })}>
+        {creditInfo && creditInfo.bankName || ''} <span style={{ fontSize: '12px' }}>尾号{creditInfo && creditInfo.bankCard && creditInfo.bankCard.slice(creditInfo.bankCard.length - 4) || ''} 信用卡</span>
         {/* <Brief>尾号{creditInfo && creditInfo.bankCard && creditInfo.bankCard.slice( creditInfo.bankCard.length - 4 ) || ''} 信用卡</Brief> */}
-    </Item>)
+      </Item>)
   }
   renderRecieveBank = () => {
     const { cardList } = this.props;
     let cards = cardList.filter(item => item && item.bankCardType === '借记卡');
-    if(!cards.length) {
-      return (     
+    if (!cards.length) {
+      return (
         <Item
           className={styles.listItem}
           arrow='horizontal'
-          multipleLine 
-          onClick={() => {}}
+          multipleLine
+          onClick={() => { }}
         >
           到账银行
         </Item>
       )
     }
     let card = cards[0];
-    return (              
-    <Item
-      className={styles.listItem}
-      thumb={<img className={styles.listItemIcon} src={Constant.banks[card.bankCode]} alt="bankLogo" />}
-      arrow='horizontal'
-      multipleLine onClick={() => {}}>
-        {card.bankName || ''} <span style={{fontSize: '12px'}}>尾号{card && card.bankCard && card.bankCard.slice( card.bankCard.length - 4 ) || ''} 借记卡</span>
+    return (
+      <Item
+        className={styles.listItem}
+        thumb={<img className={styles.listItemIcon} src={Constant.banks[card.bankCode]} alt="bankLogo" />}
+        arrow='horizontal'
+        multipleLine onClick={() => { }}>
+        {card.bankName || ''} <span style={{ fontSize: '12px' }}>尾号{card && card.bankCard && card.bankCard.slice(card.bankCard.length - 4) || ''} 借记卡</span>
         {/* <Brief></Brief> */}
-    </Item>)
+      </Item>)
   }
 
   renderTab = () => {
@@ -630,7 +659,7 @@ class Index extends React.Component {
     let payMoney = tradeInfo.payMoney | 0;
     payMoney = payMoney / 100;
     return (
-      <div style={{ width: '100%'}} title={'提现'}>
+      <div style={{ width: '100%' }} title={'提现'}>
         <Spinner loading={this.props.loading} />
         <div className={styles.normal}>
           <div className={styles.content}>
@@ -653,7 +682,7 @@ class Index extends React.Component {
                   rules: [{
                     required: true,
                     validator: (rule, value, cb) => {
-                      if(value - 10 < 0) {
+                      if (value - 10 < 0) {
                         cb(new Error('提现金额10元以上！'))
                       } else {
                         cb();
@@ -684,7 +713,7 @@ class Index extends React.Component {
             <List renderHeader={() => '选择到账方式'} className="my-list">
               {this.renderSettle(0)}
             </List>
-            <List renderHeader={() => '到账银信用卡预留手机号' + (tradeInfo.phoneNumber ? tradeInfo.phoneNumber: '')} className="my-list">
+            <List renderHeader={() => '到账银信用卡预留手机号' + (tradeInfo.phoneNumber ? tradeInfo.phoneNumber : '')} className="my-list">
               <InputItem
                 type="number"
                 {...getFieldProps('smsCode', {
@@ -692,7 +721,7 @@ class Index extends React.Component {
                   rules: [{
                     required: true,
                     validator: (rule, value, cb) => {
-                      value && value.length >3 && value.length <7 ? cb():cb(new Error('验证码格式错误'))
+                      value && value.length > 3 && value.length < 7 ? cb() : cb(new Error('验证码格式错误'))
                     }
                   }],
                 })}
@@ -700,17 +729,17 @@ class Index extends React.Component {
                 placeholder="请输入验证码"
                 error={!!getFieldError('smsCode')}
                 extra={<Button
-                        disabled={this.state.sendDisabled}
-                        onClick={this.getCode}
-                        inline
-                        className={styles.getSmsCode}
-                        type="primary">{this.state.smsInfo || ''}</Button>}
+                  disabled={this.state.sendDisabled}
+                  onClick={this.getCode}
+                  inline
+                  className={styles.getSmsCode}
+                  type="primary">{this.state.smsInfo || ''}</Button>}
               >验证码</InputItem>
             </List>
 
             <Flex className={styles.inviteContainer}>
               <Button onClick={this.submit} className={styles.invite}>
-              立即消费
+                立即消费
               </Button>
             </Flex>
 
@@ -725,10 +754,10 @@ class Index extends React.Component {
   }
 
   renderContent(pageText) {
-    if(pageText === 'home') {
+    if (pageText === 'home') {
       // return this.props.history.push('/home');
     }
-    if(pageText === 'reposit') {
+    if (pageText === 'reposit') {
       return this.renderSelf();
     }
     return (
@@ -784,14 +813,15 @@ class Index extends React.Component {
             icon={<div style={{
               width: iconSize,
               height: iconSize,
-              background: 'url(' + require('../../assets/tabbar/tab-sy-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat'
+              background: 'url(' + require('../../assets/tabbar/tab-sy-normal.png') + ') center center /  ' + iconSize + ' ' + iconSize + '  no-repeat'
             }}
             />
             }
             selectedIcon={<div style={{
               width: iconSize,
               height: iconSize,
-              background: 'url(' + require('../../assets/tabbar/tab-sy-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+              background: 'url(' + require('../../assets/tabbar/tab-sy-click.png') + ') center center /  ' + iconSize + ' ' + iconSize + '  no-repeat'
+            }}
             />
             }
             selected={this.state.selectedTab === 'blueTab'}
@@ -808,14 +838,16 @@ class Index extends React.Component {
               <div style={{
                 width: iconSize,
                 height: iconSize,
-                background: 'url(' + require('../../assets/tabbar/tab-tx-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+                background: 'url(' + require('../../assets/tabbar/tab-tx-normal.png') + ') center center /  ' + iconSize + ' ' + iconSize + '  no-repeat'
+              }}
               />
             }
             selectedIcon={
               <div style={{
                 width: iconSize,
                 height: iconSize,
-                background: 'url(' + require('../../assets/tabbar/tab-tx-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+                background: 'url(' + require('../../assets/tabbar/tab-tx-click.png') + ') center center /  ' + iconSize + ' ' + iconSize + '  no-repeat'
+              }}
               />
             }
             title="收银台"
@@ -835,14 +867,16 @@ class Index extends React.Component {
               <div style={{
                 width: iconSize,
                 height: iconSize,
-                background: 'url(' + require('../../assets/tabbar/tab-wd-normal.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+                background: 'url(' + require('../../assets/tabbar/tab-wd-normal.png') + ') center center /  ' + iconSize + ' ' + iconSize + '  no-repeat'
+              }}
               />
             }
             selectedIcon={
               <div style={{
                 width: iconSize,
                 height: iconSize,
-                background: 'url(' + require('../../assets/tabbar/tab-wd-click.png') +') center center /  '+iconSize +' '+iconSize+'  no-repeat' }}
+                background: 'url(' + require('../../assets/tabbar/tab-wd-click.png') + ') center center /  ' + iconSize + ' ' + iconSize + '  no-repeat'
+              }}
               />
             }
             title="我的"
@@ -870,23 +904,23 @@ Index.propTypes = {
 
 function mul(x) {
   let s = '' + x;
-  if(s.indexOf('.') === -1) return (x|0) * 100;
+  if (s.indexOf('.') === -1) return (x | 0) * 100;
   let arr = s.split('.');
   let first = parseInt(arr[0], 10) * 100;
-  if(!arr[1]) return first;
+  if (!arr[1]) return first;
   let second = arr[1].substr(0, 2);
-  second = second.length === 2? parseInt(second, 10): (second | 0) * 10;
+  second = second.length === 2 ? parseInt(second, 10) : (second | 0) * 10;
   return first + second;
 }
 
 const RepositIndex = createForm({
   onValuesChange(props, value) {
-    if(value && value.payMoney) {
+    if (value && value.payMoney) {
       let money = parseFloat(value.payMoney);
       money = mul(money) | 0;
       props.dispatch({
         type: 'trade/updateTradeInfo',
-        payload: {payMoney: money},
+        payload: { payMoney: money },
       });
       return;
     }
@@ -896,7 +930,7 @@ const RepositIndex = createForm({
     });
   },
 })(Index);
-function mapStateToProps( state ) {
+function mapStateToProps(state) {
   const { isLogin, info } = state.user
   // console.log(state)
   let cards = state.card.cardList;
@@ -914,4 +948,4 @@ function mapStateToProps( state ) {
     paySelectType: state.trade.paySelectType
   }
 }
-export default connect( mapStateToProps )(RepositIndex);
+export default connect(mapStateToProps)(RepositIndex);

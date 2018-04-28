@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Link, routerRedux } from 'dva/router';
-import { Flex, List, WhiteSpace, Toast, NoticeBar, Icon, TabBar } from 'antd-mobile';
+import { Flex, List, WhiteSpace, Toast, NoticeBar, Modal, TabBar } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 
@@ -13,6 +13,7 @@ import cardCenterIcon from '../../assets/myself/wd-kzx.png';
 import tradeRecordIcon from '../../assets/myself/wd-cjgl.png';
 
 const Item = List.Item;
+const alert = Modal.alert;
 
 const tabsInfo= [
   {title: '我要收款', icon: reviceMoneyIcon},
@@ -25,6 +26,8 @@ const listInfo= [
   {id: 'about', title: '关于汇藏', icon: require('../../assets/myself/wd-gy.png') },
   // {id: 'feedback', title: '帮助反馈', icon: require('../../assets/myself/wd-bz.png') },
   {id: 'notice', title: '关注公众号', icon: require('../../assets/myself/wd-gz.png') },
+  // {id: '', title: '申请信用卡', icon: require('../../assets/myself/wd-gy.png') },
+  
 ]
 
 class Index extends React.Component {
@@ -115,13 +118,21 @@ class Index extends React.Component {
           pathname: '/cardCenter'
         }));
       } else {
-        dispatch(routerRedux.push({
-          // pathname: '/addDebit'
-          pathname: '/uploadId'
-        }));
+        this.toReal();
       }
     }
   }
+
+  toReal = () => {
+    alert('实名提示', '您还未实名，需要进行实名认证后才能使用!', [
+      { text: '取消', onPress: () => console.log('cancel') },
+      { text: '确定', onPress: () => this.props.dispatch(routerRedux.push({
+        // pathname: '/addDebit'
+        pathname: '/uploadId'
+      })) },
+    ])
+  }
+
   toTradeList = () => {
     const { isLogin, info, dispatch } = this.props;
     if(!isLogin) {
@@ -134,10 +145,7 @@ class Index extends React.Component {
           pathname: '/tradeList'
         }));
       } else {
-        dispatch(routerRedux.push({
-          // pathname: '/addDebit'
-          pathname: '/uploadId'
-        }));
+        this.toReal();
       }
     }
   }
@@ -198,7 +206,7 @@ class Index extends React.Component {
                 <img src={headImageIcon} style={{width: '64px', height: '64px'}} alt="头像" />
               </Flex>
               <Flex className={styles.loginInfo}>
-              {isLogin ? username + (st && '('+st+')'):'未登录，请先登录'}
+              {isLogin ? username + (st ? '('+st+')' : ''):'未登录，请先登录'}
               </Flex>
             </Flex>
             <Flex className={styles.headAddition}>

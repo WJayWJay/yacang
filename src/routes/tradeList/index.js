@@ -5,7 +5,7 @@ import { Flex, List, Toast, Modal, ListView, Tabs, Badge, WhiteSpace } from 'ant
 
 import PropTypes from 'prop-types';
 
-import { deepCopy } from '../../functions';
+import { deepCopy, toDecimal2 } from '../../functions';
 
 import Layout from '../../components/layout';
 // import Button from '../../components/button';
@@ -114,26 +114,18 @@ class Index extends React.Component {
     //   'SUCCESS': '支付成功',
     // };
     const statColors = {
-      '支付失败': '#FF4343',
-      '已受理': '#3D67F7',
+      '支付失败': '#3D67F7',
+      '已受理': '#FF4343',
       '支付成功': '#8A8A9D',
     };
     return (
       <div onClick={() => this.toDetail(obj)} key={rowID} style={{ padding: '0 15px' }}>
-        {/* <div
-          style={{
-            lineHeight: '50px',
-            color: '#888',
-            fontSize: 18,
-            borderBottom: '1px solid #F6F6F6',
-          }}
-        >{obj.title}</div> */}
 
         <div style={{ display: '-webkit-box', display: 'flex', padding: '15px 0' }}>
           <Flex style={{flex:1, lineHeight: 1, width: '100%' }}>
             <Flex  direction="column" style={{ flex: 1 }} align='start'>
               <Flex style={{ flex: 1, paddingBottom: '10px' }}>
-              {obj.payBankName || ''}
+              {obj.payBankName || ''}{obj.payBankCard ?  `(${obj.payBankCard})` : ''}
               </Flex>
               <Flex style={{ flex: 1 }}>
               {obj.payTime || ''}              
@@ -141,7 +133,7 @@ class Index extends React.Component {
             </Flex>
             <Flex direction="column" align='end' style={{ flex: 1, width: '100%' }}>
               <Flex justify='end' style={{flex: 1,  paddingBottom: '10px', fontSize: '18px', color: '#FF4343'}}>
-              {obj.payMoney / 100}
+              {toDecimal2(obj.payMoney / 100)}
               </Flex>
               <Flex justify='end' style={{flex: 1, fontSize: '14px', color: statColors[obj.orderStat]}}>
               {obj.orderStat || ''}              
@@ -224,6 +216,7 @@ class Index extends React.Component {
       <Spinner loading={this.props.loading} />
       <div className={styles.content}>
         <Tabs tabs={tabs}
+          swipeable={false}
           initialPage={0}
           onChange={(tab, index) => { console.log('onChange', index, tab); }}
           onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}

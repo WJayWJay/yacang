@@ -64,14 +64,16 @@ class GoodsDetail extends React.Component {
           <div className={styles.contentDetail}>
             <Tabs tabs={tabs}
               initialPage={0}
+              swipeable={false}
               onChange={(tab, index) => { console.log('onChange', index, tab); }}
               onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
             >
-              <div className={styles.tabs}>
+              <div className={ styles.tabDesc }>
                 {detail.descriptions}
               </div>
               <div className={styles.tabs}>
-                <table border={'1'} cellspacing="0" cellpadding="0" className={styles.variables}>
+                <table border={'1'} cellSpacing="0" cellPadding="0" className={styles.variables}>
+                <tbody>
                   {detail.unearthedAge ? <tr>
                     <td>藏品年代</td>
                     <td>{detail.unearthedAge || ''}</td>
@@ -92,6 +94,7 @@ class GoodsDetail extends React.Component {
                     <td>尺寸</td>
                     <td>{detail.weight || ''}</td>
                   </tr>: null}
+                  </tbody>
                 </table>
               </div>
             </Tabs>

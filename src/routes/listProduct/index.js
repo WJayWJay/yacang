@@ -181,11 +181,11 @@ class ListProduct extends React.Component {
             {/* <div style={{ marginBottom: '8px', fontWeight: 'bold' }}>{obj.des}</div>
             <div><span style={{ fontSize: '30px', color: '#FF6E27' }}>{rowID}</span>¥</div> */}
             <Flex style={{ flex: 1, width: '100%' }} align={'flex-start'}>
-              <h4 style={{color: '#57493F'}}>{obj.productName}</h4>
+              <h4 style={{color: '#57493F', 'fontSize': '18px'}}>{obj.productName}</h4>
             </Flex>
             <Flex style={{ flex: 1, width: '100%' }}>
               <Flex justify='start' style={{flex: 1}}>
-                <span style={{color: 'red'}}>{obj.stat === 'S0N' ? '非卖品': obj.salePrice || ''}</span>
+                <span style={{color: 'red'}}>{obj.stat === 'S0N' ? '非卖品': <span style={{ fontSize:'17px'}}>{obj.salePrice}</span> || ''}</span>
               </Flex>
               <Flex justify='end' style={{flex: 2, color: '#808080',  'fontSize': '13px'}}>{obj.address || ''}  <Icon type={'right'} /></Flex>
             </Flex>

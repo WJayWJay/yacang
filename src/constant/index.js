@@ -1,7 +1,7 @@
 
 
 const Constant = {
-  company: '广州汇藏文化传播有限公司',
+  company: '广州智众联科技有限公司',
   copyright: 'Copyright@2015～'+ new Date().getFullYear(),
   // appid: 'wx2f5543b30ccc34de',
   appid: 'wx9d7d1117168258a1',
