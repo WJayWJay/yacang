@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- <link rel="preload" href="" as="script" /> -->
+  <title>汇藏</title>
+  <meta charset="UTF-8">
+  <!-- set `maximum-scale` for some compatibility issues -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <link rel="manifest" href="/my-manifest.json" />
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+  <!-- <script src="//cdn.staticfile.org/fastclick/1.0.6/fastclick.min.js"></script> -->
+  
+  <script src="./fastclick.min.js"></script>
+  <script>
+    if ('addEventListener' in document) {
+      document.addEventListener('DOMContentLoaded', function() {
+        FastClick.attach(document.body);
+      }, false);
+    }
+    if(!window.Promise) {
+      document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
+    }
+  </script>
+  <script>
+    var Qss = [(new Date).getTime()];
+  </script>
+</head>
+<body>
+
+  <div id="root"></div>
+  <script type="text/javascript">(function(){
+    if(navigator.userAgent.toLowerCase().indexOf('micromessenger') > -1) {
+      var mta = document.createElement("script");
+      mta.src = "//res.wx.qq.com/open/js/jweixin-1.2.0.js";
+      var s = document.getElementsByTagName("body")[0];
+      s.appendChild(mta);
+    }
+  })();</script>
+</body>
+</html>
