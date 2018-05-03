@@ -4,7 +4,7 @@ import { Link } from 'dva/router';
 // import { Link } from 'dva/router';
 import { routerRedux } from 'dva/router';
 
-import { Flex, NoticeBar, TabBar } from 'antd-mobile';
+import { Flex, NoticeBar, TabBar, Carousel } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 import Swiper from '../../components/swiper';
@@ -25,8 +25,8 @@ class Index extends React.Component {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    
-    
+
+
     dispatch({
       type: 'home/fetch',
       payload: { type: 'msg' }
@@ -41,9 +41,9 @@ class Index extends React.Component {
     });
     this._tagChangeInterval = setInterval(() => {
       let len = this.props.tagList.length || 0;
-      let tagIndex  = this.state.tagIndex;
+      let tagIndex = this.state.tagIndex;
       len && this.setState({
-        tagIndex: (tagIndex+1) >= len ? 0 : tagIndex + 1
+        tagIndex: (tagIndex + 1) >= len ? 0 : tagIndex + 1
       });
     }, 6000);
   }
@@ -57,7 +57,7 @@ class Index extends React.Component {
     // console.log(cid); return;
     cid && this.props.dispatch(routerRedux.push({
       pathname: '/productList',
-      search: '?cid='+ cid
+      search: '?cid=' + cid
     }));
   }
   renderTagList = (item) => {
@@ -95,14 +95,38 @@ class Index extends React.Component {
         <Layout title={'汇藏'}>
           <div className={styles.normal}>
             <Swiper items={list} />
-            {currentTag?
-              <NoticeBar 
-              onClick={() => { currentTag.url && (window.location.href = currentTag.url); }}
-              marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }} style={{ fontSize: '14px' }} mode="link" action={
-              <div className={styles.notify} >去看看</div>
-            }>
-              {currentTag.title || ''}
-            </NoticeBar>: null}
+            {tagList.length ? <Carousel className="my-carousel"
+              vertical
+              dots={false}
+              dragging={false}
+              swiping={false}
+              autoplay
+              infinite
+              speed={300}
+              autoplayInterval={8000}
+              resetAutoplay={false}
+            >
+              {tagList.map( tag => <NoticeBar
+                key={tag.title}
+                onClick={() => { tag.url && (window.location.href = tag.url); }}
+                marqueeProps={{ loop: true, fps: 50, style: { padding: '0 7.5px' } }} style={{ fontSize: '14px' }} mode="link" action={
+                  <div className={styles.notify} >去看看</div>
+                }>
+                {tag.title || ''}
+              </NoticeBar>)} 
+            </Carousel>: null}
+
+
+
+
+            {/* {currentTag ?
+              <NoticeBar
+                onClick={() => { currentTag.url && (window.location.href = currentTag.url); }}
+                marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }} style={{ fontSize: '14px' }} mode="link" action={
+                  <div className={styles.notify} >去看看</div>
+                }>
+                {currentTag.title || ''}
+              </NoticeBar> : null} */}
             <div className={styles.content}>
               <Flex className={styles.flexContainer} direction="column">
                 {category.map(this.renderTagList)}
@@ -140,11 +164,11 @@ class Index extends React.Component {
   }
 
   render() {
-    
+
     const iconSize = '26px';
     return (
       <div className={styles.contentContainer} style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>
-      {/* // <div className={styles.contentContainer} > */}
+        {/* // <div className={styles.contentContainer} > */}
         <TabBar
           unselectedTintColor="#949494"
           tintColor="#756145"

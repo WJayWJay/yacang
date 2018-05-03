@@ -7,7 +7,7 @@ import { Flex, List, Toast, Modal, Icon } from 'antd-mobile';
 import { createForm } from 'rc-form';
 // import Spinner from '../../components/Spinner';
 
-import { transformFileToDataUrl, compress, processData } from '../../functions';
+import { transformFileToDataUrl, processData } from '../../functions';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
@@ -124,12 +124,12 @@ class AddBankCard extends React.Component {
 
   render() {
     const { getFieldProps } = this.props.form;
-    const { creditInfo, imageStatus } = this.props;
+    const { imageStatus } = this.props;
     const listInfo = [
       { id: 0, title: '身份证正面', needs: true, subTitle: '', extra: '', imageCategory: '0003', tag: 'idCard' },
       { id: 1, title: '身份证反面', needs: true, subTitle: '请上传身份证反面', extra: '', imageCategory: '0004', tag: 'idCardOpposite' },
-      { id: 2, title: '手持身份证', subTitle: '请上传手持身份证正面', extra: '', imageCategory: '0005', tag: 'idCardTwo' },
-      { id: 3, title: '银行卡正面', subTitle: '请上传银行卡正面', extra: '', imageCategory: '0006', tag: 'bankCard' },
+      // { id: 2, title: '手持身份证', subTitle: '请上传手持身份证正面', extra: '', imageCategory: '0005', tag: 'idCardTwo' },
+      // { id: 3, title: '银行卡正面', subTitle: '请上传银行卡正面', extra: '', imageCategory: '0006', tag: 'bankCard' },
     ];
 
     return (

@@ -8,6 +8,12 @@
   "manifest": {
     "fileName": "my-manifest.json"
   },
+  "hash": true,
+  "html": {
+    "template": "./index.ejs",
+    "filename1": "index.html",
+    "hash": true
+  },
   "proxy": {
       "/huicang": {
           "target": "http://121.8.160.34:8899/",

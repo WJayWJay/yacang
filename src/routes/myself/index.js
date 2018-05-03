@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Link, routerRedux } from 'dva/router';
-import { Flex, List, WhiteSpace, Toast, NoticeBar, Modal, TabBar } from 'antd-mobile';
+import { routerRedux } from 'dva/router';
+import { Flex, List, WhiteSpace, NoticeBar, Modal, TabBar } from 'antd-mobile';
 
 import Layout from '../../components/layout';
 
@@ -186,7 +186,7 @@ class Index extends React.Component {
       FREEZE: '已冻结',
       REGISTER: '未实名'
     };
-    let username = info && info.customerName || info.companyPhone || '';
+    let username = info && info.customerName || '';
     let st = isLogin && stats[info.stat] || '';
     return (
       <Layout title={'我的'}>
@@ -205,7 +205,8 @@ class Index extends React.Component {
               <Flex>
                 <img src={headImageIcon} style={{width: '64px', height: '64px'}} alt="头像" />
               </Flex>
-              <Flex className={styles.loginInfo}>
+              <Flex className={styles.loginInfo} direction={'column'}>
+              { isLogin && info.companyPhone ? <div>{info.companyPhone}</div>: ''}
               {isLogin ? username + (st ? '('+st+')' : ''):'未登录，请先登录'}
               </Flex>
             </Flex>

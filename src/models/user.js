@@ -103,6 +103,7 @@ export default {
     },
     *getUserInfoByWx({ payload: { code } }, { call, put, select }) {  // eslint-disable-line
       const { data } = yield call(wxUserInfo, { wechatCode: code });
+      
       if (data && data['success']) {
         Toast.success('授权登录成功！');
         if (data.result) {
@@ -161,22 +162,23 @@ export default {
       }
     },
     *getUserInfo({ payload: { } }, { call, put, select }) {  // eslint-disable-line
-      const { data } = yield call(userinfo, {});
+      const {data, ...err} = yield call(userinfo, {});
       // console.log(data, 'userinfo...')
+      console.log(data, err, 'iiiiiii');
+      // return ;
       if (data && data['success']) {
         Cache.set(userKey, data.result, true);
         Cache.set(tokenKey, data.result.tokenId);
         Cache.set(loginKey, 1);
         yield put({ type: 'save', payload: { data: data.result } });        
-      } else {
+      } else if(err && err.err) {
+        console.log('error occured!');
+      }
+      else {
         yield put({
           type: 'logout',
           payload: {}
         })
-        // yield put(routerRedux.push({
-        //   pathname: '/login',
-        //   search: '?uri=' + encodeURI(window.location.href)
-        // }))
       }
     },
     *fetch({ payload: { page } }, { call, put, select }) {  // eslint-disable-line

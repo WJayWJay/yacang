@@ -62,7 +62,7 @@ class CardCenter extends React.Component {
                 {detail.payTime || ''}
               </Flex.Item>
               <Flex.Item style={{ fontSize: '36px', color: '#FF5050', padding: '10px 10px', marginLeft: '0'}}>
-               {'¥' + toDecimal2((detail.payMoney | 0) /100)}
+               {'¥' + toDecimal2((detail.payMoney | 0) /100)}元
               </Flex.Item>
               <Flex.Item style={{ padding: '10px 10px 15px', marginLeft: '0', color: statColors[detail.orderStat]}}>
               {detail.orderStat || ''}

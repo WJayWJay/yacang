@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import { routerRedux } from 'dva/router';
 import { Flex, List, Toast } from 'antd-mobile';
+import { toDecimal2 } from '../../functions';
 
 import Layout from '../../components/layout';
 import Button from '../../components/button';
@@ -36,10 +37,11 @@ class Index extends React.Component {
     return (<Item
       className={styles.listItem}
       thumb="https://zos.alipayobjects.com/rmsportal/dNuvNrtqUztHCwM.png"
-      extra='2017年12月25日'
-      multipleLine onClick={() => {}}>
-        {item.customerName || ''}
-      </Item>);
+      
+      extra={toDecimal2((item.inviteAward | 0) / 100)}
+      multipleLine onClick={() => { }}>
+      {item.customerName || ''}
+    </Item>);
   }
 
   toInvite = () => {
@@ -57,7 +59,7 @@ class Index extends React.Component {
             <Flex justify="center" className={styles.availableMoney}>
               <Flex direction='column'>
                 <Flex className={styles.money}>
-                  {this.props.inviteAward || ''}
+                  {toDecimal2((this.props.inviteAward | 0) / 100)}
                 </Flex>
                 <Flex className={styles.moneyDesc}>
                   可分利润额（元）
@@ -65,9 +67,9 @@ class Index extends React.Component {
               </Flex>
             </Flex>
 
-            <List renderHeader={() => '我的好友（'+ members.length +'人）'} className="my-list">
+            <List renderHeader={() => '我的好友（' + members.length + '人）'} className="my-list">
               {
-                members.length === 0 ? (<div style={{'textAlign': 'center', 'padding': '10px'}}>暂无好友信息!</div>): members.map(item => this.renderMembers(item))
+                members.length === 0 ? (<div style={{ 'textAlign': 'center', 'padding': '10px' }}>暂无好友信息!</div>) : members.map(item => this.renderMembers(item))
               }
               {/* <Item
               className={styles.listItem}
@@ -82,7 +84,7 @@ class Index extends React.Component {
 
             <Flex className={styles.inviteContainer}>
               <Button onClick={this.toInvite} className={styles.invite}>
-              立即邀请
+                立即邀请
               </Button>
             </Flex>
 
@@ -96,12 +98,12 @@ class Index extends React.Component {
 Index.propTypes = {
   members: PropTypes.array
 };
-function mapStateToProps( state ) {
+function mapStateToProps(state) {
   // console.log(state)
   const { members, isLogin, inviteAward } = state.user
 
   return {
-    isLogin, members: Array.isArray(state.user.members) ? members: [], inviteAward
+    isLogin, members: Array.isArray(state.user.members) ? members : [], inviteAward
   }
 }
-export default connect( mapStateToProps )(Index);
+export default connect(mapStateToProps)(Index);

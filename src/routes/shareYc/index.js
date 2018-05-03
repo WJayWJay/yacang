@@ -84,7 +84,7 @@ class Index extends React.Component {
             </Flex>
             <WhiteSpace style={{ height: '10px'}} />
             <Flex justify="center" className={styles.version}>
-              <div>汇藏 APP V1.0</div>
+              {/* <div>汇藏 APP V1.0</div> */}
             </Flex>
             <WhiteSpace style={{ height: '14px'}} />
             <Flex justify="center" className={styles.desc1}>
@@ -100,7 +100,8 @@ class Index extends React.Component {
             </Flex>
             <WhiteSpace style={{ height: '10px'}} />
             <Flex justify="center" className={styles.desc2}>
-              <div>扫码即可下载汇藏</div>
+              {/* <div>扫码即可下载汇藏</div> */}
+              <div>扫码即可关注汇藏</div>
             </Flex>
             <WhiteSpace style={{ height: '119px'}} />
           </div>

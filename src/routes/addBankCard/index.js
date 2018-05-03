@@ -18,6 +18,7 @@ class AddBankCard extends React.Component {
     itime: 60,
     sendDisabled: false,
     agreeColor: '#8C8C9E', 
+    agree: true,
   };
   intervId = 0;
 
@@ -82,6 +83,10 @@ class AddBankCard extends React.Component {
     //   type: 'card/bindDebit',
     //   payload: {info: 'submit'}
     // });
+    if(!this.state.agree) {
+      Toast.fail('请同意相关协议!');
+      return;
+    }
     let errors = null;
     this.props.form.validateFields((error, values) => {
       console.log(error, values)
@@ -113,7 +118,8 @@ class AddBankCard extends React.Component {
   agreeProto = () => {
     let gray = '#8C8C9E', blue = '#1890ff';
     this.setState({
-      agreeColor: this.state.agreeColor === blue ? gray: blue
+      // agree: this.state.agreeColor === blue ? gray: blue
+      agree: !this.state.agree
     })
   }
   
@@ -130,7 +136,7 @@ class AddBankCard extends React.Component {
       <Layout title={'添加银行卡'}>
         <div className={styles.normal}>
           <List renderHeader={() => '请绑定持卡人本人的银行卡'}>
-            <InputItem
+            {/* <InputItem
               {...getFieldProps('realName', {
                 initialValue: creditInfo.realName,
                 rules: [{
@@ -140,7 +146,7 @@ class AddBankCard extends React.Component {
               error={!!getFieldError('realName')}
               type="text"
               placeholder="请输入名字"
-            >持卡人</InputItem>
+            >持卡人</InputItem> */}
             <InputItem
             {...getFieldProps('bankCard',{
               initialValue: creditInfo.bankCard,
@@ -157,7 +163,7 @@ class AddBankCard extends React.Component {
             })}
             error={!!getFieldError('bankCard')}
             maxLength={26}
-            placeholder={'8888 8888 8888 8888'}
+            placeholder={'请填写银行卡号'}
             type="bankCard"
           >银行卡号</InputItem>
 
@@ -177,14 +183,14 @@ class AddBankCard extends React.Component {
             })}
             error={!!getFieldError('phoneNumber')}
             type="phone"
-            placeholder="请输入手机号码"
+            placeholder="请输入预留电话号码"
           >手机号码</InputItem>
           </List>
 
           <WhiteSpace />
 
           <List renderHeader={() => '银行卡类型'}>
-            <InputItem
+            {/* <InputItem
               {...getFieldProps('bankType', {
                 initialValue: creditInfo.bankType,
                 rules: [{
@@ -194,7 +200,7 @@ class AddBankCard extends React.Component {
               error={!!getFieldError('bankType')}
               placeholder="信用卡"
               type="text"
-            >卡类型</InputItem>
+            >卡类型</InputItem> */}
 
             <InputItem
               {...getFieldProps('cvv2', {
@@ -204,7 +210,7 @@ class AddBankCard extends React.Component {
                 }],
               })}
               error={!!getFieldError('cvv2')}
-              placeholder="校验码"
+              placeholder="请填写银行卡校验码(CVV2)"
               type="text"
             >校验码</InputItem>
           
@@ -213,10 +219,17 @@ class AddBankCard extends React.Component {
                 initialValue: creditInfo.validDate,
                 rules: [{
                   required: true,
+                  validator: (rule, value, cb) => {
+                      if (value && value.length !== 4) {
+                        cb(new Error('有效期为4位!'))
+                      } else {
+                        cb();
+                      }
+                    }
                 }],
               })}
               error={!!getFieldError('validDate')}
-              placeholder="有效期"
+              placeholder="请填写银行卡有效期(MMYY)"
               type="text"
             >有效期</InputItem>
 
@@ -244,7 +257,7 @@ class AddBankCard extends React.Component {
                 rules: [{
                   required: true,
                   validator: (rule, value, cb) => {
-                    value && value.length >3 && value.length <7 ? cb():cb(new Error('验证码格式错误'))
+                    value && value.length >5 && value.length <7 ? cb():cb(new Error('验证码格式错误'))
                   }
                 }],
               })}
@@ -262,7 +275,7 @@ class AddBankCard extends React.Component {
           
 
           <Flex className={styles.userProto}>
-              <Icon onClick={this.agreeProto} type="check-circle-o" color={this.state.agreeColor} size={'xs'} /><span className={styles.agree} >同意</span><span onClick={this.openProtocal} className={styles.agreeUserProto} >《 用户协议 》</span>
+              <Icon onClick={this.agreeProto} type="check-circle-o" color={this.state.agree? '#1890ff': '#8C8C9E'} size={'xs'} /><span onClick={this.agreeProto} className={styles.agree} >同意</span><span onClick={this.openProtocal} className={styles.agreeUserProto} >《 用户协议 》</span>
           </Flex>
 
           <Flex style={{marginTop: '51px'}}>

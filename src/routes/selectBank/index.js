@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { routerRedux, Link } from 'dva/router';
-import { List,Flex } from 'antd-mobile';
+import { List, Flex, Modal } from 'antd-mobile';
 import PropTypes from 'prop-types';
 import Layout from '../../components/layout';
 import queryString from 'query-string';
@@ -20,6 +20,7 @@ class Index extends React.Component {
   state = {
     hasError: false,
     phone: '',
+    loadAlert: true
   }
 
 
@@ -36,14 +37,14 @@ class Index extends React.Component {
 
   selected = (item) => {
     // console.log(item, 'aa')
-    const {dispatch} = this.props;
+    const { dispatch } = this.props;
     dispatch({
       type: 'trade/updateTradeInfo',
-      payload: {bankCardID: item.id, phoneNumber: item.phoneNumber}
+      payload: { bankCardID: item.id, phoneNumber: item.phoneNumber }
     });
     dispatch({
       type: 'trade/updateCreditInfo',
-      payload: {...item}
+      payload: { ...item }
     });
     // dispatch(routerRedux.push({
     //   pathname: '/reposit'
@@ -55,32 +56,62 @@ class Index extends React.Component {
     let initialPage = search.type | 0;
     dispatch(routerRedux.push({
       pathname: '/reposit',
-      search: queryString.stringify({initialPage: initialPage})
+      search: queryString.stringify({ initialPage: initialPage })
     }))
   }
 
+  onClose = () => {
+    this.setState({loadAlert: false});
+  }
+  toBindCard = (link) => {
+    this.props.dispatch(routerRedux.push({
+      pathname: link
+    }))
+  }
+
+  loadAlert = () => {
+    return (<Modal
+      visible={this.state.loadAlert}
+      transparent
+      maskClosable={false}
+      onClose={this.onClose}
+      title="绑卡提示"
+      footer={[
+        { text: '取消', onPress: () => { this.onClose() } },
+        { text: '确定', onPress: () => { this.toBindCard('/addBankCard') } }
+      ]}
+      wrapProps={{ onTouchStart: this.onWrapTouchStart }}
+    >
+      <div style={{ overflow: 'scroll' }}>
+        您还没绑定过信用卡，去绑定?
+      </div>
+    </Modal>)
+  }
+
   render() {
+    const { isLogin, loading } = this.props;
+    const len = this.props.cardList.length || 0;
     return (
       <Layout title={'我的'}>
         <div className={styles.normal}>
-        <List renderHeader={() => '选择消费信用卡'} className="my-list">
-          {this.props.cardList.length ?
-            this.props.cardList.map((item) => {
-              return (<Item
-                key={item.id}
-                className={styles.listItem}
-                extra={''}
-                arrow='horizontal'
-                multipleLine onClick={() => {this.selected(item)}}>
-                {item.bankName || ''}
-                <Brief>{item.bankCard || ''}</Brief>
-              </Item>)
-            })
-            : 
-            <Flex.Item align='center' style={{padding: '10px'}}>暂无绑定信用卡，<Link to={'/addBankCard'}>点击添加</Link></Flex.Item>
-          }
-        </List>
-
+          <List renderHeader={() => '选择消费信用卡'} className="my-list">
+            {len ?
+              this.props.cardList.map((item) => {
+                return (<Item
+                  key={item.id}
+                  className={styles.listItem}
+                  extra={''}
+                  arrow='horizontal'
+                  multipleLine onClick={() => { this.selected(item) }}>
+                  {item.bankName || ''}
+                  <Brief>{item.bankCard || ''}</Brief>
+                </Item>)
+              })
+              :
+              <Flex.Item align='center' style={{ padding: '10px' }}>暂无绑定信用卡，<Link to={'/addBankCard'}>点击添加</Link></Flex.Item>
+            }
+          </List>
+          {isLogin && !loading && !len && this.loadAlert() || ''}
         </div>
       </Layout>
     );
@@ -90,17 +121,18 @@ class Index extends React.Component {
 Index.propTypes = {
   cardList: PropTypes.array
 };
-function mapStateToProps( state ) {
+function mapStateToProps(state) {
   // console.log(state,'select')
   const { isLogin, info } = state.user
-
+  
   let cards = state.card.cardList;
   cards = Array.isArray(cards) ? cards.filter(item => item && item.bankCardType === '信用卡') : [];
   return {
-    isLogin, 
-    info, 
+    isLogin,
+    info,
+    loading: state.loading.global,
     cardList: cards
   }
 }
-export default connect( mapStateToProps )(Index);
+export default connect(mapStateToProps)(Index);
 

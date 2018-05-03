@@ -604,6 +604,7 @@ class Index extends React.Component {
   renderFromBank = (type) => {
     const { tradeInfo, creditInfo } = this.props;
     let bankCardID = tradeInfo.bankCardID || '';
+    // console.log(bankCardID, 'reposit')
     if (!bankCardID) {
       return (
         <Item

@@ -81,8 +81,8 @@ class AddDebitCard extends React.Component {
   getCode = (e) => {
     e.preventDefault();
     const { getFieldError } = this.props.form;
-    if (!!getFieldError('smsCode')) {
-      Toast.show('验证码格式错误！');
+    if (!!getFieldError('phoneNumber')) {
+      Toast.show('手机号格式错误！');
       return;
     }
     this.setState({
@@ -214,7 +214,7 @@ class AddDebitCard extends React.Component {
                 rules: [{
                   required: true,
                   validator: (rule, value, cb) => {
-                    if (value.length < 6) {
+                    if (!value || value.length < 9 || value.length > 14) {
                       cb(new Error('手机格式错误'))
                     } else {
                       cb();
