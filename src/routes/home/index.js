@@ -164,7 +164,6 @@ class Index extends React.Component {
   }
 
   render() {
-
     const iconSize = '26px';
     return (
       <div className={styles.contentContainer} style={this.state.fullScreen ? { position: 'fixed', height: '100%', width: '100%', top: 0 } : { height: 400 }}>

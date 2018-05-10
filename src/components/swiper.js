@@ -10,7 +10,7 @@ import styles from './swiper.less';
 const BgElement = Element.BgElement;
 
 const Swiper = (props) => {
-  
+
   const items = props.items || [
     {
       url: 'https://os.alipayobjects.com/rmsportal/uaQVvDrCwryVlbb.jpg'
@@ -18,43 +18,43 @@ const Swiper = (props) => {
     {
       url: 'https://os.alipayobjects.com/rmsportal/IhCNTqPpLeTNnwr.jpg'
     }
-  ]; 
-  if(items.length < 1) {
+  ];
+  if (items.length < 1) {
     return null;
   }
   let { height } = props;
-  let elements = items.map((item, index) => (<Element 
-      prefixCls={styles.bannerUserElem}
-      style={height? {height: height}: {}}
-      key={index}
-      {...props}
-    >
-      <BgElement
-        key="bg"
-        className={styles.bg}
-        style={{
-          backgroundImage: 'url('+item.url+')',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: height || null
-        }}
-      >{props.BackRound}</BgElement>
-      <QueueAnim name="QueueAnim">
-        <h3 key="h1">{item.title || ''}</h3>
-        <p key="p">{item.text || ''}</p>
-      </QueueAnim>
+  let elements = items.map((item, index) => (<Element
+    prefixCls={styles.bannerUserElem}
+    style={height ? { height: height } : {}}
+    key={index}
+    {...props}
+  >
+    <BgElement
+      key="bg"
+      className={styles.bg}
+      style={{
+        backgroundImage: 'url(' + item.url + ')',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: height || null
+      }}
+    >{props.BackRound}</BgElement>
+    <QueueAnim name="QueueAnim">
+      <h3 key="h1">{item.title || ''}</h3>
+      <p key="p">{item.text || ''}</p>
+    </QueueAnim>
   </Element>));
-  
-  
-  return <Carousel 
+
+  return <Carousel
     swiping={true}
     dragging={true}
     infinite={true}
     wrapAround={true}
-    autoplay={true} 
+    autoplay={true}
+    style={{ backgroundColor: '#e2e2e2' }}
   >
     {items.map((item) => (<div key={item.url} className={styles.contain}>
-      <h3>{item.title || ''}</h3>
+      {item.title ? <h3>{item.title || ''}</h3> : null}
       <img src={item.url} alt={item.title} />
     </div>))}
   </Carousel>;

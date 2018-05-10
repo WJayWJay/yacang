@@ -164,7 +164,7 @@ export default {
     *getUserInfo({ payload: { } }, { call, put, select }) {  // eslint-disable-line
       const {data, ...err} = yield call(userinfo, {});
       // console.log(data, 'userinfo...')
-      console.log(data, err, 'iiiiiii');
+      // console.log(data, err, 'iiiiiii');
       // return ;
       if (data && data['success']) {
         Cache.set(userKey, data.result, true);
