@@ -362,13 +362,18 @@ class Index extends React.Component {
   }
 
   onTabClick = (tab, index) => {
-    if (index === 1) {
-      Modal.alert('温馨提示', '该功能维护中', [{
-        text: '确定', onPress: () => {
-          this.dTabs && this.dTabs.props.goToTab(0);
-        }
-      }])
-    }
+    // if (index === 1) {
+    //   Modal.alert('温馨提示', '该功能维护中', [{
+    //     text: '确定', onPress: () => {
+    //       this.dTabs && this.dTabs.props.goToTab(0);
+    //     }
+    //   }])
+    // }
+    // console.log(tab, index, 'in')
+
+    this.props.dispatch(routerRedux.replace({
+      search: '?initialPage=' + (index | 0)
+    }))
   }
 
   renderSelf = () => {
@@ -389,15 +394,16 @@ class Index extends React.Component {
       );
     }
     const tabs = [
+      { title: <Badge text={''}><span>无卡快捷</span></Badge> },
       { title: <Badge text={''}>跳转支付</Badge> },
-      { title: <Badge text={''}><span style={{ 'color': 'gray' }}>无卡快捷(维护中)</span></Badge> },
+      // { title: <Badge text={''}><span style={{ 'color': 'gray' }}>无卡快捷(维护中)</span></Badge> },
     ];
     let search = history.location.search;
     search = queryString.parse(search);
     let initialPage = search.initialPage | 0;
     // console.log(initialPage)
     initialPage = initialPage < 2 ? initialPage : 0;
-    initialPage = 0;
+    // initialPage = 0;
     return (<Layout title={'收银台'}>
       <Tabs tabs={tabs}
         swipeable={false}
@@ -407,12 +413,14 @@ class Index extends React.Component {
         onTabClick={(tab, index) => { this.onTabClick(tab, index) }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
-          {this.renderLinkTab()}
+          {this.renderTab()}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 'auto', backgroundColor: '#fff' }}>
-          {this.renderTab()}
+          {this.renderLinkTab()}
         </div>
+
+
       </Tabs>
     </Layout>);
   }
@@ -736,6 +744,42 @@ class Index extends React.Component {
                   className={styles.getSmsCode}
                   type="primary">{this.state.smsInfo || ''}</Button>}
               >验证码</InputItem>
+              <InputItem
+                {...getFieldProps('cvv2', {
+                  initialValue: tradeInfo.cvv2 || '',
+                  rules: [{
+                    required: true,
+                    validator: (rule, value, cb) => {
+                      if (value && value.length !== 3) {
+                        cb(new Error('cvv2长度必须是三位!'))
+                      } else {
+                        cb();
+                      }
+                    }
+                  }],
+                })}
+                error={!!getFieldError('cvv2')}
+                placeholder="请填写银行卡校验码(CVV2)"
+                type="text"
+              >校验码</InputItem>
+              <InputItem
+                {...getFieldProps('validDate', {
+                  initialValue: tradeInfo.validDate,
+                  rules: [{
+                    required: true,
+                    validator: (rule, value, cb) => {
+                      if (value && value.length !== 4) {
+                        cb(new Error('有效期为4位!'))
+                      } else {
+                        cb();
+                      }
+                    }
+                  }],
+                })}
+                error={!!getFieldError('validDate')}
+                placeholder="请填写银行卡有效期(MMYY)"
+                type="text"
+              >有效期</InputItem>
             </List>
 
             <Flex className={styles.inviteContainer}>

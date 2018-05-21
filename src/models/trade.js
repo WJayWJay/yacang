@@ -20,7 +20,9 @@ export default {
       phoneNumber: '',
       smsCode: '',
       password:'',
-      msgType: '002'
+      msgType: '002',
+      cvv2: '',
+      validDate: '',
     },
     creditInfo: {},
     channelResultNo: '',
