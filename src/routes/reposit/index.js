@@ -336,16 +336,25 @@ class Index extends React.Component {
       }
       return;
     }
-    if (!tradeInfo.smsCode || tradeInfo.smsCode.length < 4) {
-      Toast.fail('请输入您收到的短信验证码');
+    if (!tradeInfo.bankCardID || tradeInfo.bankCardID.length < 10 || tradeInfo.phoneNumber < 6) {
+      Toast.fail('请选择消费信用卡！');
       return;
     }
     if (!tradeInfo.settleType) {
       Toast.fail('请选择到账方式！');
       return;
     }
-    if (!tradeInfo.bankCardID || tradeInfo.bankCardID.length < 10 || tradeInfo.phoneNumber < 6) {
-      Toast.fail('请选择消费信用卡！');
+    if (!tradeInfo.cvv2 || tradeInfo.cvv2.length > 4 || tradeInfo.cvv2.length < 2) {
+      Toast.fail('请填写银行卡校验码(CVV2)');
+      return;
+    }
+    if (!tradeInfo.valiateDate || tradeInfo.valiateDate.length > 5 || tradeInfo.valiateDate.length < 2) {
+      Toast.fail('请填写银行卡有效期(MMYY)');
+      return;
+    }
+
+    if (!tradeInfo.smsCode || tradeInfo.smsCode.length < 4) {
+      Toast.fail('请输入您收到的短信验证码');
       return;
     }
     dispatch({
