@@ -22,7 +22,7 @@ export default {
       password:'',
       msgType: '002',
       cvv2: '',
-      validDate: '',
+      valiateDate: '',
     },
     creditInfo: {},
     channelResultNo: '',

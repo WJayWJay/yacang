@@ -721,6 +721,43 @@ class Index extends React.Component {
 
             <List renderHeader={() => '选择到账方式'} className="my-list">
               {this.renderSettle(0)}
+
+              <InputItem
+                {...getFieldProps('cvv2', {
+                  initialValue: tradeInfo.cvv2 || '',
+                  rules: [{
+                    required: true,
+                    validator: (rule, value, cb) => {
+                      if (value && value.length !== 3) {
+                        cb(new Error('cvv2长度必须是三位!'))
+                      } else {
+                        cb();
+                      }
+                    }
+                  }],
+                })}
+                error={!!getFieldError('cvv2')}
+                placeholder="请填写银行卡校验码(CVV2)"
+                type="text"
+              >校验码</InputItem>
+              <InputItem
+                {...getFieldProps('valiateDate', {
+                  initialValue: tradeInfo.valiateDate,
+                  rules: [{
+                    required: true,
+                    validator: (rule, value, cb) => {
+                      if (value && value.length !== 4) {
+                        cb(new Error('有效期为4位!'))
+                      } else {
+                        cb();
+                      }
+                    }
+                  }],
+                })}
+                error={!!getFieldError('valiateDate')}
+                placeholder="请填写银行卡有效期(MMYY)"
+                type="text"
+              >有效期</InputItem>
             </List>
             <List renderHeader={() => '到账银信用卡预留手机号' + (tradeInfo.phoneNumber ? tradeInfo.phoneNumber : '')} className="my-list">
               <InputItem
@@ -744,42 +781,7 @@ class Index extends React.Component {
                   className={styles.getSmsCode}
                   type="primary">{this.state.smsInfo || ''}</Button>}
               >验证码</InputItem>
-              <InputItem
-                {...getFieldProps('cvv2', {
-                  initialValue: tradeInfo.cvv2 || '',
-                  rules: [{
-                    required: true,
-                    validator: (rule, value, cb) => {
-                      if (value && value.length !== 3) {
-                        cb(new Error('cvv2长度必须是三位!'))
-                      } else {
-                        cb();
-                      }
-                    }
-                  }],
-                })}
-                error={!!getFieldError('cvv2')}
-                placeholder="请填写银行卡校验码(CVV2)"
-                type="text"
-              >校验码</InputItem>
-              <InputItem
-                {...getFieldProps('validDate', {
-                  initialValue: tradeInfo.validDate,
-                  rules: [{
-                    required: true,
-                    validator: (rule, value, cb) => {
-                      if (value && value.length !== 4) {
-                        cb(new Error('有效期为4位!'))
-                      } else {
-                        cb();
-                      }
-                    }
-                  }],
-                })}
-                error={!!getFieldError('validDate')}
-                placeholder="请填写银行卡有效期(MMYY)"
-                type="text"
-              >有效期</InputItem>
+              
             </List>
 
             <Flex className={styles.inviteContainer}>
